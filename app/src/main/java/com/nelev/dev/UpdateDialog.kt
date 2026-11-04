@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -31,10 +32,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -50,6 +53,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -82,7 +86,7 @@ fun UpdateDialog(
     var downloading by remember { mutableStateOf(false) }
     var progress by remember { mutableIntStateOf(0) }
     var error by remember { mutableStateOf<String?>(null) }
-    var needPermission by remember { mutableStateOf(false) }
+    var showPermissionDialog by remember { mutableStateOf(false) }
     var showNotes by remember { mutableStateOf(false) }
 
     Dialog(
@@ -192,47 +196,17 @@ fun UpdateDialog(
                             }
                         }
 
-                        if (needPermission) {
-                            Column(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(18.dp))
-                                    .background(accent.copy(alpha = 0.08f))
-                                    .border(1.dp, accent.copy(alpha = 0.30f), RoundedCornerShape(18.dp))
-                                    .padding(14.dp),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(Icons.Filled.Warning, null, Modifier.size(18.dp), tint = accent)
-                                    Spacer(Modifier.width(8.dp))
-                                    Text(
-                                        UpdateText.get("permission_title", lang),
-                                        fontSize = 13.sp,
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = text
-                                    )
-                                }
-                                Text(
-                                    UpdateText.get("permission_body", lang),
-                                    fontSize = 12.sp,
-                                    lineHeight = 17.sp,
-                                    color = muted
-                                )
-                                Button(
-                                    onClick = { Updater.openInstallSettings(ctx) },
-                                    shape = RoundedCornerShape(12.dp),
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = accent,
-                                        contentColor = buttonContent
-                                    )
-                                ) {
-                                    Text(
-                                        UpdateText.get("permission_grant", lang),
-                                        fontSize = 12.sp,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                }
-                            }
+                        if (showPermissionDialog) {
+                            InstallPermissionDialog(
+                                colors = colors,
+                                lang = lang,
+                                isDark = isDark,
+                                onGrant = {
+                                    showPermissionDialog = false
+                                    Updater.openInstallSettings(ctx)
+                                },
+                                onDismiss = { showPermissionDialog = false }
+                            )
                         }
 
                         error?.let {
@@ -257,12 +231,12 @@ fun UpdateDialog(
                                 ),
                                 onClick = {
                                     if (!Updater.canInstall(ctx)) {
-                                        // Не открываем настройки сразу: сначала показываем
-                                        // объяснение и отдельную кнопку «Выдать разрешение».
-                                        needPermission = true
+                                        // Никакого автоматического перехода в настройки:
+                                        // сначала отдельное окно с кнопкой «Разрешить доступ».
+                                        showPermissionDialog = true
                                         return@Button
                                     }
-                                    needPermission = false
+                                    showPermissionDialog = false
                                     scope.launch {
                                         downloading = true
                                         error = null
@@ -561,16 +535,54 @@ fun WhatsNewDialog(
                     Modifier.padding(horizontal = 20.dp, vertical = 18.dp),
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
-                    Text(
-                        changelog?.takeIf { it.isNotBlank() }
-                            ?: UpdateText.get("no_changelog", lang),
-                        fontSize = 14.sp,
-                        lineHeight = 21.sp,
-                        color = muted,
-                        modifier = Modifier
-                            .heightIn(max = 300.dp)
-                            .verticalScroll(rememberScrollState())
-                    )
+                    val scroll = rememberScrollState()
+                    val canScrollDown by remember {
+                        derivedStateOf { scroll.value < scroll.maxValue - 4 }
+                    }
+                    Box(Modifier.fillMaxWidth()) {
+                        Text(
+                            changelog?.takeIf { it.isNotBlank() }
+                                ?: UpdateText.get("no_changelog", lang),
+                            fontSize = 14.sp,
+                            lineHeight = 21.sp,
+                            color = muted,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(max = 300.dp)
+                                .verticalScroll(scroll)
+                                .padding(bottom = if (canScrollDown) 18.dp else 0.dp)
+                        )
+                        if (canScrollDown) {
+                            Box(
+                                Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .padding(bottom = 2.dp)
+                                    .size(32.dp)
+                                    .clip(CircleShape)
+                                    .background(card.copy(alpha = 0.92f))
+                                    .border(1.dp, accent.copy(alpha = 0.35f), CircleShape)
+                                    .clickable {
+                                        // Подсказка-стрелка: прокручиваем вниз
+                                        // (жест прокрутки работает и без неё).
+                                    },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Filled.KeyboardArrowDown, null,
+                                    Modifier.size(20.dp), tint = accent
+                                )
+                            }
+                        }
+                    }
+                    if (canScrollDown) {
+                        Text(
+                            UpdateText.get("scroll_hint", lang),
+                            fontSize = 11.sp,
+                            color = muted.copy(alpha = 0.8f),
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    }
                     Button(
                         onClick = onDismiss,
                         modifier = Modifier.fillMaxWidth().height(48.dp),
@@ -589,6 +601,383 @@ fun WhatsNewDialog(
                 }
             }
         }
+    }
+}
+
+// ─── Разрешение на установку ─────────────────────────────────────────────────
+
+@Composable
+fun InstallPermissionDialog(
+    colors: NelevColors,
+    lang: String,
+    isDark: Boolean,
+    onGrant: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val card = colors["card"] ?: Color(0xFF101010)
+    val text = colors["text"] ?: Color.White
+    val muted = colors["muted"] ?: Color.Gray
+    val accent = colors["accent"] ?: Color(0xFFE79BC0)
+    val buttonContent = if (isDark) Color.Black else Color.White
+
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(26.dp),
+            color = card,
+            tonalElevation = 0.dp,
+            shadowElevation = 18.dp,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                Modifier.padding(22.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Box(
+                        Modifier
+                            .size(46.dp)
+                            .clip(RoundedCornerShape(15.dp))
+                            .background(accent.copy(alpha = 0.14f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(Icons.Filled.Warning, null, Modifier.size(24.dp), tint = accent)
+                    }
+                    Text(
+                        UpdateText.get("permission_title", lang),
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = text
+                    )
+                }
+                Text(
+                    UpdateText.get("permission_body", lang),
+                    fontSize = 13.sp,
+                    lineHeight = 19.sp,
+                    color = muted
+                )
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TextButton(onClick = onDismiss) {
+                        Text(UpdateText.get("close", lang), color = muted)
+                    }
+                    Spacer(Modifier.width(8.dp))
+                    Button(
+                        onClick = onGrant,
+                        shape = RoundedCornerShape(13.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = accent,
+                            contentColor = buttonContent
+                        )
+                    ) {
+                        Text(
+                            UpdateText.get("permission_grant", lang),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+// ─── Уведомление о новой версии (при запуске) ────────────────────────────────
+
+@Composable
+fun UpdateAvailableNotice(
+    versionName: String,
+    colors: NelevColors,
+    lang: String,
+    isDark: Boolean,
+    onOpenMenu: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val card = colors["card"] ?: Color(0xFF101010)
+    val text = colors["text"] ?: Color.White
+    val muted = colors["muted"] ?: Color.Gray
+    val accent = colors["accent"] ?: Color(0xFFE79BC0)
+    val buttonContent = if (isDark) Color.Black else Color.White
+
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(26.dp),
+            color = card,
+            tonalElevation = 0.dp,
+            shadowElevation = 18.dp,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                Modifier.padding(22.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Box(
+                        Modifier
+                            .size(46.dp)
+                            .clip(RoundedCornerShape(15.dp))
+                            .background(accent.copy(alpha = 0.14f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(IconsEx.SystemUpdate, null, Modifier.size(25.dp), tint = accent)
+                    }
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text(
+                            UpdateText.get("update_notice_title", lang),
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = text
+                        )
+                        Text(
+                            UpdateText.get("update_notice_version", lang).replace("%s", versionName),
+                            fontSize = 12.sp,
+                            color = muted
+                        )
+                    }
+                }
+                Text(
+                    UpdateText.get("update_notice_body", lang),
+                    fontSize = 13.sp,
+                    lineHeight = 19.sp,
+                    color = muted
+                )
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TextButton(onClick = onDismiss) {
+                        Text(UpdateText.get("later", lang), color = muted)
+                    }
+                    Spacer(Modifier.width(8.dp))
+                    Button(
+                        onClick = onOpenMenu,
+                        shape = RoundedCornerShape(13.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = accent,
+                            contentColor = buttonContent
+                        )
+                    ) {
+                        Text(
+                            UpdateText.get("update_notice_open", lang),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+// ─── Пауза уведомлений об обновлениях ────────────────────────────────────────
+
+@Composable
+fun UpdatePauseDialog(
+    colors: NelevColors,
+    lang: String,
+    isDark: Boolean,
+    pausedUntilMs: Long,
+    pausedForever: Boolean,
+    onPause: (untilMs: Long, forever: Boolean) -> Unit,
+    onResume: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val card = colors["card"] ?: Color(0xFF101010)
+    val text = colors["text"] ?: Color.White
+    val muted = colors["muted"] ?: Color.Gray
+    val border = colors["border"] ?: Color.DarkGray
+    val accent = colors["accent"] ?: Color(0xFFE79BC0)
+    val buttonContent = if (isDark) Color.Black else Color.White
+    val isPaused = pausedForever || pausedUntilMs > System.currentTimeMillis()
+    var customDays by remember { mutableStateOf("") }
+
+    fun pauseForDays(days: Long) {
+        onPause(System.currentTimeMillis() + days * 24L * 60L * 60L * 1000L, false)
+        onDismiss()
+    }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(26.dp),
+            color = card,
+            tonalElevation = 0.dp,
+            shadowElevation = 18.dp,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                Modifier
+                    .padding(22.dp)
+                    .heightIn(max = 560.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    UpdateText.get("pause_title", lang),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = text
+                )
+                Text(
+                    UpdateText.get("pause_subtitle", lang),
+                    fontSize = 13.sp,
+                    lineHeight = 19.sp,
+                    color = muted
+                )
+
+                if (isPaused) {
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(accent.copy(alpha = 0.10f))
+                            .border(1.dp, accent.copy(alpha = 0.28f), RoundedCornerShape(14.dp))
+                            .padding(14.dp)
+                    ) {
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(
+                                UpdateText.get("pause_active", lang),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = text
+                            )
+                            Text(
+                                if (pausedForever) {
+                                    UpdateText.get("pause_forever_status", lang)
+                                } else {
+                                    val fmt = java.text.SimpleDateFormat(
+                                        "dd.MM.yyyy HH:mm",
+                                        java.util.Locale.getDefault()
+                                    )
+                                    UpdateText.get("pause_until", lang)
+                                        .replace("%s", fmt.format(java.util.Date(pausedUntilMs)))
+                                },
+                                fontSize = 12.sp,
+                                color = muted
+                            )
+                        }
+                    }
+                    Button(
+                        onClick = { onResume(); onDismiss() },
+                        modifier = Modifier.fillMaxWidth().height(46.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = accent,
+                            contentColor = buttonContent
+                        )
+                    ) {
+                        Text(
+                            UpdateText.get("pause_resume", lang),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+
+                PauseOption(UpdateText.get("pause_1_week", lang), text, border, accent) {
+                    pauseForDays(7)
+                }
+                PauseOption(UpdateText.get("pause_2_weeks", lang), text, border, accent) {
+                    pauseForDays(14)
+                }
+                PauseOption(UpdateText.get("pause_1_month", lang), text, border, accent) {
+                    pauseForDays(30)
+                }
+
+                Text(
+                    UpdateText.get("pause_custom", lang),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = muted
+                )
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    OutlinedTextField(
+                        value = customDays,
+                        onValueChange = { v ->
+                            customDays = v.filter { it.isDigit() }.take(5)
+                        },
+                        singleLine = true,
+                        placeholder = {
+                            Text(UpdateText.get("pause_days_hint", lang), fontSize = 13.sp)
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.weight(1f)
+                    )
+                    Button(
+                        onClick = {
+                            val days = customDays.toLongOrNull() ?: 0L
+                            if (days > 0L) pauseForDays(days)
+                        },
+                        enabled = (customDays.toLongOrNull() ?: 0L) > 0L,
+                        modifier = Modifier.height(54.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = accent,
+                            contentColor = buttonContent
+                        )
+                    ) {
+                        Text(
+                            UpdateText.get("pause_apply", lang),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+
+                TextButton(
+                    onClick = {
+                        onPause(0L, true)
+                        onDismiss()
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        UpdateText.get("pause_forever", lang),
+                        color = Color(0xFFE5484D),
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+                TextButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(UpdateText.get("close", lang), color = muted)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PauseOption(
+    label: String,
+    text: Color,
+    border: Color,
+    accent: Color,
+    onClick: () -> Unit
+) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .border(1.dp, border, RoundedCornerShape(14.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(label, fontSize = 14.sp, color = text)
+        Box(
+            Modifier.size(7.dp).clip(CircleShape).background(accent)
+        )
     }
 }
 
@@ -635,7 +1024,25 @@ internal object UpdateText {
         "check_again" to "Check again",
         "back" to "Back",
         "next" to "Next",
-        "onboarding_update" to "Update now"
+        "onboarding_update" to "Update now",
+        "scroll_hint" to "Scroll the list to see more",
+        "pause_title" to "Pause update notifications",
+        "pause_subtitle" to "Choose how long to pause update checks and notifications. Manual checks still work.",
+        "pause_1_week" to "1 week",
+        "pause_2_weeks" to "2 weeks",
+        "pause_1_month" to "1 month",
+        "pause_custom" to "Custom period",
+        "pause_days_hint" to "Number of days",
+        "pause_apply" to "Pause",
+        "pause_forever" to "Pause forever",
+        "pause_active" to "Updates paused",
+        "pause_until" to "Notifications will resume on %s",
+        "pause_forever_status" to "Notifications are paused until you turn them back on",
+        "pause_resume" to "Resume notifications",
+        "update_notice_title" to "New version available",
+        "update_notice_version" to "NELEV %s is ready",
+        "update_notice_body" to "Go to the Menu tab to update the app.",
+        "update_notice_open" to "Open menu"
     )
 
     private val RU = mapOf(
@@ -677,7 +1084,25 @@ internal object UpdateText {
         "check_again" to "Проверить снова",
         "back" to "Назад",
         "next" to "Далее",
-        "onboarding_update" to "Обновить сейчас"
+        "onboarding_update" to "Обновить сейчас",
+        "scroll_hint" to "Прокрутите список, чтобы увидеть больше",
+        "pause_title" to "Приостановить уведомления об обновлениях",
+        "pause_subtitle" to "Выберите, на сколько приостановить проверки и уведомления. Ручная проверка всё равно работает.",
+        "pause_1_week" to "1 неделя",
+        "pause_2_weeks" to "2 недели",
+        "pause_1_month" to "1 месяц",
+        "pause_custom" to "Свой срок",
+        "pause_days_hint" to "Количество дней",
+        "pause_apply" to "Приостановить",
+        "pause_forever" to "Приостановить навсегда",
+        "pause_active" to "Обновления приостановлены",
+        "pause_until" to "Уведомления возобновятся %s",
+        "pause_forever_status" to "Уведомления приостановлены, пока вы их не включите",
+        "pause_resume" to "Возобновить уведомления",
+        "update_notice_title" to "Доступна новая версия",
+        "update_notice_version" to "NELEV %s готов к установке",
+        "update_notice_body" to "Перейдите на вкладку «Меню», чтобы обновиться.",
+        "update_notice_open" to "Открыть меню"
     )
 
     private val ES = mapOf(
@@ -719,7 +1144,25 @@ internal object UpdateText {
         "check_again" to "Comprobar de nuevo",
         "back" to "Atrás",
         "next" to "Siguiente",
-        "onboarding_update" to "Actualizar ahora"
+        "onboarding_update" to "Actualizar ahora",
+        "scroll_hint" to "Desplaza la lista para ver más",
+        "pause_title" to "Pausar notificaciones de actualización",
+        "pause_subtitle" to "Elige cuánto tiempo pausar las comprobaciones y notificaciones. Las comprobaciones manuales siguen funcionando.",
+        "pause_1_week" to "1 semana",
+        "pause_2_weeks" to "2 semanas",
+        "pause_1_month" to "1 mes",
+        "pause_custom" to "Período personalizado",
+        "pause_days_hint" to "Número de días",
+        "pause_apply" to "Pausar",
+        "pause_forever" to "Pausar para siempre",
+        "pause_active" to "Actualizaciones pausadas",
+        "pause_until" to "Las notificaciones se reanudarán el %s",
+        "pause_forever_status" to "Las notificaciones están pausadas hasta que las vuelvas a activar",
+        "pause_resume" to "Reanudar notificaciones",
+        "update_notice_title" to "Nueva versión disponible",
+        "update_notice_version" to "NELEV %s está listo",
+        "update_notice_body" to "Ve a la pestaña Menú para actualizar la aplicación.",
+        "update_notice_open" to "Abrir menú"
     )
 
     private val ZH = mapOf(
@@ -761,7 +1204,25 @@ internal object UpdateText {
         "check_again" to "重新检查",
         "back" to "返回",
         "next" to "下一步",
-        "onboarding_update" to "立即更新"
+        "onboarding_update" to "立即更新",
+        "scroll_hint" to "滚动列表查看更多",
+        "pause_title" to "暂停更新通知",
+        "pause_subtitle" to "选择暂停检查和通知的时长。手动检查仍然有效。",
+        "pause_1_week" to "1周",
+        "pause_2_weeks" to "2周",
+        "pause_1_month" to "1个月",
+        "pause_custom" to "自定义时长",
+        "pause_days_hint" to "天数",
+        "pause_apply" to "暂停",
+        "pause_forever" to "永久暂停",
+        "pause_active" to "更新已暂停",
+        "pause_until" to "通知将在 %s 恢复",
+        "pause_forever_status" to "通知已暂停，直到您重新开启",
+        "pause_resume" to "恢复通知",
+        "update_notice_title" to "有新版本",
+        "update_notice_version" to "NELEV %s 已就绪",
+        "update_notice_body" to "前往菜单标签页更新应用。",
+        "update_notice_open" to "打开菜单"
     )
 
     private val JA = mapOf(
@@ -803,7 +1264,25 @@ internal object UpdateText {
         "check_again" to "再確認",
         "back" to "戻る",
         "next" to "次へ",
-        "onboarding_update" to "今すぐ更新"
+        "onboarding_update" to "今すぐ更新",
+        "scroll_hint" to "リストをスクロールして詳細を表示",
+        "pause_title" to "更新通知を一時停止",
+        "pause_subtitle" to "チェックと通知を一時停止する期間を選択してください。手動チェックは引き続き機能します。",
+        "pause_1_week" to "1週間",
+        "pause_2_weeks" to "2週間",
+        "pause_1_month" to "1ヶ月",
+        "pause_custom" to "カスタム期間",
+        "pause_days_hint" to "日数",
+        "pause_apply" to "一時停止",
+        "pause_forever" to "永久に一時停止",
+        "pause_active" to "更新が一時停止中",
+        "pause_until" to "通知は %s に再開されます",
+        "pause_forever_status" to "通知は再度有効にするまで一時停止されています",
+        "pause_resume" to "通知を再開",
+        "update_notice_title" to "新しいバージョンがあります",
+        "update_notice_version" to "NELEV %s が利用可能です",
+        "update_notice_body" to "メニュータブに移動してアプリを更新してください。",
+        "update_notice_open" to "メニューを開く"
     )
 
     private val KO = mapOf(
@@ -845,7 +1324,25 @@ internal object UpdateText {
         "check_again" to "다시 확인",
         "back" to "뒤로",
         "next" to "다음",
-        "onboarding_update" to "지금 업데이트"
+        "onboarding_update" to "지금 업데이트",
+        "scroll_hint" to "목록을 스크롤하여 더 보기",
+        "pause_title" to "업데이트 알림 일시정지",
+        "pause_subtitle" to "확인 및 알림을 일시정지할 기간을 선택하세요. 수동 확인은 계속 작동합니다.",
+        "pause_1_week" to "1주",
+        "pause_2_weeks" to "2주",
+        "pause_1_month" to "1개월",
+        "pause_custom" to "사용자 지정 기간",
+        "pause_days_hint" to "일수",
+        "pause_apply" to "일시정지",
+        "pause_forever" to "영구 일시정지",
+        "pause_active" to "업데이트 일시정지됨",
+        "pause_until" to "알림은 %s에 재개됩니다",
+        "pause_forever_status" to "알림이 다시 켤 때까지 일시정지되었습니다",
+        "pause_resume" to "알림 재개",
+        "update_notice_title" to "새 버전 사용 가능",
+        "update_notice_version" to "NELEV %s을(를) 사용할 수 있습니다",
+        "update_notice_body" to "메뉴 탭으로 이동하여 앱을 업데이트하세요.",
+        "update_notice_open" to "메뉴 열기"
     )
 
     private val PT = mapOf(
@@ -887,7 +1384,25 @@ internal object UpdateText {
         "check_again" to "Verificar novamente",
         "back" to "Voltar",
         "next" to "Próximo",
-        "onboarding_update" to "Atualizar agora"
+        "onboarding_update" to "Atualizar agora",
+        "scroll_hint" to "Role a lista para ver mais",
+        "pause_title" to "Pausar notificações de atualização",
+        "pause_subtitle" to "Escolha por quanto tempo pausar as verificações e notificações. Verificações manuais ainda funcionam.",
+        "pause_1_week" to "1 semana",
+        "pause_2_weeks" to "2 semanas",
+        "pause_1_month" to "1 mês",
+        "pause_custom" to "Período personalizado",
+        "pause_days_hint" to "Número de dias",
+        "pause_apply" to "Pausar",
+        "pause_forever" to "Pausar para sempre",
+        "pause_active" to "Atualizações pausadas",
+        "pause_until" to "As notificações serão retomadas em %s",
+        "pause_forever_status" to "As notificações estão pausadas até você ativá-las novamente",
+        "pause_resume" to "Retomar notificações",
+        "update_notice_title" to "Nova versão disponível",
+        "update_notice_version" to "NELEV %s está pronto",
+        "update_notice_body" to "Vá para a aba Menu para atualizar o aplicativo.",
+        "update_notice_open" to "Abrir menu"
     )
 
     private val UK = mapOf(
@@ -929,7 +1444,25 @@ internal object UpdateText {
         "check_again" to "Перевірити знову",
         "back" to "Назад",
         "next" to "Далі",
-        "onboarding_update" to "Оновити зараз"
+        "onboarding_update" to "Оновити зараз",
+        "scroll_hint" to "Прокрутіть список, щоб побачити більше",
+        "pause_title" to "Призупинити сповіщення про оновлення",
+        "pause_subtitle" to "Виберіть, на скільки призупинити перевірки та сповіщення. Ручна перевірка все одно працює.",
+        "pause_1_week" to "1 тиждень",
+        "pause_2_weeks" to "2 тижні",
+        "pause_1_month" to "1 місяць",
+        "pause_custom" to "Свій термін",
+        "pause_days_hint" to "Кількість днів",
+        "pause_apply" to "Призупинити",
+        "pause_forever" to "Призупинити назавжди",
+        "pause_active" to "Оновлення призупинено",
+        "pause_until" to "Сповіщення відновляться %s",
+        "pause_forever_status" to "Сповіщення призупинено, доки ви їх не ввімкнете",
+        "pause_resume" to "Відновити сповіщення",
+        "update_notice_title" to "Доступна нова версія",
+        "update_notice_version" to "NELEV %s готовий до встановлення",
+        "update_notice_body" to "Перейдіть на вкладку «Меню», щоб оновитися.",
+        "update_notice_open" to "Відкрити меню"
     )
 
     fun get(key: String, lang: String): String {

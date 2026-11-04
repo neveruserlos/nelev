@@ -128,17 +128,41 @@ data class AppSettings(
     val lastStatisticsSentMs: Long = 0L,
     val userUID: String = "",
     val autoStartEnabled: Boolean = false,
-    val syncWithPc: Boolean = true
-)
+    val syncWithPc: Boolean = true,
+    // Пауза уведомлений об обновлениях: 0 — не приостановлено.
+    val updatesPausedUntilMs: Long = 0L,
+    val updatesPausedForever: Boolean = false
+) {
+    fun updatesPaused(now: Long = System.currentTimeMillis()): Boolean =
+        updatesPausedForever || (updatesPausedUntilMs > now)
+}
 
 object SettingsStore {
     private const val FILE = "nelev_app.txt"
 
-    private fun generateUID(): String {
+    private fun generateUID(ctx: Context): String {
         val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        return (1..10)
-            .map { chars.random() }
-            .joinToString("")
+        // ANDROID_ID стабилен для пары «устройство + подпись приложения» и
+        // переживает удаление/переустановку. Из него детерминированно получаем
+        // тот же UID, поэтому после переустановки ID не меняется.
+        val androidId = try {
+            android.provider.Settings.Secure.getString(
+                ctx.contentResolver,
+                android.provider.Settings.Secure.ANDROID_ID
+            ).orEmpty()
+        } catch (_: Exception) {
+            ""
+        }
+        if (androidId.isNotBlank()) {
+            try {
+                val digest = java.security.MessageDigest.getInstance("SHA-256")
+                    .digest("nelev:$androidId:${ctx.packageName}".toByteArray())
+                return (0 until 10)
+                    .map { chars[(digest[it].toInt() and 0xFF) % chars.length] }
+                    .joinToString("")
+            } catch (_: Exception) {}
+        }
+        return (1..10).map { chars.random() }.joinToString("")
     }
 
     fun load(ctx: Context): AppSettings = try {
@@ -147,8 +171,9 @@ object SettingsStore {
         val m = if (isFirstLaunch) emptyMap() else file.readLines()
             .mapNotNull { it.split("=", limit = 2).takeIf { p -> p.size == 2 }?.let { p -> p[0] to p[1] } }.toMap()
 
-        // Генерируем UID при первом запуске
-        val uid = m["userUID"]?.takeIf { it.isNotEmpty() } ?: generateUID()
+        // UID генерируется один раз и хранится в настройках. Если файл удалён
+        // вместе с приложением — восстанавливается из ANDROID_ID.
+        val uid = m["userUID"]?.takeIf { it.isNotEmpty() } ?: generateUID(ctx)
 
         AppSettings(
             isDark               = m["isDark"] == "true",
@@ -167,7 +192,9 @@ object SettingsStore {
             lastStatisticsSentMs = m["lastStatisticsSentMs"]?.toLongOrNull() ?: 0L,
             userUID              = uid,
             autoStartEnabled     = m["autoStartEnabled"] == "true",
-            syncWithPc           = m["syncWithPc"] != "false"
+            syncWithPc           = m["syncWithPc"] != "false",
+            updatesPausedUntilMs = m["updatesPausedUntilMs"]?.toLongOrNull() ?: 0L,
+            updatesPausedForever = m["updatesPausedForever"] == "true"
         )
     } catch (_: Exception) { AppSettings() }
 
@@ -186,7 +213,9 @@ object SettingsStore {
                     "lastStatisticsSentMs=${s.lastStatisticsSentMs}\n" +
                     "userUID=${s.userUID}\n" +
                     "autoStartEnabled=${s.autoStartEnabled}\n" +
-                    "syncWithPc=${s.syncWithPc}\n"
+                    "syncWithPc=${s.syncWithPc}\n" +
+                    "updatesPausedUntilMs=${s.updatesPausedUntilMs}\n" +
+                    "updatesPausedForever=${s.updatesPausedForever}\n"
         )
     } catch (_: Exception) {}
 }
@@ -200,6 +229,8 @@ object SessionStore {
     private const val FILE = "nelev_sessions.txt"
     private const val ACTIVE_SESSION_FILE = "nelev_active_session.txt"
     private const val MAX  = 50
+    // Сессии короче секунды не записываем: защита от спама «старт/стоп».
+    const val MIN_DURATION_MS = 1000L
     
     fun load(ctx: Context): List<SessionRecord> = try {
         File(ctx.filesDir, FILE).readLines().mapNotNull { line ->
@@ -209,6 +240,10 @@ object SessionStore {
     } catch (_: Exception) { emptyList() }
     
     fun append(ctx: Context, record: SessionRecord) {
+        if (record.durationMs < MIN_DURATION_MS) {
+            clearActive(ctx)
+            return
+        }
         val list = load(ctx).toMutableList().also { it.add(record) }.takeLast(MAX)
         try { File(ctx.filesDir, FILE).writeText(list.joinToString("\n") { "${it.startMs},${it.durationMs},${it.avgPingMs}" }) }
         catch (_: Exception) {}
@@ -1113,12 +1148,12 @@ object TelegramSender {
     fun sendStatistics(ctx: Context, forceUpdate: Boolean = false): Boolean {
         val settings = SettingsStore.load(ctx)
         val currentTime = System.currentTimeMillis()
-        val oneDayMs = 24 * 60 * 60 * 1000L
+        val twoDaysMs = 2 * 24 * 60 * 60 * 1000L
 
-        // Проверяем, прошло ли 24 часа с последней отправки
-        if (!forceUpdate && (currentTime - settings.lastStatisticsSentMs) < oneDayMs) {
+        // Статистика отправляется не чаще одного раза в 2 дня (по дате телефона)
+        if (!forceUpdate && (currentTime - settings.lastStatisticsSentMs) < twoDaysMs) {
             android.util.Log.d("TelegramSender", "Statistics blocked: last sent ${(currentTime - settings.lastStatisticsSentMs) / 1000 / 60} minutes ago")
-            return false // Ещё не прошло 24 часа
+            return false
         }
 
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
@@ -2206,15 +2241,15 @@ class MainActivity : ComponentActivity() {
             var whatsNewNotes by remember { mutableStateOf<String?>(null) }
             var whatsNewChecked by remember { mutableStateOf(false) }
 
-            // Автоматическая отправка статистики при запуске (только если прошло больше 24 часов)
+            // Автоматическая отправка статистики при запуске (раз в 2 дня)
             LaunchedEffect(Unit) {
                 if (appSettings.value.sendStatistics) {
                     val currentTime = System.currentTimeMillis()
                     val lastSent = appSettings.value.lastStatisticsSentMs
-                    val oneDayMs = 24 * 60 * 60 * 1000L
+                    val twoDaysMs = 2 * 24 * 60 * 60 * 1000L
 
-                    // Отправляем только если прошло больше 24 часов
-                    if (currentTime - lastSent >= oneDayMs) {
+                    // Отправляем только если прошло больше 2 дней по часам телефона
+                    if (currentTime - lastSent >= twoDaysMs) {
                         TelegramSender.sendStatistics(ctx, forceUpdate = false)
                     }
                 }
@@ -3417,13 +3452,13 @@ fun NelevSplash(isDark: Boolean, onFinish: () -> Unit) {
     }
 
     LaunchedEffect(Unit) {
-        delay(40) // OPTIMIZATION: 60ms → 40ms - быстрее старт
-        animateTo(120) { outlineAlpha = easeOutCubic(it) } // OPTIMIZATION: 160ms → 120ms
-        delay(20) // OPTIMIZATION: 30ms → 20ms
-        animateTo(140) { fillProgress = it } // OPTIMIZATION: 180ms → 140ms
+        delay(60)
+        animateTo(200) { outlineAlpha = easeOutCubic(it) }
+        delay(30)
+        animateTo(240) { fillProgress = easeOutCubic(it) }
         fillProgress = 1f
-        delay(60) // OPTIMIZATION: 100ms → 60ms
-        animateTo(130) { splashAlpha = 1f - easeOutCubic(it) } // OPTIMIZATION: 180ms → 130ms
+        delay(90)
+        animateTo(200) { splashAlpha = 1f - easeOutCubic(it) }
         onFinish()
     }
 
@@ -3532,6 +3567,8 @@ fun NelevMainScreen(
     var updateInfo by remember { mutableStateOf<UpdateInfo?>(null) }
     var updateChecking by remember { mutableStateOf(false) }
     var showUpdateError by remember { mutableStateOf(false) }
+    var showUpdateNotice by remember { mutableStateOf(false) }
+    var showPauseDialog by remember { mutableStateOf(false) }
     val updateScope = rememberCoroutineScope()
     var isTransitioning by remember { mutableStateOf(false) }
     val showStats      = remember { mutableStateOf(false) }
@@ -3551,12 +3588,21 @@ fun NelevMainScreen(
     }
 
     // OTA: тихая проверка обновлений при запуске (не чаще раза в 3 часа)
+    // Если обновления не приостановлены — показываем лёгкое уведомление.
     LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(3000)
+        if (appSettings.value.updatesPaused()) {
+            // Пауза активна: автопроверка отключена
+            return@LaunchedEffect
+        }
         if (Updater.shouldAutoCheck(ctx)) {
             Updater.markChecked(ctx)
             Updater.check(ctx, respectSkip = true).onSuccess { info ->
-                if (info != null) updateInfo = info
+                if (info != null) {
+                    // Не открываем полный диалог: только лёгкое уведомление
+                    updateInfo = info
+                    showUpdateNotice = true
+                }
             }
         }
     }
@@ -4045,16 +4091,34 @@ fun NelevMainScreen(
             )
 
             updateInfo?.let { info ->
-                UpdateDialog(
-                    info = info,
-                    colors = colors,
-                    lang = lang,
-                    isDark = isDark,
-                    onDismiss = {
-                        Updater.markSkipped(ctx, info.versionCode)
-                        updateInfo = null
-                    }
-                )
+                if (showUpdateNotice) {
+                    UpdateAvailableNotice(
+                        versionName = info.versionName,
+                        colors = colors,
+                        lang = lang,
+                        isDark = isDark,
+                        onOpenMenu = {
+                            showUpdateNotice = false
+                            selectedTab.value = NelevTab.SETTINGS
+                        },
+                        onDismiss = {
+                            showUpdateNotice = false
+                            Updater.markSkipped(ctx, info.versionCode)
+                            updateInfo = null
+                        }
+                    )
+                } else {
+                    UpdateDialog(
+                        info = info,
+                        colors = colors,
+                        lang = lang,
+                        isDark = isDark,
+                        onDismiss = {
+                            Updater.markSkipped(ctx, info.versionCode)
+                            updateInfo = null
+                        }
+                    )
+                }
             }
 
             if (showUpdateError) {
@@ -4066,6 +4130,33 @@ fun NelevMainScreen(
                         checkUpdates()
                     },
                     onDismiss = { showUpdateError = false }
+                )
+            }
+
+            if (showPauseDialog) {
+                UpdatePauseDialog(
+                    colors = colors,
+                    lang = lang,
+                    isDark = isDark,
+                    pausedUntilMs = appSettings.value.updatesPausedUntilMs,
+                    pausedForever = appSettings.value.updatesPausedForever,
+                    onPause = { untilMs, forever ->
+                        val s = appSettings.value.copy(
+                            updatesPausedUntilMs = untilMs,
+                            updatesPausedForever = forever
+                        )
+                        appSettings.value = s
+                        SettingsStore.save(ctx, s)
+                    },
+                    onResume = {
+                        val s = appSettings.value.copy(
+                            updatesPausedUntilMs = 0L,
+                            updatesPausedForever = false
+                        )
+                        appSettings.value = s
+                        SettingsStore.save(ctx, s)
+                    },
+                    onDismiss = { showPauseDialog = false }
                 )
             }
         }
@@ -4386,7 +4477,8 @@ private fun TabContent(
     selectedTab: MutableState<NelevTab>,
     showAbout: MutableState<Boolean>,
     onCheckUpdates: () -> Unit = {},
-    onScanQr: () -> Unit = {}
+    onScanQr: () -> Unit = {},
+    onShowPauseDialog: () -> Unit = {}
 ) {
     val ctx = LocalContext.current
     when (tab) {
@@ -4395,7 +4487,7 @@ private fun TabContent(
             menuCentered = appSettings.value.menuCentered, onScanQr = onScanQr)
         NelevTab.FILTERS  -> FiltersScreen(appState, colors, lang, sliderDragging, appSettings.value.soundClickEnabled, effectsEnabled, isDark, menuCentered = appSettings.value.menuCentered)
         NelevTab.INFO     -> InfoScreen(colors, lang, effectsEnabled)
-        NelevTab.SETTINGS -> SettingsScreen(appSettings, colors, lang, ctx, showHistory, selectedTab, showAbout, onCheckUpdates)
+        NelevTab.SETTINGS -> SettingsScreen(appSettings, colors, lang, ctx, showHistory, selectedTab, showAbout, onCheckUpdates, onShowPauseDialog)
     }
 }
 
@@ -6809,7 +6901,12 @@ fun SessionHistoryScreen(
             }
         }
     } else {
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
                     // Активная сессия (живой таймер)
                     if (activeStart > 0L) {
                         key("active") {
@@ -7066,7 +7163,8 @@ fun SettingsScreen(
     showHistory: MutableState<Boolean>,
     selectedTab: MutableState<NelevTab>,
     showAbout: MutableState<Boolean>,
-    onCheckUpdates: () -> Unit = {}
+    onCheckUpdates: () -> Unit = {},
+    onShowPauseDialog: () -> Unit = {}
 ) {
     val bg = colors["bg"]!!
     val text = colors["text"]!!
@@ -7259,82 +7357,129 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
             }
         }
 
-        AnimatedOutlinedButton(
-            onClick = {
-                if (soundClickEnabled) ClickPlayer.play(ctx)
-                onCheckUpdates()
-            },
-            modifier = Modifier.fillMaxWidth().height(68.dp),
-            shape = RoundedCornerShape(20.dp),
-            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Transparent, contentColor = text),
-            border = androidx.compose.foundation.BorderStroke(1.dp, accent.copy(alpha = 0.35f)),
-            effectsEnabled = effectsEnabled
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(
-                        Brush.linearGradient(
-                            listOf(
-                                accent.copy(alpha = 0.22f),
-                                accent.copy(alpha = 0.08f),
-                                card.copy(alpha = 0.55f)
-                            )
-                        )
-                    )
+            AnimatedOutlinedButton(
+                onClick = {
+                    if (soundClickEnabled) ClickPlayer.play(ctx)
+                    onCheckUpdates()
+                },
+                modifier = Modifier.weight(1f).height(68.dp),
+                shape = RoundedCornerShape(20.dp),
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Transparent, contentColor = text),
+                border = androidx.compose.foundation.BorderStroke(1.dp, accent.copy(alpha = 0.35f)),
+                effectsEnabled = effectsEnabled
             ) {
                 Box(
                     Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(end = 10.dp)
-                        .size(92.dp)
-                        .clip(CircleShape)
-                        .background(accent.copy(alpha = 0.07f))
-                )
-                Row(
-                    Modifier.fillMaxSize().padding(horizontal = 14.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(
+                            Brush.linearGradient(
+                                listOf(
+                                    accent.copy(alpha = 0.22f),
+                                    accent.copy(alpha = 0.08f),
+                                    card.copy(alpha = 0.55f)
+                                )
+                            )
+                        )
                 ) {
                     Box(
                         Modifier
-                            .size(42.dp)
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(
-                                Brush.linearGradient(
-                                    listOf(accent, accent.copy(alpha = 0.68f))
-                                )
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(IconsEx.SystemUpdate, null, Modifier.size(23.dp), tint = buttonContent)
-                    }
-                    Spacer(Modifier.width(12.dp))
-                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(
-                            Strings.get("check_update", lang),
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = text
-                        )
-                        Text(
-                            "${Strings.get("version", lang)} $APP_VERSION",
-                            fontSize = 11.sp,
-                            color = muted
-                        )
-                    }
-                    Box(
-                        Modifier
-                            .size(30.dp)
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 10.dp)
+                            .size(72.dp)
                             .clip(CircleShape)
-                            .background(accent.copy(alpha = 0.12f)),
-                        contentAlignment = Alignment.Center
+                            .background(accent.copy(alpha = 0.07f))
+                    )
+                    Row(
+                        Modifier.fillMaxSize().padding(horizontal = 14.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            Icons.Filled.KeyboardArrowRight, null,
-                            Modifier.size(19.dp), tint = accent
-                        )
+                        Box(
+                            Modifier
+                                .size(42.dp)
+                                .clip(RoundedCornerShape(14.dp))
+                                .background(
+                                    Brush.linearGradient(
+                                        listOf(accent, accent.copy(alpha = 0.68f))
+                                    )
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(IconsEx.SystemUpdate, null, Modifier.size(23.dp), tint = buttonContent)
+                        }
+                        Spacer(Modifier.width(12.dp))
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Text(
+                                Strings.get("check_update", lang),
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = text
+                            )
+                            Text(
+                                "${Strings.get("version", lang)} $APP_VERSION",
+                                fontSize = 11.sp,
+                                color = muted
+                            )
+                        }
                     }
+                }
+            }
+            // Иконка «Что нового» справа от кнопки обновления
+            Box(
+                Modifier
+                    .size(68.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(card)
+                    .border(1.dp, border, RoundedCornerShape(20.dp))
+                    .clickable {
+                        if (soundClickEnabled) ClickPlayer.play(ctx)
+                        // Просто открываем меню, чтобы показать текущую версию
+                        selectedTab.value = NelevTab.SETTINGS
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    Icons.Filled.CheckCircle, null,
+                    Modifier.size(28.dp), tint = accent
+                )
+            }
+        }
+
+        // Кнопка настроек паузы обновлений
+        AnimatedOutlinedButton(
+            onClick = {
+                if (soundClickEnabled) ClickPlayer.play(ctx)
+                onShowPauseDialog()
+            },
+            modifier = Modifier.fillMaxWidth().height(56.dp),
+            shape = RoundedCornerShape(18.dp),
+            colors = ButtonDefaults.outlinedButtonColors(containerColor = card, contentColor = text),
+            border = androidx.compose.foundation.BorderStroke(1.dp, border),
+            effectsEnabled = effectsEnabled
+        ) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val paused = appSettings.value.updatesPaused()
+                Text(
+                    if (paused) Strings.get("pause_updates_active", lang)
+                    else Strings.get("pause_updates", lang),
+                    fontSize = 14.sp,
+                    color = text
+                )
+                if (paused) {
+                    Box(
+                        Modifier.size(8.dp).clip(CircleShape).background(Color(0xFFFFA726))
+                    )
+                } else {
+                    Icon(Icons.Filled.KeyboardArrowRight, null, Modifier.size(18.dp), tint = muted)
                 }
             }
         }
@@ -7899,13 +8044,14 @@ fun AboutAppOverlay(
                                                 )
                                                 // Таймер до следующей отправки
                                                 val timeLeft = remember(appSettings.value.lastStatisticsSentMs) {
-                                                    val oneDayMs = 24 * 60 * 60 * 1000L
+                                                    val twoDaysMs = 2 * 24 * 60 * 60 * 1000L
                                                     val elapsed = System.currentTimeMillis() - appSettings.value.lastStatisticsSentMs
-                                                    val remaining = oneDayMs - elapsed
+                                                    val remaining = twoDaysMs - elapsed
                                                     if (remaining > 0 && appSettings.value.lastStatisticsSentMs > 0) {
-                                                        val hours = remaining / (60 * 60 * 1000)
+                                                        val days = remaining / (24 * 60 * 60 * 1000)
+                                                        val hours = (remaining % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000)
                                                         val minutes = (remaining % (60 * 60 * 1000)) / (60 * 1000)
-                                                        "${hours}ч ${minutes}м"
+                                                        if (days > 0) "${days}д ${hours}ч" else "${hours}ч ${minutes}м"
                                                     } else null
                                                 }
                                                 if (timeLeft != null && appSettings.value.sendStatistics) {
