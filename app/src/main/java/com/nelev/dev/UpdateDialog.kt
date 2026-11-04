@@ -2,8 +2,11 @@ package com.nelev.dev
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -156,7 +159,14 @@ fun UpdateDialog(
                                 label = "update_notes_arrow"
                             )
                             Column(
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .animateContentSize(
+                                        animationSpec = spring(
+                                            dampingRatio = Spring.DampingRatioNoBouncy,
+                                            stiffness = Spring.StiffnessMediumLow
+                                        )
+                                    )
                             ) {
                                 Row(
                                     modifier = Modifier
@@ -180,17 +190,7 @@ fun UpdateDialog(
                                         tint = muted
                                     )
                                 }
-                                androidx.compose.animation.AnimatedVisibility(
-                                    visible = showNotes,
-                                    enter = expandVertically(
-                                        animationSpec = tween(320, easing = FastOutSlowInEasing),
-                                        expandFrom = Alignment.Top
-                                    ),
-                                    exit = shrinkVertically(
-                                        animationSpec = tween(280, easing = FastOutSlowInEasing),
-                                        shrinkTowards = Alignment.Top
-                                    )
-                                ) {
+                                if (showNotes) {
                                     Text(
                                         info.changelog,
                                         fontSize = 13.sp,

@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 48,
+      "versionName": "1.9.13",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Убрано дёрганье окна при изменении размера (паузы обновлений)\n• Плашка выбора теперь плавно \"переплывает\" между пунктами\n• Исправлено дёрганье окна \"Что нового\" при раскрытии\n• Исправлена загрузка переводов changelog для всех языков\n• Все анимации теперь используют spring для естественного движения",
+        "en": "• Removed window jerking on resize (update pause)\n• Selection plate now smoothly \"floats\" between items\n• Fixed What's New window jerking on expansion\n• Fixed changelog translation loading for all languages\n• All animations now use spring for natural movement",
+        "es": "• Eliminado el movimiento brusco de la ventana al cambiar tamaño (pausa de actualización)\n• La placa de selección ahora \"flota\" suavemente entre elementos\n• Corregido movimiento brusco de ventana de Novedades al expandir\n• Corregida carga de traducción de changelog para todos los idiomas\n• Todas las animaciones ahora usan spring para movimiento natural",
+        "zh": "• 移除了调整大小时的窗口抖动（更新暂停）\n• 选择板现在在项目之间平滑\"浮动\"\n• 修复了展开时新功能窗口的抖动\n• 修复了所有语言的更新日志翻译加载\n• 所有动画现在使用弹簧以实现自然运动",
+        "ja": "• リサイズ時のウィンドウのガタつきを削除（更新一時停止）\n• 選択プレートがアイテム間をスムーズに\"浮遊\"するようになりました\n• 新機能ウィンドウの展開時のガタつきを修正\n• すべての言語の変更履歴翻訳の読み込みを修正\n• すべてのアニメーションが自然な動きのためにスプリングを使用するようになりました",
+        "ko": "• 크기 조정 시 창 떨림 제거（업데이트 일시 중지）\n• 선택 플레이트가 이제 항목 간에 부드럽게 \"떠다님\"\n• 확장 시 새 기능 창 떨림 수정\n• 모든 언어에 대한 변경 로그 번역 로딩 수정\n• 모든 애니메이션이 이제 자연스러운 움직임을 위해 스프링 사용",
+        "pt": "• Removido o movimento brusco da janela ao redimensionar (pausa de atualização)\n• A placa de seleção agora \"flutua\" suavemente entre itens\n• Corrigido movimento brusco da janela de Novidades ao expandir\n• Corrigido carregamento de tradução de changelog para todos os idiomas\n• Todas as animações agora usam spring para movimento natural",
+        "uk": "• Прибрано смикання вікна при зміні розміру (паузи оновлень)\n• Плашка вибору тепер плавно \"переплаває\" між пунктами\n• Виправлено смикання вікна \"Що нового\" при розкритті\n• Виправлено завантаження перекладів changelog для всіх мов\n• Всі анімації тепер використовують spring для природного руху"
+      }
+    },
+    {
       "versionCode": 47,
       "versionName": "1.9.12",
       "releaseDate": "2026-11-04",

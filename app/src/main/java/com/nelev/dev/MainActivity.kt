@@ -8401,7 +8401,15 @@ fun AboutAppOverlay(
                                         UpdateText.get("pause_custom", lang) to 0L
                                     )
                                     
-                                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                                    Column(
+                                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                                        modifier = Modifier.animateContentSize(
+                                            animationSpec = spring(
+                                                dampingRatio = Spring.DampingRatioNoBouncy,
+                                                stiffness = Spring.StiffnessMediumLow
+                                            )
+                                        )
+                                    ) {
                                         if (isPaused) {
                                             Text(
                                                 if (appSettings.value.updatesPausedForever) {
@@ -8422,85 +8430,89 @@ fun AboutAppOverlay(
                                             color = muted
                                         )
                                         
-                                        Column(
-                                            Modifier
-                                                .fillMaxWidth()
-                                                .clip(RoundedCornerShape(16.dp))
-                                                .background(if (isDark) Color.White.copy(alpha = 0.04f) else Color.Black.copy(alpha = 0.02f))
-                                                .border(1.dp, border, RoundedCornerShape(16.dp))
-                                                .padding(10.dp),
-                                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                                        ) {
-                                            presets.forEachIndexed { idx, (label, days) ->
-                                                val isSelected = selectedPauseOption == idx
-                                                val backgroundColor by animateColorAsState(
-                                                    if (isSelected) colors["accent"]!!.copy(alpha = 0.12f) else Color.Transparent,
-                                                    animationSpec = tween(250, easing = FastOutSlowInEasing),
-                                                    label = "pause_bg_$idx"
-                                                )
-                                                val borderColor by animateColorAsState(
-                                                    if (isSelected) colors["accent"]!!.copy(alpha = 0.35f) else Color.Transparent,
-                                                    animationSpec = tween(250, easing = FastOutSlowInEasing),
-                                                    label = "pause_border_$idx"
-                                                )
-                                                Row(
+                                        Box {
+                                            // Фоновая плашка которая переплывает
+                                            val selectedOffset by animateDpAsState(
+                                                targetValue = if (selectedPauseOption != null) (selectedPauseOption!! * 44).dp else 0.dp,
+                                                animationSpec = spring(
+                                                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                                                    stiffness = Spring.StiffnessMedium
+                                                ),
+                                                label = "pause_selection_offset"
+                                            )
+                                            
+                                            if (selectedPauseOption != null) {
+                                                Box(
                                                     Modifier
+                                                        .offset(y = selectedOffset + 10.dp)
                                                         .fillMaxWidth()
+                                                        .height(44.dp)
+                                                        .padding(horizontal = 10.dp)
                                                         .clip(RoundedCornerShape(12.dp))
-                                                        .background(backgroundColor)
-                                                        .border(1.dp, borderColor, RoundedCornerShape(12.dp))
-                                                        .clickable {
-                                                            if (soundClickEnabled) ClickPlayer.play(ctx)
-                                                            selectedPauseOption = idx
-                                                        }
-                                                        .padding(horizontal = 14.dp, vertical = 12.dp),
-                                                    verticalAlignment = Alignment.CenterVertically
-                                                ) {
-                                                    val buttonContent = if (isDark) Color.Black else Color.White
-                                                    Box(
+                                                        .background(colors["accent"]!!.copy(alpha = 0.12f))
+                                                        .border(1.dp, colors["accent"]!!.copy(alpha = 0.35f), RoundedCornerShape(12.dp))
+                                                )
+                                            }
+                                            
+                                            Column(
+                                                Modifier
+                                                    .fillMaxWidth()
+                                                    .clip(RoundedCornerShape(16.dp))
+                                                    .background(if (isDark) Color.White.copy(alpha = 0.04f) else Color.Black.copy(alpha = 0.02f))
+                                                    .border(1.dp, border, RoundedCornerShape(16.dp))
+                                                    .padding(10.dp),
+                                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                                            ) {
+                                                presets.forEachIndexed { idx, (label, days) ->
+                                                    val isSelected = selectedPauseOption == idx
+                                                    Row(
                                                         Modifier
-                                                            .size(20.dp)
-                                                            .clip(CircleShape)
-                                                            .border(2.dp, if (isSelected) colors["accent"]!! else muted, CircleShape)
-                                                            .background(if (isSelected) colors["accent"]!! else Color.Transparent),
-                                                        contentAlignment = Alignment.Center
+                                                            .fillMaxWidth()
+                                                            .height(44.dp)
+                                                            .clip(RoundedCornerShape(12.dp))
+                                                            .clickable {
+                                                                if (soundClickEnabled) ClickPlayer.play(ctx)
+                                                                selectedPauseOption = idx
+                                                            }
+                                                            .padding(horizontal = 14.dp, vertical = 12.dp),
+                                                        verticalAlignment = Alignment.CenterVertically
                                                     ) {
-                                                        androidx.compose.animation.AnimatedVisibility(
-                                                            visible = isSelected,
-                                                            enter = scaleIn(animationSpec = tween(150, easing = FastOutSlowInEasing)),
-                                                            exit = scaleOut(animationSpec = tween(150, easing = FastOutSlowInEasing))
+                                                        val buttonContent = if (isDark) Color.Black else Color.White
+                                                        Box(
+                                                            Modifier
+                                                                .size(20.dp)
+                                                                .clip(CircleShape)
+                                                                .border(2.dp, if (isSelected) colors["accent"]!! else muted, CircleShape)
+                                                                .background(if (isSelected) colors["accent"]!! else Color.Transparent),
+                                                            contentAlignment = Alignment.Center
                                                         ) {
-                                                            Box(
-                                                                Modifier
-                                                                    .size(8.dp)
-                                                                    .clip(CircleShape)
-                                                                    .background(buttonContent)
-                                                            )
+                                                            androidx.compose.animation.AnimatedVisibility(
+                                                                visible = isSelected,
+                                                                enter = scaleIn(animationSpec = tween(150, easing = FastOutSlowInEasing)),
+                                                                exit = scaleOut(animationSpec = tween(150, easing = FastOutSlowInEasing))
+                                                            ) {
+                                                                Box(
+                                                                    Modifier
+                                                                        .size(8.dp)
+                                                                        .clip(CircleShape)
+                                                                        .background(buttonContent)
+                                                                )
+                                                            }
                                                         }
+                                                        Spacer(Modifier.width(12.dp))
+                                                        Text(
+                                                            label,
+                                                            fontSize = 14.sp,
+                                                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                                            color = text,
+                                                            modifier = Modifier.weight(1f)
+                                                        )
                                                     }
-                                                    Spacer(Modifier.width(12.dp))
-                                                    Text(
-                                                        label,
-                                                        fontSize = 14.sp,
-                                                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                                                        color = text,
-                                                        modifier = Modifier.weight(1f)
-                                                    )
                                                 }
                                             }
                                         }
                                         
-                                        androidx.compose.animation.AnimatedVisibility(
-                                            visible = selectedPauseOption == 4,
-                                            enter = expandVertically(
-                                                animationSpec = tween(320, easing = FastOutSlowInEasing),
-                                                expandFrom = Alignment.Top
-                                            ) + fadeIn(animationSpec = tween(250, easing = FastOutSlowInEasing)),
-                                            exit = shrinkVertically(
-                                                animationSpec = tween(280, easing = FastOutSlowInEasing),
-                                                shrinkTowards = Alignment.Top
-                                            ) + fadeOut(animationSpec = tween(200, easing = FastOutSlowInEasing))
-                                        ) {
+                                        if (selectedPauseOption == 4) {
                                             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                                 Text(
                                                     UpdateText.get("pause_custom_hint", lang),
