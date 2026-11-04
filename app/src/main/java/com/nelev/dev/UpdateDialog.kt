@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -159,14 +160,7 @@ fun UpdateDialog(
                                 label = "update_notes_arrow"
                             )
                             Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .animateContentSize(
-                                        animationSpec = spring(
-                                            dampingRatio = Spring.DampingRatioNoBouncy,
-                                            stiffness = Spring.StiffnessMediumLow
-                                        )
-                                    )
+                                modifier = Modifier.fillMaxWidth()
                             ) {
                                 Row(
                                     modifier = Modifier
@@ -190,7 +184,21 @@ fun UpdateDialog(
                                         tint = muted
                                     )
                                 }
-                                if (showNotes) {
+                                AnimatedVisibility(
+                                    visible = showNotes,
+                                    enter = expandVertically(
+                                        animationSpec = spring(
+                                            dampingRatio = Spring.DampingRatioNoBouncy,
+                                            stiffness = Spring.StiffnessMediumLow
+                                        )
+                                    ) + fadeIn(),
+                                    exit = shrinkVertically(
+                                        animationSpec = spring(
+                                            dampingRatio = Spring.DampingRatioNoBouncy,
+                                            stiffness = Spring.StiffnessMediumLow
+                                        )
+                                    ) + fadeOut()
+                                ) {
                                     Text(
                                         info.changelog,
                                         fontSize = 13.sp,
@@ -500,14 +508,20 @@ fun WhatsNewDialog(
     val buttonContent = if (isDark) Color.Black else Color.White
 
     Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            shape = RoundedCornerShape(28.dp),
-            color = card,
-            tonalElevation = 0.dp,
-            shadowElevation = 20.dp,
-            modifier = Modifier.fillMaxWidth()
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            contentAlignment = Alignment.Center
         ) {
-            Column {
+            Surface(
+                shape = RoundedCornerShape(28.dp),
+                color = card,
+                tonalElevation = 0.dp,
+                shadowElevation = 20.dp,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column {
                 Box(
                     Modifier
                         .fillMaxWidth()
@@ -629,6 +643,7 @@ fun WhatsNewDialog(
                     }
                 }
             }
+        }
         }
     }
 }

@@ -8433,7 +8433,7 @@ fun AboutAppOverlay(
                                         Box {
                                             // Фоновая плашка которая переплывает
                                             val selectedOffset by animateDpAsState(
-                                                targetValue = if (selectedPauseOption != null) (selectedPauseOption!! * 44).dp else 0.dp,
+                                                targetValue = if (selectedPauseOption != null) (selectedPauseOption!! * 52).dp else 0.dp,
                                                 animationSpec = spring(
                                                     dampingRatio = Spring.DampingRatioMediumBouncy,
                                                     stiffness = Spring.StiffnessMedium
@@ -8444,7 +8444,7 @@ fun AboutAppOverlay(
                                             if (selectedPauseOption != null) {
                                                 Box(
                                                     Modifier
-                                                        .offset(y = selectedOffset + 10.dp)
+                                                        .offset(y = selectedOffset)
                                                         .fillMaxWidth()
                                                         .height(44.dp)
                                                         .padding(horizontal = 10.dp)
