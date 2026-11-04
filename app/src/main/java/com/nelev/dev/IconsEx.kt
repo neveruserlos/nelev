@@ -23,6 +23,9 @@ object IconsEx {
     private val _Lightbulb by lazy { lightbulb() }
     val Lightbulb: ImageVector get() = _Lightbulb
 
+    private val _SystemUpdate by lazy { systemUpdate() }
+    val SystemUpdate: ImageVector get() = _SystemUpdate
+
     private fun mic(): ImageVector = ImageVector.Builder(
         name = "Mic", defaultWidth = 24.dp, defaultHeight = 24.dp,
         viewportWidth = 24f, viewportHeight = 24f
@@ -259,6 +262,40 @@ object IconsEx {
             curveToRelative(0f, -2.76f, 2.24f, -5f, 5f, -5f)
             reflectiveCurveToRelative(5f, 2.24f, 5f, 5f)
             curveTo(17f, 12.7f, 15.52f, 14.22f, 14f, 14.7f)
+            close()
+        }
+    }.build()
+
+    // Обновление приложения: телефон + стрелка вниз (Material "system update")
+    private fun systemUpdate(): ImageVector = ImageVector.Builder(
+        name = "SystemUpdate", defaultWidth = 24.dp, defaultHeight = 24.dp,
+        viewportWidth = 24f, viewportHeight = 24f
+    ).apply {
+        path(fill = SolidColor(Color.Black), pathFillType = PathFillType.NonZero) {
+            moveTo(17f, 1.01f)
+            lineTo(7f, 1f)
+            curveTo(5.9f, 1f, 5f, 1.9f, 5f, 3f)
+            verticalLineTo(21f)
+            curveToRelative(0f, 1.1f, 0.9f, 2f, 2f, 2f)
+            horizontalLineTo(17f)
+            curveToRelative(1.1f, 0f, 2f, -0.9f, 2f, -2f)
+            verticalLineTo(3f)
+            curveToRelative(0f, -1.1f, -0.9f, -1.99f, -2f, -1.99f)
+            close()
+            moveTo(17f, 19f)
+            horizontalLineTo(7f)
+            verticalLineTo(5f)
+            horizontalLineTo(17f)
+            verticalLineTo(19f)
+            close()
+            moveTo(16f, 13f)
+            horizontalLineTo(13f)
+            verticalLineTo(8f)
+            horizontalLineTo(11f)
+            verticalLineTo(13f)
+            horizontalLineTo(8f)
+            lineTo(12f, 17f)
+            lineTo(16f, 13f)
             close()
         }
     }.build()

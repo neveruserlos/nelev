@@ -33,6 +33,67 @@ data class UpdateInfo(
     val minSdk: Int
 )
 
+data class LaunchUpdateInfo(
+    val previousCode: Int,
+    val currentCode: Int,
+    val updated: Boolean
+)
+
+/**
+ * Хранит версию прошлого запуска и списки изменений.
+ * При каждом запуске пишет текущую версию в filesDir/last_run_version.txt.
+ */
+object VersionHistory {
+
+    private const val LAST_VERSION_FILE = "last_run_version.txt"
+    private const val CHANGELOG_PREFIX = "changelog_"
+    private const val MAX_CHANGELOG_CHARS = 16_000
+
+    fun recordLaunch(ctx: Context): LaunchUpdateInfo {
+        val file = File(ctx.filesDir, LAST_VERSION_FILE)
+        val previous = try {
+            if (file.exists()) file.readText().trim().toIntOrNull() ?: 0 else 0
+        } catch (_: Exception) {
+            0
+        }
+        try {
+            file.writeText(BuildConfig.VERSION_CODE.toString())
+        } catch (_: Exception) {}
+        return LaunchUpdateInfo(
+            previousCode = previous,
+            currentCode = BuildConfig.VERSION_CODE,
+            updated = previous > 0 && previous != BuildConfig.VERSION_CODE
+        )
+    }
+
+    fun saveChangelog(ctx: Context, versionCode: Int, changelog: String) {
+        if (changelog.isBlank()) return
+        try {
+            val file = File(ctx.filesDir, "$CHANGELOG_PREFIX$versionCode.txt")
+            file.writeText(changelog.take(MAX_CHANGELOG_CHARS))
+            pruneChangelogs(ctx)
+        } catch (_: Exception) {}
+    }
+
+    fun changelog(ctx: Context, versionCode: Int): String? {
+        return try {
+            val file = File(ctx.filesDir, "$CHANGELOG_PREFIX$versionCode.txt")
+            if (file.exists()) file.readText().trim().ifBlank { null } else null
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun pruneChangelogs(ctx: Context) {
+        try {
+            val files = ctx.filesDir.listFiles { f -> f.name.startsWith(CHANGELOG_PREFIX) }
+                ?.sortedByDescending { it.lastModified() }
+                ?: return
+            files.drop(4).forEach { it.delete() }
+        } catch (_: Exception) {}
+    }
+}
+
 object Updater {
 
     private const val MANIFEST_URL =
@@ -79,6 +140,17 @@ object Updater {
             }
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    suspend fun changelogFor(ctx: Context, versionCode: Int): String? = withContext(Dispatchers.IO) {
+        try {
+            val o = JSONObject(fetchText(MANIFEST_URL))
+            if (o.optInt("versionCode", 0) == versionCode) {
+                o.optString("changelog", "").trim().ifBlank { null }
+            } else null
+        } catch (_: Exception) {
+            null
         }
     }
 
@@ -132,6 +204,10 @@ object Updater {
         if (info.sha256.isNotBlank() && sha256(file) != info.sha256) {
             file.delete()
             throw IOException("checksum mismatch")
+        }
+        // Сохраняем список изменений: после установки покажем его на первом запуске.
+        if (info.changelog.isNotBlank()) {
+            VersionHistory.saveChangelog(ctx, info.versionCode, info.changelog)
         }
         onProgress(100)
         file

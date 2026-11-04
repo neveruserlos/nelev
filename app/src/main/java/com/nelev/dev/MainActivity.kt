@@ -43,6 +43,7 @@ import kotlin.math.sqrt
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -2199,6 +2200,11 @@ class MainActivity : ComponentActivity() {
             var splashDone by remember { mutableStateOf(false) }
             var uiAlpha    by remember { mutableStateOf(0f) }
             val effectsEnabled = appSettings.value.visualEffectsEnabled
+            // Версия прошлого запуска: файл last_run_version.txt
+            val launchInfo = remember { VersionHistory.recordLaunch(ctx) }
+            var whatsNewVersion by remember { mutableStateOf<String?>(null) }
+            var whatsNewNotes by remember { mutableStateOf<String?>(null) }
+            var whatsNewChecked by remember { mutableStateOf(false) }
 
             // Автоматическая отправка статистики при запуске (только если прошло больше 24 часов)
             LaunchedEffect(Unit) {
@@ -2219,6 +2225,7 @@ class MainActivity : ComponentActivity() {
                     if (appSettings.value.isDark) Color(0xFF060606) else Color(0xFFFFFCFF),
                     tween(if (effectsEnabled) 250 else 0) // OPTIMIZATION: 500ms → 250ms - быстрее смена темы
                 )
+                val rootColors = nelevColors(appSettings.value.isDark, effectsEnabled)
 
                 LaunchedEffect(Unit) {
                     delay(20)
@@ -2233,6 +2240,19 @@ class MainActivity : ComponentActivity() {
                             lastFrame = now
                         }
                     }
+                }
+
+                // После заставки: если версия изменилась с прошлого запуска — «Что нового»
+                LaunchedEffect(splashDone, uiAlpha, appSettings.value.isFirstLaunch) {
+                    if (whatsNewChecked || !splashDone || uiAlpha < 1f || appSettings.value.isFirstLaunch) {
+                        return@LaunchedEffect
+                    }
+                    whatsNewChecked = true
+                    if (!launchInfo.updated) return@LaunchedEffect
+                    val notes = VersionHistory.changelog(ctx, launchInfo.currentCode)
+                        ?: Updater.changelogFor(ctx, launchInfo.currentCode)
+                    whatsNewNotes = notes
+                    whatsNewVersion = APP_VERSION
                 }
 
                 Box(Modifier.fillMaxSize().background(appBg)) {
@@ -2255,6 +2275,19 @@ class MainActivity : ComponentActivity() {
                     }
                     if (!splashDone || uiAlpha < 1f) {
                         NelevSplash(isDark = appSettings.value.isDark) { splashDone = true }
+                    }
+
+                    whatsNewVersion?.let { version ->
+                        if (splashDone && uiAlpha >= 1f) {
+                            WhatsNewDialog(
+                                versionName = version,
+                                changelog = whatsNewNotes,
+                                colors = rootColors,
+                                lang = appSettings.value.language,
+                                isDark = appSettings.value.isDark,
+                                onDismiss = { whatsNewVersion = null }
+                            )
+                        }
                     }
                 }
             }
@@ -2525,6 +2558,32 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
             ContextCompat.checkSelfPermission(ctx, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
         else true
     }
+
+    // ── Проверка версии (перед вопросом «откуда узнали») ──
+    var onbVersionChecking by remember { mutableStateOf(false) }
+    var onbVersionFailed by remember { mutableStateOf(false) }
+    var onbUpdateInfo by remember { mutableStateOf<UpdateInfo?>(null) }
+    var onbVersionChecked by remember { mutableStateOf(false) }
+    var showOnbUpdateDialog by remember { mutableStateOf(false) }
+    val onbScope = rememberCoroutineScope()
+
+    fun checkVersionOnboarding() {
+        if (onbVersionChecking) return
+        onbVersionChecking = true
+        onbVersionFailed = false
+        onbScope.launch {
+            Updater.check(ctx, respectSkip = false)
+                .onSuccess { onbUpdateInfo = it }
+                .onFailure { onbVersionFailed = true }
+            onbVersionChecked = true
+            onbVersionChecking = false
+        }
+    }
+
+    LaunchedEffect(step) {
+        if (step == 3 && !onbVersionChecked) checkVersionOnboarding()
+    }
+
     BackHandler {
         if (step > 0) step -= 1
     }
@@ -2803,6 +2862,255 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                     }
                 }
 
+                3 -> {
+                    val onbColors = remember(bg, card, text, muted, border, accent) {
+                        NelevColors(mapOf(
+                            "bg" to bg,
+                            "card" to card,
+                            "text" to text,
+                            "muted" to muted,
+                            "border" to border,
+                            "accent" to accent
+                        ))
+                    }
+                    Box(Modifier.fillMaxSize().padding(horizontal = 28.dp, vertical = 40.dp)) {
+                        OnboardingArrow(
+                            "←", muted, direction = -1, animated = false,
+                            modifier = Modifier.align(Alignment.TopStart)
+                        ) {
+                            if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
+                            step = 2
+                        }
+                        Column(
+                            Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer(Modifier.weight(1f))
+                            Text(
+                                UpdateText.get("version_check_title", currentLang),
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = text,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(Modifier.height(8.dp))
+                            Text(
+                                UpdateText.get("version_check_subtitle", currentLang),
+                                fontSize = 15.sp,
+                                lineHeight = 21.sp,
+                                color = muted,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(Modifier.height(24.dp))
+
+                            Column(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(22.dp))
+                                    .background(card)
+                                    .border(1.dp, border, RoundedCornerShape(22.dp))
+                                    .padding(horizontal = 18.dp, vertical = 20.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(10.dp)
+                            ) {
+                                when {
+                                    onbVersionChecking -> {
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.size(34.dp),
+                                            color = accent,
+                                            strokeWidth = 3.dp
+                                        )
+                                        Text(
+                                            UpdateText.get("checking", currentLang),
+                                            fontSize = 14.sp,
+                                            color = muted
+                                        )
+                                    }
+
+                                    onbVersionFailed -> {
+                                        Icon(
+                                            Icons.Filled.Warning, null,
+                                            Modifier.size(40.dp),
+                                            tint = Color(0xFFE5484D)
+                                        )
+                                        Text(
+                                            UpdateText.get("version_unknown", currentLang),
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = text,
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            "• " + UpdateText.get("error_reason_1", currentLang),
+                                            fontSize = 12.sp,
+                                            lineHeight = 17.sp,
+                                            color = muted
+                                        )
+                                        Text(
+                                            "• " + UpdateText.get("error_reason_2", currentLang),
+                                            fontSize = 12.sp,
+                                            lineHeight = 17.sp,
+                                            color = muted
+                                        )
+                                        Text(
+                                            "• " + UpdateText.get("error_reason_3", currentLang),
+                                            fontSize = 12.sp,
+                                            lineHeight = 17.sp,
+                                            color = muted
+                                        )
+                                        Button(
+                                            onClick = {
+                                                if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
+                                                checkVersionOnboarding()
+                                            },
+                                            shape = RoundedCornerShape(13.dp),
+                                            colors = ButtonDefaults.buttonColors(
+                                                containerColor = accent,
+                                                contentColor = buttonContent
+                                            )
+                                        ) {
+                                            Text(
+                                                UpdateText.get("check_again", currentLang),
+                                                fontSize = 12.sp,
+                                                fontWeight = FontWeight.SemiBold
+                                            )
+                                        }
+                                    }
+
+                                    onbUpdateInfo != null -> {
+                                        val info = onbUpdateInfo!!
+                                        Box(
+                                            Modifier
+                                                .size(46.dp)
+                                                .clip(RoundedCornerShape(15.dp))
+                                                .background(accent.copy(alpha = 0.14f)),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Icon(IconsEx.SystemUpdate, null, Modifier.size(26.dp), tint = accent)
+                                        }
+                                        Text(
+                                            UpdateText.get("version_available", currentLang)
+                                                .replace("%s", info.versionName),
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = text,
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            UpdateText.get("version_current", currentLang)
+                                                .replace("%s", APP_VERSION),
+                                            fontSize = 12.sp,
+                                            color = muted
+                                        )
+                                        Text(
+                                            UpdateText.get("version_latest", currentLang)
+                                                .replace("%s", info.versionName),
+                                            fontSize = 12.sp,
+                                            color = muted
+                                        )
+                                        Button(
+                                            onClick = {
+                                                if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
+                                                showOnbUpdateDialog = true
+                                            },
+                                            shape = RoundedCornerShape(13.dp),
+                                            colors = ButtonDefaults.buttonColors(
+                                                containerColor = accent,
+                                                contentColor = buttonContent
+                                            )
+                                        ) {
+                                            Text(
+                                                UpdateText.get("onboarding_update", currentLang),
+                                                fontSize = 12.sp,
+                                                fontWeight = FontWeight.SemiBold
+                                            )
+                                        }
+                                    }
+
+                                    else -> {
+                                        Icon(
+                                            Icons.Filled.CheckCircle, null,
+                                            Modifier.size(44.dp),
+                                            tint = Color(0xFF4CAF50)
+                                        )
+                                        Text(
+                                            UpdateText.get("version_actual", currentLang),
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = text,
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            UpdateText.get("version_current", currentLang)
+                                                .replace("%s", APP_VERSION),
+                                            fontSize = 12.sp,
+                                            color = muted
+                                        )
+                                        Text(
+                                            UpdateText.get("version_latest", currentLang)
+                                                .replace("%s", APP_VERSION),
+                                            fontSize = 12.sp,
+                                            color = muted
+                                        )
+                                    }
+                                }
+                            }
+
+                            Spacer(Modifier.weight(1.25f))
+                            Row(
+                                Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                OutlinedButton(
+                                    onClick = {
+                                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
+                                        step = 2
+                                    },
+                                    modifier = Modifier.weight(1f).height(46.dp),
+                                    shape = RoundedCornerShape(15.dp),
+                                    colors = ButtonDefaults.outlinedButtonColors(contentColor = text),
+                                    border = androidx.compose.foundation.BorderStroke(1.dp, border)
+                                ) {
+                                    Text(
+                                        UpdateText.get("back", currentLang),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
+                                Button(
+                                    onClick = {
+                                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
+                                        step = 4
+                                    },
+                                    modifier = Modifier.weight(1f).height(46.dp),
+                                    shape = RoundedCornerShape(15.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = accent,
+                                        contentColor = buttonContent
+                                    )
+                                ) {
+                                    Text(
+                                        UpdateText.get("next", currentLang),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
+                            }
+                            Spacer(Modifier.height(56.dp))
+                        }
+                    }
+
+                    if (showOnbUpdateDialog && onbUpdateInfo != null) {
+                        UpdateDialog(
+                            info = onbUpdateInfo!!,
+                            colors = onbColors,
+                            lang = currentLang,
+                            isDark = themeDark,
+                            onDismiss = { showOnbUpdateDialog = false }
+                        )
+                    }
+                }
+
                 else -> {
                     val focusManager = LocalFocusManager.current
                     val sendEnabled = sourceText.isNotBlank()
@@ -2834,7 +3142,7 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                             modifier = Modifier.align(Alignment.TopStart)
                         ) {
                             if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
-                            step = 2
+                            step = 3
                         }
                         Column(
                             Modifier.fillMaxSize(),
@@ -3223,6 +3531,7 @@ fun NelevMainScreen(
     val showAbout      = remember { mutableStateOf(false) }
     var updateInfo by remember { mutableStateOf<UpdateInfo?>(null) }
     var updateChecking by remember { mutableStateOf(false) }
+    var showUpdateError by remember { mutableStateOf(false) }
     val updateScope = rememberCoroutineScope()
     var isTransitioning by remember { mutableStateOf(false) }
     val showStats      = remember { mutableStateOf(false) }
@@ -3266,7 +3575,7 @@ fun NelevMainScreen(
                         }
                     }
                     .onFailure {
-                        Toast.makeText(ctx, UpdateText.get("error_check", lang), Toast.LENGTH_SHORT).show()
+                        showUpdateError = true
                     }
                 updateChecking = false
             }
@@ -3745,6 +4054,18 @@ fun NelevMainScreen(
                         Updater.markSkipped(ctx, info.versionCode)
                         updateInfo = null
                     }
+                )
+            }
+
+            if (showUpdateError) {
+                UpdateErrorDialog(
+                    colors = colors,
+                    lang = lang,
+                    onRetry = {
+                        showUpdateError = false
+                        checkUpdates()
+                    },
+                    onDismiss = { showUpdateError = false }
                 )
             }
         }
@@ -6752,7 +7073,9 @@ fun SettingsScreen(
     val muted = colors["muted"]!!
     val border = colors["border"]!!
     val card = colors["card"]!!
+    val accent = colors["accent"] ?: text
     val isDark = appSettings.value.isDark
+    val buttonContent = if (isDark) Color.Black else Color.White
     val soundClickEnabled = appSettings.value.soundClickEnabled
     val effectsEnabled = appSettings.value.visualEffectsEnabled
     val backScale = remember { mutableStateOf(1f) }
@@ -6941,19 +7264,78 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                 if (soundClickEnabled) ClickPlayer.play(ctx)
                 onCheckUpdates()
             },
-            modifier = Modifier.fillMaxWidth().height(48.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.outlinedButtonColors(containerColor = card, contentColor = text),
-            border = androidx.compose.foundation.BorderStroke(1.dp, border),
+            modifier = Modifier.fillMaxWidth().height(68.dp),
+            shape = RoundedCornerShape(20.dp),
+            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Transparent, contentColor = text),
+            border = androidx.compose.foundation.BorderStroke(1.dp, accent.copy(alpha = 0.35f)),
             effectsEnabled = effectsEnabled
         ) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(
+                        Brush.linearGradient(
+                            listOf(
+                                accent.copy(alpha = 0.22f),
+                                accent.copy(alpha = 0.08f),
+                                card.copy(alpha = 0.55f)
+                            )
+                        )
+                    )
             ) {
-                Icon(Icons.Filled.Refresh, null, Modifier.size(16.dp), muted)
-                Spacer(Modifier.width(6.dp))
-                Text(Strings.get("check_update", lang), fontSize = 13.sp, color = text)
+                Box(
+                    Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 10.dp)
+                        .size(92.dp)
+                        .clip(CircleShape)
+                        .background(accent.copy(alpha = 0.07f))
+                )
+                Row(
+                    Modifier.fillMaxSize().padding(horizontal = 14.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        Modifier
+                            .size(42.dp)
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(
+                                Brush.linearGradient(
+                                    listOf(accent, accent.copy(alpha = 0.68f))
+                                )
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(IconsEx.SystemUpdate, null, Modifier.size(23.dp), tint = buttonContent)
+                    }
+                    Spacer(Modifier.width(12.dp))
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text(
+                            Strings.get("check_update", lang),
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = text
+                        )
+                        Text(
+                            "${Strings.get("version", lang)} $APP_VERSION",
+                            fontSize = 11.sp,
+                            color = muted
+                        )
+                    }
+                    Box(
+                        Modifier
+                            .size(30.dp)
+                            .clip(CircleShape)
+                            .background(accent.copy(alpha = 0.12f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            Icons.Filled.KeyboardArrowRight, null,
+                            Modifier.size(19.dp), tint = accent
+                        )
+                    }
+                }
             }
         }
 
