@@ -1,0 +1,49 @@
+{
+  "versions": [
+    {
+      "versionCode": 41,
+      "versionName": "1.9.6",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Все зелёные цвета заменены на розовые (accent)\n• Ping в истории сессий: розовый градиент\n• Этап проверки версии: убрана кнопка «Назад»\n• Плавная анимация проверки версии\n• Диалог паузы обновлений переделан",
+        "en": "• All green colors replaced with pink (accent)\n• Ping history: pink gradient\n• Version check step: removed Back button\n• Smooth version check animation\n• Update pause dialog redesigned",
+        "es": "• Todos los colores verdes reemplazados por rosa (accent)\n• Historial de ping: degradado rosa\n• Paso de verificación de versión: botón Atrás eliminado\n• Animación suave de verificación de versión\n• Diálogo de pausa de actualización rediseñado",
+        "zh": "• 所有绿色替换为粉色（accent）\n• Ping历史：粉色渐变\n• 版本检查步骤：删除返回按钮\n• 流畅的版本检查动画\n• 更新暂停对话框重新设计",
+        "ja": "• すべての緑色をピンク（accent）に置き換え\n• Ping履歴：ピンクのグラデーション\n• バージョン確認ステップ：戻るボタンを削除\n• スムーズなバージョン確認アニメーション\n• 更新一時停止ダイアログの再設計",
+        "ko": "• 모든 녹색을 분홍색(accent)으로 교체\n• Ping 기록: 분홍색 그라데이션\n• 버전 확인 단계: 뒤로 버튼 제거\n• 부드러운 버전 확인 애니메이션\n• 업데이트 일시 중지 대화상자 재설계",
+        "pt": "• Todas as cores verdes substituídas por rosa (accent)\n• Histórico de ping: gradiente rosa\n• Etapa de verificação de versão: botão Voltar removido\n• Animação suave de verificação de versão\n• Diálogo de pausa de atualização redesenhado",
+        "uk": "• Всі зелені кольори замінено на рожеві (accent)\n• Історія ping: рожевий градієнт\n• Етап перевірки версії: видалено кнопку «Назад»\n• Плавна анімація перевірки версії\n• Діалог паузи оновлень перероблено"
+      }
+    },
+    {
+      "versionCode": 40,
+      "versionName": "1.9.5",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Кнопка «Приостановить обновления» перенесена в «О приложении»\n• Кнопка «Проверить обновление» переделана: компактная, не обрезается\n• Кнопка ℹ️ «Что нового» работает\n• Исправлен жест назад в истории сессий\n• Исправлена анимация «Что нового»",
+        "en": "• Pause updates button moved to About\n• Check update button redesigned: compact, no clipping\n• ℹ️ What's new button works\n• Fixed back gesture in session history\n• Fixed What's new animation",
+        "es": "• Botón Pausar actualizaciones movido a Acerca de\n• Botón Verificar actualización rediseñado: compacto, sin recortes\n• Botón ℹ️ Novedades funciona\n• Gesto de retroceso corregido en historial de sesiones\n• Animación de Novedades corregida",
+        "zh": "• 暂停更新按钮移至关于\n• 检查更新按钮重新设计：紧凑，无裁剪\n• ℹ️ 新功能按钮有效\n• 修复会话历史中的返回手势\n• 修复新功能动画",
+        "ja": "• 更新一時停止ボタンをアバウトに移動\n• 更新確認ボタンの再設計：コンパクト、クリッピングなし\n• ℹ️ 新機能ボタンが機能\n• セッション履歴の戻るジェスチャーを修正\n• 新機能アニメーションを修正",
+        "ko": "• 업데이트 일시 중지 버튼이 정보로 이동\n• 업데이트 확인 버튼 재설계: 컴팩트, 클리핑 없음\n• ℹ️ 새 기능 버튼 작동\n• 세션 기록의 뒤로 제스처 수정\n• 새 기능 애니메이션 수정",
+        "pt": "• Botão Pausar atualizações movido para Sobre\n• Botão Verificar atualização redesenhado: compacto, sem recorte\n• Botão ℹ️ Novidades funciona\n• Gesto de voltar corrigido no histórico de sessões\n• Animação de Novidades corrigida",
+        "uk": "• Кнопку «Призупинити оновлення» перенесено до «Про додаток»\n• Кнопку «Перевірити оновлення» перероблено: компактна, не обрізається\n• Кнопка ℹ️ «Що нового» працює\n• Виправлено жест назад в історії сесій\n• Виправлено анімацію «Що нового»"
+      }
+    },
+    {
+      "versionCode": 39,
+      "versionName": "1.9.4",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Стрелочка-индикатор в «Что нового»\n• Диалог приостановки обновлений\n• Тихое уведомление о новой версии\n• История: не сохраняются сессии < 2 сек\n• Анимация заставки замедлена в 2 раза\n• Постоянный UID на основе ANDROID_ID",
+        "en": "• Scroll indicator in What's new\n• Update pause dialog\n• Silent notification about new version\n• History: sessions < 2 sec not saved\n• Splash animation slowed 2x\n• Permanent UID based on ANDROID_ID",
+        "es": "• Indicador de desplazamiento en Novedades\n• Diálogo de pausa de actualización\n• Notificación silenciosa sobre nueva versión\n• Historial: sesiones < 2 seg no guardadas\n• Animación de inicio ralentizada 2x\n• UID permanente basado en ANDROID_ID",
+        "zh": "• 新功能中的滚动指示器\n• 更新暂停对话框\n• 关于新版本的静默通知\n• 历史：< 2秒的会话不保存\n• 启动动画减慢2倍\n• 基于ANDROID_ID的永久UID",
+        "ja": "• 新機能のスクロールインジケーター\n• 更新一時停止ダイアログ\n• 新しいバージョンについてのサイレント通知\n• 履歴：2秒未満のセッションは保存されません\n• スプラッシュアニメーションを2倍遅く\n• ANDROID_IDに基づく永続UID",
+        "ko": "• 새 기능의 스크롤 표시기\n• 업데이트 일시 중지 대화상자\n• 새 버전에 대한 조용한 알림\n• 기록: 2초 미만 세션 저장 안 됨\n• 스플래시 애니메이션 2배 느려짐\n• ANDROID_ID 기반 영구 UID",
+        "pt": "• Indicador de rolagem em Novidades\n• Diálogo de pausa de atualização\n• Notificação silenciosa sobre nova versão\n• Histórico: sessões < 2 seg não salvas\n• Animação de inicialização desacelerada 2x\n• UID permanente baseado em ANDROID_ID",
+        "uk": "• Стрілочка-індикатор у «Що нового»\n• Діалог призупинення оновлень\n• Тихе сповіщення про нову версію\n• Історія: не зберігаються сесії < 2 сек\n• Анімацію заставки уповільнено у 2 рази\n• Постійний UID на основі ANDROID_ID"
+      }
+    }
+  ]
+}

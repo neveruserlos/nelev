@@ -105,8 +105,126 @@ object VersionHistory {
             val files = ctx.filesDir.listFiles { f -> f.name.startsWith(CHANGELOG_PREFIX) }
                 ?.sortedByDescending { it.lastModified() }
                 ?: return
-            files.drop(4).forEach { it.delete() }
+            files.drop(10).forEach { it.delete() }
         } catch (_: Exception) {}
+    }
+}
+
+object VersionHistoryManager {
+    
+    data class VersionInfo(
+        val versionCode: Int,
+        val versionName: String,
+        val releaseDate: String,
+        val changelog: Map<String, String>
+    )
+    
+    private const val INSTALLED_VERSIONS_FILE = "installed_versions.json"
+    
+    // Сохранить информацию об установленной версии
+    fun recordInstalledVersion(ctx: Context, versionCode: Int, versionName: String, changelog: Map<String, String>) {
+        try {
+            val installed = loadInstalledVersions(ctx).toMutableList()
+            installed.removeAll { it.versionCode == versionCode }
+            installed.add(VersionInfo(
+                versionCode = versionCode,
+                versionName = versionName,
+                releaseDate = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US)
+                    .format(java.util.Date()),
+                changelog = changelog
+            ))
+            saveInstalledVersions(ctx, installed)
+        } catch (_: Exception) {}
+    }
+    
+    // Загрузить список установленных версий
+    fun loadInstalledVersions(ctx: Context): List<VersionInfo> {
+        return try {
+            val file = File(ctx.filesDir, INSTALLED_VERSIONS_FILE)
+            if (!file.exists()) return emptyList()
+            val json = file.readText()
+            parseVersionsJson(json)
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+    
+    // Загрузить все доступные версии из встроенного JSON
+    fun loadAllVersions(ctx: Context): List<VersionInfo> {
+        return try {
+            val json = ctx.assets.open("version_history.json").bufferedReader().use { it.readText() }
+            parseVersionsJson(json)
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+    
+    // Загрузить changelog конкретной версии с GitHub
+    suspend fun fetchChangelogFromGitHub(versionName: String, lang: String): String? {
+        return try {
+            val url = "https://raw.githubusercontent.com/neveruserlos/nelev/main/version_history.json"
+            val connection = java.net.URL(url).openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "GET"
+            connection.connectTimeout = 10000
+            connection.readTimeout = 10000
+            
+            if (connection.responseCode == 200) {
+                val json = connection.inputStream.bufferedReader().use { it.readText() }
+                val versions = parseVersionsJson(json)
+                versions.find { it.versionName == versionName }?.changelog?.get(lang)
+            } else null
+        } catch (_: Exception) {
+            null
+        }
+    }
+    
+    private fun parseVersionsJson(json: String): List<VersionInfo> {
+        val versions = mutableListOf<VersionInfo>()
+        try {
+            val root = org.json.JSONObject(json)
+            val array = root.getJSONArray("versions")
+            for (i in 0 until array.length()) {
+                val obj = array.getJSONObject(i)
+                val changelogObj = obj.getJSONObject("changelog")
+                val changelog = mutableMapOf<String, String>()
+                changelogObj.keys().forEach { key ->
+                    changelog[key] = changelogObj.getString(key)
+                }
+                versions.add(VersionInfo(
+                    versionCode = obj.getInt("versionCode"),
+                    versionName = obj.getString("versionName"),
+                    releaseDate = obj.getString("releaseDate"),
+                    changelog = changelog
+                ))
+            }
+        } catch (_: Exception) {}
+        return versions.sortedByDescending { it.versionCode }
+    }
+    
+    private fun saveInstalledVersions(ctx: Context, versions: List<VersionInfo>) {
+        try {
+            val json = buildVersionsJson(versions)
+            File(ctx.filesDir, INSTALLED_VERSIONS_FILE).writeText(json)
+        } catch (_: Exception) {}
+    }
+    
+    private fun buildVersionsJson(versions: List<VersionInfo>): String {
+        val obj = org.json.JSONObject()
+        val array = org.json.JSONArray()
+        versions.forEach { v ->
+            val vObj = org.json.JSONObject()
+            vObj.put("versionCode", v.versionCode)
+            vObj.put("versionName", v.versionName)
+            vObj.put("releaseDate", v.releaseDate)
+            val changelogObj = org.json.JSONObject()
+            v.changelog.forEach { (lang, text) ->
+                changelogObj.put(lang, text)
+            }
+            vObj.put("changelog", changelogObj)
+            array.put(vObj)
+        }
+        obj.put("versions", array)
+        return obj.toString()
     }
 }
 

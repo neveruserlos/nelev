@@ -1510,6 +1510,7 @@ object Strings {
         "version" to "Версия",
         "send_statistics" to "Отправка статистики",
         "participate_beta" to "Участие в бета-версиях",
+        "pause_updates" to "Приостановить обновления",
         "sync_with_pc" to "Синхронизация с ПК",
         "sync_with_pc_desc" to "Автоматически синхронизировать тему, язык и другие настройки между ПК и телефоном",
         "conn_notif_connected_title" to "Подключено к ПК",
@@ -1573,6 +1574,7 @@ object Strings {
         "version" to "Versión",
         "send_statistics" to "Enviar estadísticas",
         "participate_beta" to "Participar en beta",
+        "pause_updates" to "Pausar actualizaciones",
         "sync_with_pc" to "Sincronizar con PC",
         "sync_with_pc_desc" to "Sincronizar automáticamente tema, idioma y otros ajustes entre PC y teléfono",
         "conn_notif_connected_title" to "Conectado al PC",
@@ -1636,6 +1638,7 @@ object Strings {
         "version" to "版本",
         "send_statistics" to "发送统计信息",
         "participate_beta" to "参与测试版",
+        "pause_updates" to "暂停更新",
         "sync_with_pc" to "与电脑同步",
         "sync_with_pc_desc" to "自动同步电脑和手机之间的主题、语言和其他设置",
         "conn_notif_connected_title" to "已连接到电脑",
@@ -1699,6 +1702,7 @@ object Strings {
         "version" to "バージョン",
         "send_statistics" to "統計情報を送信",
         "participate_beta" to "ベータ版に参加",
+        "pause_updates" to "更新を一時停止",
         "sync_with_pc" to "PCと同期",
         "sync_with_pc_desc" to "PCとスマホ間でテーマ、言語、その他の設定を自動同期",
         "conn_notif_connected_title" to "PCに接続されました",
@@ -1762,6 +1766,7 @@ object Strings {
         "version" to "버전",
         "send_statistics" to "통계 보내기",
         "participate_beta" to "베타 참여",
+        "pause_updates" to "업데이트 일시 중지",
         "sync_with_pc" to "PC와 동기화",
         "sync_with_pc_desc" to "PC와 휴대폰 간 테마, 언어 및 기타 설정 자동 동기화",
         "conn_notif_connected_title" to "PC에 연결됨",
@@ -1825,6 +1830,7 @@ object Strings {
         "version" to "Versão",
         "send_statistics" to "Enviar estatísticas",
         "participate_beta" to "Participar na versão beta",
+        "pause_updates" to "Pausar atualizações",
         "sync_with_pc" to "Sincronizar com PC",
         "sync_with_pc_desc" to "Sincronizar automaticamente tema, idioma e outras configurações entre PC e telemóvel",
         "conn_notif_connected_title" to "Ligado ao PC",
@@ -1888,6 +1894,7 @@ object Strings {
         "version" to "Версія",
         "send_statistics" to "Надсилання статистики",
         "participate_beta" to "Участь у бета-версіях",
+        "pause_updates" to "Призупинити оновлення",
         "sync_with_pc" to "Синхронізація з ПК",
         "sync_with_pc_desc" to "Автоматично синхронізувати тему, мову та інші налаштування між ПК і телефоном",
         "conn_notif_connected_title" to "Підключено до ПК",
@@ -1935,7 +1942,9 @@ object Strings {
         "sound_click_label" to "Tap sounds","history_title" to "Session history",
         "history_btn" to "History","no_sessions" to "No sessions yet",
         "session_duration" to "Duration","session_ping" to "Avg ping",
-        "waiting_pc" to "Waiting for PC…","connected_pc" to "Connected","ping_label" to "Ping",
+        "waiting_pc" to "Waiting for PC…",
+        "connected_pc" to "Connected",
+        "ping_label" to "Ping",
         "back" to "Back","menu_centered_label" to "Center content",
         "first_session" to "Make first session",
         "auto_start" to "Auto-start",
@@ -1951,6 +1960,7 @@ object Strings {
         "version" to "Version",
         "send_statistics" to "Send statistics",
         "participate_beta" to "Participate in beta",
+        "pause_updates" to "Pause updates",
         "sync_with_pc" to "Sync with PC",
         "sync_with_pc_desc" to "Automatically sync theme, language and other settings between PC and phone",
         "conn_notif_connected_title" to "Connected to PC",
@@ -7360,6 +7370,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
             }
         }
 
+        // Кнопка "Проверить обновление" + иконка "Что нового"
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -7369,8 +7380,8 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                     if (soundClickEnabled) ClickPlayer.play(ctx)
                     onCheckUpdates()
                 },
-                modifier = Modifier.weight(1f).height(56.dp),
-                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.weight(1f).height(54.dp),
+                shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
                     containerColor = card,
                     contentColor = text
@@ -7379,20 +7390,20 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                 effectsEnabled = effectsEnabled
             ) {
                 Row(
-                    Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                    Modifier.fillMaxWidth().padding(horizontal = 6.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Box(
                         Modifier
-                            .size(36.dp)
+                            .size(34.dp)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(accent.copy(alpha = 0.12f)),
+                            .background(accent.copy(alpha = 0.10f)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(IconsEx.SystemUpdate, null, Modifier.size(20.dp), tint = accent)
+                        Icon(Icons.Filled.Refresh, null, Modifier.size(18.dp), tint = accent)
                     }
-                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(0.dp)) {
                         Text(
                             Strings.get("check_update", lang),
                             fontSize = 13.sp,
@@ -7400,7 +7411,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                             color = text
                         )
                         Text(
-                            "${Strings.get("version", lang)} $APP_VERSION",
+                            "v$APP_VERSION",
                             fontSize = 10.sp,
                             color = muted
                         )
@@ -7411,10 +7422,10 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
             var showWhatsNewLocal by remember { mutableStateOf(false) }
             Box(
                 Modifier
-                    .size(56.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .size(54.dp)
+                    .clip(RoundedCornerShape(14.dp))
                     .background(card)
-                    .border(1.dp, border, RoundedCornerShape(16.dp))
+                    .border(1.dp, border, RoundedCornerShape(14.dp))
                     .clickable {
                         if (soundClickEnabled) ClickPlayer.play(ctx)
                         showWhatsNewLocal = true
@@ -7423,7 +7434,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
             ) {
                 Icon(
                     Icons.Filled.Info, null,
-                    Modifier.size(22.dp), tint = muted
+                    Modifier.size(20.dp), tint = muted
                 )
             }
             

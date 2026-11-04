@@ -945,7 +945,14 @@ fun UpdatePauseDialog(
                         )
                         androidx.compose.material3.OutlinedTextField(
                             value = customDays,
-                            onValueChange = { customDays = it.filter { c -> c.isDigit() } },
+                            onValueChange = { 
+                                val filtered = it.filter { c -> c.isDigit() }
+                                customDays = if (filtered.isNotEmpty() && filtered.toIntOrNull()?.let { n -> n > 9999 } == true) {
+                                    "9999"
+                                } else {
+                                    filtered.take(4)
+                                }
+                            },
                             modifier = Modifier.fillMaxWidth(),
                             label = { Text(UpdateText.get("pause_custom_label", lang), fontSize = 12.sp) },
                             singleLine = true,
