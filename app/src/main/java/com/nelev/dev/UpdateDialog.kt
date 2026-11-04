@@ -1,8 +1,13 @@
 package com.nelev.dev
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -166,13 +171,17 @@ fun UpdateDialog(
                                     tint = muted
                                 )
                             }
-                            AnimatedVisibility(visible = showNotes) {
+                            AnimatedVisibility(
+                                visible = showNotes,
+                                enter = fadeIn(tween(300, easing = FastOutSlowInEasing)) + expandVertically(tween(300, easing = FastOutSlowInEasing)),
+                                exit = fadeOut(tween(200, easing = FastOutSlowInEasing)) + shrinkVertically(tween(200, easing = FastOutSlowInEasing))
+                            ) {
                                 Text(
                                     info.changelog,
                                     fontSize = 13.sp,
                                     lineHeight = 19.sp,
                                     color = muted,
-                                    modifier = Modifier.padding(horizontal = 4.dp)
+                                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 12.dp)
                                 )
                             }
                         }

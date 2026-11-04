@@ -3677,8 +3677,8 @@ fun NelevMainScreen(
     BackHandler {
         focusManager.clearFocus()
         when {
-            showHistory.value -> showHistory.value = false
-            showAbout.value -> showAbout.value = false
+            showHistory.value -> { showHistory.value = false; return@BackHandler }
+            showAbout.value -> { showAbout.value = false; return@BackHandler }
             selectedTab.value != NelevTab.CONNECT -> selectedTab.value = NelevTab.CONNECT
         }
     }
@@ -7359,16 +7359,15 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
 
         Row(
             Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             AnimatedOutlinedButton(
                 onClick = {
                     if (soundClickEnabled) ClickPlayer.play(ctx)
                     onCheckUpdates()
                 },
-                modifier = Modifier.weight(1f).height(64.dp),
-                shape = RoundedCornerShape(18.dp),
+                modifier = Modifier.weight(1f).height(56.dp),
+                shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
                     containerColor = card,
                     contentColor = text
@@ -7377,84 +7376,74 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                 effectsEnabled = effectsEnabled
             ) {
                 Row(
-                    Modifier.fillMaxWidth().padding(horizontal = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Box(
                         Modifier
-                            .size(40.dp)
-                            .clip(RoundedCornerShape(12.dp))
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(10.dp))
                             .background(accent.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(IconsEx.SystemUpdate, null, Modifier.size(22.dp), tint = accent)
+                        Icon(IconsEx.SystemUpdate, null, Modifier.size(20.dp), tint = accent)
                     }
-                    Spacer(Modifier.width(11.dp))
-                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
                         Text(
                             Strings.get("check_update", lang),
-                            fontSize = 14.sp,
+                            fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = text
                         )
                         Text(
                             "${Strings.get("version", lang)} $APP_VERSION",
-                            fontSize = 11.sp,
+                            fontSize = 10.sp,
                             color = muted
                         )
                     }
                 }
             }
+            
+            var showWhatsNewLocal by remember { mutableStateOf(false) }
             Box(
                 Modifier
-                    .size(64.dp)
-                    .clip(RoundedCornerShape(18.dp))
+                    .size(56.dp)
+                    .clip(RoundedCornerShape(16.dp))
                     .background(card)
-                    .border(1.dp, border, RoundedCornerShape(18.dp))
+                    .border(1.dp, border, RoundedCornerShape(16.dp))
                     .clickable {
                         if (soundClickEnabled) ClickPlayer.play(ctx)
-                        // TODO: показать WhatsNewDialog для текущей версии
+                        showWhatsNewLocal = true
                     },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     Icons.Filled.Info, null,
-                    Modifier.size(24.dp), tint = muted
+                    Modifier.size(22.dp), tint = muted
                 )
             }
-        }
-
-        // Кнопка настроек паузы обновлений
-        AnimatedOutlinedButton(
-            onClick = {
-                if (soundClickEnabled) ClickPlayer.play(ctx)
-                onShowPauseDialog()
-            },
-            modifier = Modifier.fillMaxWidth().height(56.dp),
-            shape = RoundedCornerShape(18.dp),
-            colors = ButtonDefaults.outlinedButtonColors(containerColor = card, contentColor = text),
-            border = androidx.compose.foundation.BorderStroke(1.dp, border),
-            effectsEnabled = effectsEnabled
-        ) {
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                val paused = appSettings.value.updatesPaused()
-                Text(
-                    if (paused) Strings.get("pause_updates_active", lang)
-                    else Strings.get("pause_updates", lang),
-                    fontSize = 14.sp,
-                    color = text
+            
+            if (showWhatsNewLocal) {
+                val currentCode = try {
+                    ctx.packageManager.getPackageInfo(ctx.packageName, 0).let {
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                            it.longVersionCode.toInt()
+                        } else {
+                            @Suppress("DEPRECATION")
+                            it.versionCode
+                        }
+                    }
+                } catch (_: Exception) { 0 }
+                val changelog = remember(currentCode) { VersionHistory.changelog(ctx, currentCode) ?: "" }
+                WhatsNewDialog(
+                    versionName = APP_VERSION,
+                    changelog = changelog,
+                    colors = colors,
+                    lang = lang,
+                    isDark = appSettings.value.isDark,
+                    onDismiss = { showWhatsNewLocal = false }
                 )
-                if (paused) {
-                    Box(
-                        Modifier.size(8.dp).clip(CircleShape).background(Color(0xFFFFA726))
-                    )
-                } else {
-                    Icon(Icons.Filled.KeyboardArrowRight, null, Modifier.size(18.dp), tint = muted)
-                }
             }
         }
 
@@ -8093,6 +8082,75 @@ fun AboutAppOverlay(
                                                 },
                                                 isDark = isDark,
                                                 effectsEnabled = effectsEnabled
+                                            )
+                                        }
+                                        
+                                        // Кнопка приостановки обновлений
+                                        var showPauseDialogLocal by remember { mutableStateOf(false) }
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .clip(RoundedCornerShape(12.dp))
+                                                .background(
+                                                    if (isDark) Color.White.copy(alpha = 0.11f) else Color.Black.copy(alpha = 0.08f)
+                                                )
+                                                .clickable {
+                                                    if (soundClickEnabled) ClickPlayer.play(ctx)
+                                                    showPauseDialogLocal = true
+                                                }
+                                                .padding(horizontal = 12.dp, vertical = 12.dp),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Column {
+                                                Text(
+                                                    Strings.get("pause_updates", lang),
+                                                    color = text,
+                                                    fontSize = 14.sp
+                                                )
+                                                if (appSettings.value.updatesPaused()) {
+                                                    val now = System.currentTimeMillis()
+                                                    val statusText = if (appSettings.value.updatesPausedForever) {
+                                                        UpdateText.get("paused_forever_status", lang)
+                                                    } else {
+                                                        val days = ((appSettings.value.updatesPausedUntilMs - now) / (24 * 60 * 60 * 1000L)).toInt() + 1
+                                                        UpdateText.get("paused_until_status", lang).replace("%d", days.toString())
+                                                    }
+                                                    Text(
+                                                        statusText,
+                                                        color = Color(0xFFFFA726),
+                                                        fontSize = 11.sp
+                                                    )
+                                                }
+                                            }
+                                            Icon(
+                                                Icons.Filled.KeyboardArrowRight,
+                                                null,
+                                                Modifier.size(20.dp),
+                                                tint = muted
+                                            )
+                                        }
+                                        
+                                        if (showPauseDialogLocal) {
+                                            UpdatePauseDialog(
+                                                colors = colors,
+                                                lang = lang,
+                                                isDark = isDark,
+                                                pausedUntilMs = appSettings.value.updatesPausedUntilMs,
+                                                pausedForever = appSettings.value.updatesPausedForever,
+                                                onPause = { untilMs, forever ->
+                                                    save(appSettings.value.copy(
+                                                        updatesPausedUntilMs = untilMs,
+                                                        updatesPausedForever = forever
+                                                    ))
+                                                },
+                                                onResume = {
+                                                    save(appSettings.value.copy(
+                                                        updatesPausedUntilMs = 0L,
+                                                        updatesPausedForever = false
+                                                    ))
+                                                },
+                                                onDismiss = { showPauseDialogLocal = false }
                                             )
                                         }
                                     }
