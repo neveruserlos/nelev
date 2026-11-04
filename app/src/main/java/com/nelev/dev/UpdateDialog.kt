@@ -806,131 +806,207 @@ fun UpdatePauseDialog(
     val border = colors["border"] ?: Color.DarkGray
     val accent = colors["accent"] ?: Color(0xFFE79BC0)
     val buttonContent = if (isDark) Color.Black else Color.White
-    val isPaused = pausedForever || pausedUntilMs > System.currentTimeMillis()
-    var customDays by remember { mutableStateOf("") }
 
-    fun pauseForDays(days: Long) {
-        onPause(System.currentTimeMillis() + days * 24L * 60L * 60L * 1000L, false)
-        onDismiss()
-    }
+    val now = System.currentTimeMillis()
+    val isPaused = pausedForever || pausedUntilMs > now
+
+    var selectedOption by remember { mutableStateOf<Int?>(null) }
+    var customDays by remember { mutableStateOf("") }
+    var showCustomInput by remember { mutableStateOf(false) }
+
+    val presets = listOf(
+        UpdateText.get("pause_1week", lang) to 7L,
+        UpdateText.get("pause_2weeks", lang) to 14L,
+        UpdateText.get("pause_1month", lang) to 30L,
+        UpdateText.get("pause_forever", lang) to -1L,
+        UpdateText.get("pause_custom", lang) to 0L
+    )
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
-            shape = RoundedCornerShape(26.dp),
+            shape = RoundedCornerShape(24.dp),
             color = card,
             tonalElevation = 0.dp,
-            shadowElevation = 18.dp,
-            modifier = Modifier.fillMaxWidth()
+            shadowElevation = 16.dp,
+            modifier = Modifier.fillMaxWidth(0.92f)
         ) {
             Column(
-                Modifier
-                    .padding(22.dp)
-                    .heightIn(max = 560.dp)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                Modifier.padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Text(
-                    UpdateText.get("pause_title", lang),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = text
-                )
-                Text(
-                    UpdateText.get("pause_subtitle", lang),
-                    fontSize = 13.sp,
-                    lineHeight = 19.sp,
-                    color = muted
-                )
-
-                if (isPaused) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
                     Box(
                         Modifier
-                            .fillMaxWidth()
+                            .size(46.dp)
                             .clip(RoundedCornerShape(14.dp))
-                            .background(accent.copy(alpha = 0.10f))
-                            .border(1.dp, accent.copy(alpha = 0.28f), RoundedCornerShape(14.dp))
-                            .padding(14.dp)
+                            .background(accent.copy(alpha = 0.12f)),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(
-                                UpdateText.get("pause_active", lang),
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = text
-                            )
+                        Icon(
+                            Icons.Filled.Notifications, null,
+                            Modifier.size(24.dp), tint = accent
+                        )
+                    }
+                    Column {
+                        Text(
+                            UpdateText.get("pause_title", lang),
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = text
+                        )
+                        if (isPaused) {
                             Text(
                                 if (pausedForever) {
-                                    UpdateText.get("pause_forever_status", lang)
+                                    UpdateText.get("paused_forever_status", lang)
                                 } else {
-                                    val fmt = java.text.SimpleDateFormat(
-                                        "dd.MM.yyyy HH:mm",
-                                        java.util.Locale.getDefault()
-                                    )
-                                    UpdateText.get("pause_until", lang)
-                                        .replace("%s", fmt.format(java.util.Date(pausedUntilMs)))
+                                    val days = ((pausedUntilMs - now) / (24 * 60 * 60 * 1000L)).toInt() + 1
+                                    UpdateText.get("paused_until_status", lang).replace("%d", days.toString())
                                 },
-                                fontSize = 12.sp,
-                                color = muted
+                                fontSize = 11.sp,
+                                color = Color(0xFFFFA726)
                             )
                         }
                     }
-                    Button(
-                        onClick = { onResume(); onDismiss() },
-                        modifier = Modifier.fillMaxWidth().height(46.dp),
-                        shape = RoundedCornerShape(14.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = accent,
-                            contentColor = buttonContent
-                        )
-                    ) {
+                }
+
+                Text(
+                    UpdateText.get("pause_subtitle", lang),
+                    fontSize = 13.sp,
+                    lineHeight = 18.sp,
+                    color = muted
+                )
+
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(if (isDark) Color.White.copy(alpha = 0.04f) else Color.Black.copy(alpha = 0.02f))
+                        .border(1.dp, border, RoundedCornerShape(16.dp))
+                        .padding(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    presets.forEachIndexed { idx, (label, days) ->
+                        val isSelected = selectedOption == idx
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(if (isSelected) accent.copy(alpha = 0.12f) else Color.Transparent)
+                                .border(
+                                    1.dp,
+                                    if (isSelected) accent.copy(alpha = 0.35f) else Color.Transparent,
+                                    RoundedCornerShape(12.dp)
+                                )
+                                .clickable {
+                                    selectedOption = idx
+                                    showCustomInput = (days == 0L)
+                                }
+                                .padding(horizontal = 14.dp, vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                Modifier
+                                    .size(20.dp)
+                                    .clip(CircleShape)
+                                    .border(2.dp, if (isSelected) accent else muted, CircleShape)
+                                    .background(if (isSelected) accent else Color.Transparent),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                if (isSelected) {
+                                    Box(
+                                        Modifier
+                                            .size(8.dp)
+                                            .clip(CircleShape)
+                                            .background(buttonContent)
+                                    )
+                                }
+                            }
+                            Spacer(Modifier.width(12.dp))
+                            Text(
+                                label,
+                                fontSize = 14.sp,
+                                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                color = text,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
+                }
+
+                if (showCustomInput) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
-                            UpdateText.get("pause_resume", lang),
-                            fontWeight = FontWeight.SemiBold
+                            UpdateText.get("pause_custom_hint", lang),
+                            fontSize = 12.sp,
+                            color = muted
+                        )
+                        androidx.compose.material3.OutlinedTextField(
+                            value = customDays,
+                            onValueChange = { customDays = it.filter { c -> c.isDigit() } },
+                            modifier = Modifier.fillMaxWidth(),
+                            label = { Text(UpdateText.get("pause_custom_label", lang), fontSize = 12.sp) },
+                            singleLine = true,
+                            colors = androidx.compose.material3.TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                focusedIndicatorColor = accent,
+                                unfocusedIndicatorColor = border,
+                                focusedTextColor = text,
+                                unfocusedTextColor = text,
+                                cursorColor = accent,
+                                focusedLabelColor = accent,
+                                unfocusedLabelColor = muted
+                            )
                         )
                     }
                 }
 
-                PauseOption(UpdateText.get("pause_1_week", lang), text, border, accent) {
-                    pauseForDays(7)
-                }
-                PauseOption(UpdateText.get("pause_2_weeks", lang), text, border, accent) {
-                    pauseForDays(14)
-                }
-                PauseOption(UpdateText.get("pause_1_month", lang), text, border, accent) {
-                    pauseForDays(30)
-                }
-
-                Text(
-                    UpdateText.get("pause_custom", lang),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = muted
-                )
                 Row(
                     Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    OutlinedTextField(
-                        value = customDays,
-                        onValueChange = { v ->
-                            customDays = v.filter { it.isDigit() }.take(5)
-                        },
-                        singleLine = true,
-                        placeholder = {
-                            Text(UpdateText.get("pause_days_hint", lang), fontSize = 13.sp)
-                        },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.weight(1f)
-                    )
+                    if (isPaused) {
+                        TextButton(onClick = {
+                            onResume()
+                            onDismiss()
+                        }) {
+                            Text(UpdateText.get("pause_resume", lang), color = muted)
+                        }
+                        Spacer(Modifier.width(8.dp))
+                    }
+                    TextButton(onClick = onDismiss) {
+                        Text(UpdateText.get("close", lang), color = muted)
+                    }
+                    Spacer(Modifier.width(8.dp))
                     Button(
                         onClick = {
-                            val days = customDays.toLongOrNull() ?: 0L
-                            if (days > 0L) pauseForDays(days)
+                            val option = selectedOption ?: return@Button
+                            val (_, days) = presets[option]
+                            when {
+                                days == -1L -> {
+                                    onPause(0L, true)
+                                    onDismiss()
+                                }
+                                days == 0L -> {
+                                    val custom = customDays.toLongOrNull() ?: return@Button
+                                    if (custom < 1) return@Button
+                                    val until = now + custom * 24 * 60 * 60 * 1000L
+                                    onPause(until, false)
+                                    onDismiss()
+                                }
+                                else -> {
+                                    val until = now + days * 24 * 60 * 60 * 1000L
+                                    onPause(until, false)
+                                    onDismiss()
+                                }
+                            }
                         },
-                        enabled = (customDays.toLongOrNull() ?: 0L) > 0L,
-                        modifier = Modifier.height(54.dp),
-                        shape = RoundedCornerShape(14.dp),
+                        enabled = selectedOption != null && (selectedOption != 4 || customDays.isNotBlank()),
+                        shape = RoundedCornerShape(13.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = accent,
                             contentColor = buttonContent
@@ -942,53 +1018,8 @@ fun UpdatePauseDialog(
                         )
                     }
                 }
-
-                TextButton(
-                    onClick = {
-                        onPause(0L, true)
-                        onDismiss()
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        UpdateText.get("pause_forever", lang),
-                        color = Color(0xFFE5484D),
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
-                TextButton(
-                    onClick = onDismiss,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(UpdateText.get("close", lang), color = muted)
-                }
             }
         }
-    }
-}
-
-@Composable
-private fun PauseOption(
-    label: String,
-    text: Color,
-    border: Color,
-    accent: Color,
-    onClick: () -> Unit
-) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
-            .border(1.dp, border, RoundedCornerShape(14.dp))
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 14.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(label, fontSize = 14.sp, color = text)
-        Box(
-            Modifier.size(7.dp).clip(CircleShape).background(accent)
-        )
     }
 }
 

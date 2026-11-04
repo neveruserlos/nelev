@@ -2948,188 +2948,187 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.spacedBy(10.dp)
                             ) {
-                                when {
-                                    onbVersionChecking -> {
-                                        CircularProgressIndicator(
-                                            modifier = Modifier.size(34.dp),
-                                            color = accent,
-                                            strokeWidth = 3.dp
-                                        )
-                                        Text(
-                                            UpdateText.get("checking", currentLang),
-                                            fontSize = 14.sp,
-                                            color = muted
-                                        )
-                                    }
+                                androidx.compose.animation.AnimatedContent(
+                                    targetState = when {
+                                        onbVersionChecking -> 0
+                                        onbVersionFailed -> 1
+                                        onbUpdateInfo != null -> 2
+                                        else -> 3
+                                    },
+                                    transitionSpec = {
+                                        fadeIn(tween(400, easing = FastOutSlowInEasing)) + 
+                                            scaleIn(initialScale = 0.92f, animationSpec = tween(400, easing = FastOutSlowInEasing)) togetherWith
+                                            fadeOut(tween(200, easing = FastOutSlowInEasing))
+                                    },
+                                    label = "version_check_content"
+                                ) { state ->
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                                    ) {
+                                        when (state) {
+                                            0 -> {
+                                                CircularProgressIndicator(
+                                                    modifier = Modifier.size(34.dp),
+                                                    color = accent,
+                                                    strokeWidth = 3.dp
+                                                )
+                                                Text(
+                                                    UpdateText.get("checking", currentLang),
+                                                    fontSize = 14.sp,
+                                                    color = muted
+                                                )
+                                            }
 
-                                    onbVersionFailed -> {
-                                        Icon(
-                                            Icons.Filled.Warning, null,
-                                            Modifier.size(40.dp),
-                                            tint = Color(0xFFE5484D)
-                                        )
-                                        Text(
-                                            UpdateText.get("version_unknown", currentLang),
-                                            fontSize = 16.sp,
-                                            fontWeight = FontWeight.SemiBold,
-                                            color = text,
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "• " + UpdateText.get("error_reason_1", currentLang),
-                                            fontSize = 12.sp,
-                                            lineHeight = 17.sp,
-                                            color = muted
-                                        )
-                                        Text(
-                                            "• " + UpdateText.get("error_reason_2", currentLang),
-                                            fontSize = 12.sp,
-                                            lineHeight = 17.sp,
-                                            color = muted
-                                        )
-                                        Text(
-                                            "• " + UpdateText.get("error_reason_3", currentLang),
-                                            fontSize = 12.sp,
-                                            lineHeight = 17.sp,
-                                            color = muted
-                                        )
-                                        Button(
-                                            onClick = {
-                                                if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
-                                                checkVersionOnboarding()
-                                            },
-                                            shape = RoundedCornerShape(13.dp),
-                                            colors = ButtonDefaults.buttonColors(
-                                                containerColor = accent,
-                                                contentColor = buttonContent
-                                            )
-                                        ) {
-                                            Text(
-                                                UpdateText.get("check_again", currentLang),
-                                                fontSize = 12.sp,
-                                                fontWeight = FontWeight.SemiBold
-                                            )
-                                        }
-                                    }
+                                            1 -> {
+                                                Icon(
+                                                    Icons.Filled.Warning, null,
+                                                    Modifier.size(40.dp),
+                                                    tint = Color(0xFFE5484D)
+                                                )
+                                                Text(
+                                                    UpdateText.get("version_unknown", currentLang),
+                                                    fontSize = 16.sp,
+                                                    fontWeight = FontWeight.SemiBold,
+                                                    color = text,
+                                                    textAlign = TextAlign.Center
+                                                )
+                                                Text(
+                                                    "• " + UpdateText.get("error_reason_1", currentLang),
+                                                    fontSize = 12.sp,
+                                                    lineHeight = 17.sp,
+                                                    color = muted
+                                                )
+                                                Text(
+                                                    "• " + UpdateText.get("error_reason_2", currentLang),
+                                                    fontSize = 12.sp,
+                                                    lineHeight = 17.sp,
+                                                    color = muted
+                                                )
+                                                Text(
+                                                    "• " + UpdateText.get("error_reason_3", currentLang),
+                                                    fontSize = 12.sp,
+                                                    lineHeight = 17.sp,
+                                                    color = muted
+                                                )
+                                                Button(
+                                                    onClick = {
+                                                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
+                                                        checkVersionOnboarding()
+                                                    },
+                                                    shape = RoundedCornerShape(13.dp),
+                                                    colors = ButtonDefaults.buttonColors(
+                                                        containerColor = accent,
+                                                        contentColor = buttonContent
+                                                    )
+                                                ) {
+                                                    Text(
+                                                        UpdateText.get("check_again", currentLang),
+                                                        fontSize = 12.sp,
+                                                        fontWeight = FontWeight.SemiBold
+                                                    )
+                                                }
+                                            }
 
-                                    onbUpdateInfo != null -> {
-                                        val info = onbUpdateInfo!!
-                                        Box(
-                                            Modifier
-                                                .size(46.dp)
-                                                .clip(RoundedCornerShape(15.dp))
-                                                .background(accent.copy(alpha = 0.14f)),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Icon(IconsEx.SystemUpdate, null, Modifier.size(26.dp), tint = accent)
-                                        }
-                                        Text(
-                                            UpdateText.get("version_available", currentLang)
-                                                .replace("%s", info.versionName),
-                                            fontSize = 16.sp,
-                                            fontWeight = FontWeight.SemiBold,
-                                            color = text,
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            UpdateText.get("version_current", currentLang)
-                                                .replace("%s", APP_VERSION),
-                                            fontSize = 12.sp,
-                                            color = muted
-                                        )
-                                        Text(
-                                            UpdateText.get("version_latest", currentLang)
-                                                .replace("%s", info.versionName),
-                                            fontSize = 12.sp,
-                                            color = muted
-                                        )
-                                        Button(
-                                            onClick = {
-                                                if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
-                                                showOnbUpdateDialog = true
-                                            },
-                                            shape = RoundedCornerShape(13.dp),
-                                            colors = ButtonDefaults.buttonColors(
-                                                containerColor = accent,
-                                                contentColor = buttonContent
-                                            )
-                                        ) {
-                                            Text(
-                                                UpdateText.get("onboarding_update", currentLang),
-                                                fontSize = 12.sp,
-                                                fontWeight = FontWeight.SemiBold
-                                            )
-                                        }
-                                    }
+                                            2 -> {
+                                                val info = onbUpdateInfo!!
+                                                Box(
+                                                    Modifier
+                                                        .size(46.dp)
+                                                        .clip(RoundedCornerShape(15.dp))
+                                                        .background(accent.copy(alpha = 0.14f)),
+                                                    contentAlignment = Alignment.Center
+                                                ) {
+                                                    Icon(IconsEx.SystemUpdate, null, Modifier.size(26.dp), tint = accent)
+                                                }
+                                                Text(
+                                                    UpdateText.get("version_available", currentLang)
+                                                        .replace("%s", info.versionName),
+                                                    fontSize = 16.sp,
+                                                    fontWeight = FontWeight.SemiBold,
+                                                    color = text,
+                                                    textAlign = TextAlign.Center
+                                                )
+                                                Text(
+                                                    UpdateText.get("version_current", currentLang)
+                                                        .replace("%s", APP_VERSION),
+                                                    fontSize = 12.sp,
+                                                    color = muted
+                                                )
+                                                Text(
+                                                    UpdateText.get("version_latest", currentLang)
+                                                        .replace("%s", info.versionName),
+                                                    fontSize = 12.sp,
+                                                    color = muted
+                                                )
+                                                Button(
+                                                    onClick = {
+                                                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
+                                                        showOnbUpdateDialog = true
+                                                    },
+                                                    shape = RoundedCornerShape(13.dp),
+                                                    colors = ButtonDefaults.buttonColors(
+                                                        containerColor = accent,
+                                                        contentColor = buttonContent
+                                                    )
+                                                ) {
+                                                    Text(
+                                                        UpdateText.get("onboarding_update", currentLang),
+                                                        fontSize = 12.sp,
+                                                        fontWeight = FontWeight.SemiBold
+                                                    )
+                                                }
+                                            }
 
-                                    else -> {
-                                        Icon(
-                                            Icons.Filled.CheckCircle, null,
-                                            Modifier.size(44.dp),
-                                            tint = Color(0xFF4CAF50)
-                                        )
-                                        Text(
-                                            UpdateText.get("version_actual", currentLang),
-                                            fontSize = 16.sp,
-                                            fontWeight = FontWeight.SemiBold,
-                                            color = text,
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            UpdateText.get("version_current", currentLang)
-                                                .replace("%s", APP_VERSION),
-                                            fontSize = 12.sp,
-                                            color = muted
-                                        )
-                                        Text(
-                                            UpdateText.get("version_latest", currentLang)
-                                                .replace("%s", APP_VERSION),
-                                            fontSize = 12.sp,
-                                            color = muted
-                                        )
+                                            3 -> {
+                                                Icon(
+                                                    Icons.Filled.CheckCircle, null,
+                                                    Modifier.size(44.dp),
+                                                    tint = accent
+                                                )
+                                                Text(
+                                                    UpdateText.get("version_actual", currentLang),
+                                                    fontSize = 16.sp,
+                                                    fontWeight = FontWeight.SemiBold,
+                                                    color = text,
+                                                    textAlign = TextAlign.Center
+                                                )
+                                                Text(
+                                                    UpdateText.get("version_current", currentLang)
+                                                        .replace("%s", APP_VERSION),
+                                                    fontSize = 12.sp,
+                                                    color = muted
+                                                )
+                                                Text(
+                                                    UpdateText.get("version_latest", currentLang)
+                                                        .replace("%s", APP_VERSION),
+                                                    fontSize = 12.sp,
+                                                    color = muted
+                                                )
+                                            }
+                                        }
                                     }
                                 }
                             }
 
                             Spacer(Modifier.weight(1.25f))
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            Button(
+                                onClick = {
+                                    if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
+                                    step = 4
+                                },
+                                modifier = Modifier.fillMaxWidth().height(46.dp),
+                                shape = RoundedCornerShape(15.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = accent,
+                                    contentColor = buttonContent
+                                )
                             ) {
-                                OutlinedButton(
-                                    onClick = {
-                                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
-                                        step = 2
-                                    },
-                                    modifier = Modifier.weight(1f).height(46.dp),
-                                    shape = RoundedCornerShape(15.dp),
-                                    colors = ButtonDefaults.outlinedButtonColors(contentColor = text),
-                                    border = androidx.compose.foundation.BorderStroke(1.dp, border)
-                                ) {
-                                    Text(
-                                        UpdateText.get("back", currentLang),
-                                        fontSize = 14.sp,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                }
-                                Button(
-                                    onClick = {
-                                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
-                                        step = 4
-                                    },
-                                    modifier = Modifier.weight(1f).height(46.dp),
-                                    shape = RoundedCornerShape(15.dp),
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = accent,
-                                        contentColor = buttonContent
-                                    )
-                                ) {
-                                    Text(
-                                        UpdateText.get("next", currentLang),
-                                        fontSize = 14.sp,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                }
+                                Text(
+                                    UpdateText.get("next", currentLang),
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                )
                             }
                             Spacer(Modifier.height(56.dp))
                         }
@@ -6741,7 +6740,7 @@ fun SessionHistoryScreen(
     onBack: () -> Unit, onGoConnect: () -> Unit
 ) {
     val bg = colors["bg"]!!; val card = colors["card"]!!; val text = colors["text"]!!
-    val muted = colors["muted"]!!; val border = colors["border"]!!
+    val muted = colors["muted"]!!; val border = colors["border"]!!; val accent = colors["accent"]!!
     val ctx = LocalContext.current
     val sessions = remember { mutableStateListOf<SessionRecord>().also { it.addAll(SessionStore.load(ctx).reversed()) } }
     val fmt = remember(lang) { SimpleDateFormat("dd MMM, HH:mm", Strings.locale(lang)) }
@@ -6916,17 +6915,17 @@ fun SessionHistoryScreen(
                                     .fillMaxWidth()
                                     .clip(RoundedCornerShape(16.dp))
                                     .background(card.copy(alpha = 0.9f))
-                                    .border(1.dp, Color(0xFF4CAF50).copy(alpha = 0.5f), RoundedCornerShape(16.dp))
+                                    .border(1.dp, accent.copy(alpha = 0.5f), RoundedCornerShape(16.dp))
                                     .padding(horizontal = 16.dp, vertical = 12.dp)
                             ) {
                                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                     Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
-                                        Box(Modifier.size(7.dp).clip(RoundedCornerShape(50)).background(Color(0xFF4CAF50)))
+                                        Box(Modifier.size(7.dp).clip(RoundedCornerShape(50)).background(accent))
                                         Text(fmt.format(Date(activeStart)), fontSize = 13.sp, color = muted)
                                     }
                                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                                         Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
-                                            Icon(IconsEx.History, null, Modifier.size(14.dp), Color(0xFF4CAF50))
+                                            Icon(IconsEx.History, null, Modifier.size(14.dp), accent)
                                             Text(fmtDuration(activeDur), fontSize = 14.sp, color = text, fontWeight = FontWeight.Medium)
                                         }
                                         val liveLabel = when (lang) {
@@ -6940,7 +6939,7 @@ fun SessionHistoryScreen(
                                             "pt" -> "AO VIVO"
                                             else -> "LIVE"
                                         }
-                                        Text(liveLabel, fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF4CAF50))
+                                        Text(liveLabel, fontSize = 11.sp, fontWeight = FontWeight.Bold, color = accent)
                                     }
                                 }
                             }
@@ -6969,7 +6968,11 @@ fun SessionHistoryScreen(
                                                 Text(fmtDuration(s.durationMs), fontSize = 14.sp, color = text, fontWeight = FontWeight.Medium)
                                             }
                                             if (s.avgPingMs > 0) {
-                                                val pc = when { s.avgPingMs < 50 -> Color(0xFF4CAF50); s.avgPingMs < 150 -> Color(0xFFFFC107); else -> Color(0xFFFF5252) }
+                                                val pc = accent.copy(alpha = when { 
+                                                    s.avgPingMs < 50 -> 1f
+                                                    s.avgPingMs < 150 -> 0.7f
+                                                    else -> 0.5f 
+                                                })
                                                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
                                                     Box(Modifier.size(5.dp).clip(RoundedCornerShape(50)).background(pc))
                                                     Text("${s.avgPingMs}ms", fontSize = 12.sp, color = pc)
