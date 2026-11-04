@@ -155,40 +155,42 @@ fun UpdateDialog(
                                 tween(220),
                                 label = "update_notes_arrow"
                             )
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(14.dp))
-                                    .background(accent.copy(alpha = 0.08f))
-                                    .clickable { showNotes = !showNotes }
-                                    .padding(horizontal = 14.dp, vertical = 11.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    UpdateText.get("whats_new", lang),
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = text
-                                )
-                                Icon(
-                                    Icons.Filled.KeyboardArrowDown, null,
-                                    Modifier.size(18.dp).graphicsLayer { rotationZ = arrow },
-                                    tint = muted
-                                )
-                            }
-                            AnimatedVisibility(
-                                visible = showNotes,
-                                enter = fadeIn(tween(300, easing = FastOutSlowInEasing)) + expandVertically(tween(300, easing = FastOutSlowInEasing)),
-                                exit = fadeOut(tween(200, easing = FastOutSlowInEasing)) + shrinkVertically(tween(200, easing = FastOutSlowInEasing))
-                            ) {
-                                Text(
-                                    info.changelog,
-                                    fontSize = 13.sp,
-                                    lineHeight = 19.sp,
-                                    color = muted,
-                                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 12.dp)
-                                )
+                            Column {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(14.dp))
+                                        .background(accent.copy(alpha = 0.08f))
+                                        .clickable { showNotes = !showNotes }
+                                        .padding(horizontal = 14.dp, vertical = 11.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        UpdateText.get("whats_new", lang),
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = text
+                                    )
+                                    Icon(
+                                        Icons.Filled.KeyboardArrowDown, null,
+                                        Modifier.size(18.dp).graphicsLayer { rotationZ = arrow },
+                                        tint = muted
+                                    )
+                                }
+                                androidx.compose.animation.AnimatedVisibility(
+                                    visible = showNotes,
+                                    enter = expandVertically(animationSpec = tween(300, easing = FastOutSlowInEasing)),
+                                    exit = shrinkVertically(animationSpec = tween(250, easing = FastOutSlowInEasing))
+                                ) {
+                                    Text(
+                                        info.changelog,
+                                        fontSize = 13.sp,
+                                        lineHeight = 19.sp,
+                                        color = muted,
+                                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 12.dp)
+                                    )
+                                }
                             }
                         }
 
