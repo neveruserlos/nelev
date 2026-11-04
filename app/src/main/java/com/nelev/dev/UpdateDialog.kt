@@ -1,5 +1,6 @@
 package com.nelev.dev
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -826,231 +827,235 @@ fun UpdatePauseDialog(
         UpdateText.get("pause_custom", lang) to 0L
     )
 
-    Dialog(onDismissRequest = onDismiss) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Box(Modifier.wrapContentSize()) {
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(24.dp))
-                        .background(
-                            if (isDark) {
-                                Brush.linearGradient(
-                                    listOf(
-                                        Color(0xFF1E1E1E).copy(alpha = 0.48f),
-                                        Color(0xFF151515).copy(alpha = 0.50f)
-                                    )
-                                )
-                            } else {
-                                Brush.linearGradient(
-                                    listOf(
-                                        Color(0xFFFFFCFF).copy(alpha = 0.48f),
-                                        Color(0xFFFFF2FA).copy(alpha = 0.50f)
-                                    )
-                                )
-                            }
-                        )
-                        .border(
-                            1.5.dp,
-                            if (isDark) Color.White.copy(alpha = 0.14f) else Color.Black.copy(alpha = 0.08f),
-                            RoundedCornerShape(24.dp)
-                        )
-                ) {
-                    androidx.compose.animation.AnimatedContent(
-                        targetState = selectedOption,
-                        transitionSpec = {
-                            fadeIn(tween(300)) + expandVertically(tween(300)) togetherWith
-                                    fadeOut(tween(200)) + shrinkVertically(tween(200))
-                        },
-                        label = "pause_content"
-                    ) { currentOption ->
-                        Column(
-                            Modifier.padding(24.dp),
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Column {
-                                    Text(
-                                        UpdateText.get("pause_title", lang),
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = text
-                                    )
-                                    if (isPaused) {
-                                        Spacer(Modifier.height(2.dp))
-                                        Text(
-                                            if (pausedForever) {
-                                                UpdateText.get("paused_forever_status", lang)
-                                            } else {
-                                                val days = ((pausedUntilMs - now) / (24 * 60 * 60 * 1000L)).toInt() + 1
-                                                UpdateText.get("paused_until_status", lang).replace("%d", days.toString())
-                                            },
-                                            fontSize = 11.sp,
-                                            color = Color(0xFFFFA726)
-                                        )
-                                    }
-                                }
-                                IconButton(onClick = onDismiss) {
-                                    Icon(Icons.Filled.Close, null, tint = if (isDark) Color.White.copy(alpha = 0.85f) else muted)
-                                }
-                            }
+    BackHandler(onBack = onDismiss)
 
-                            Text(
-                                UpdateText.get("pause_subtitle", lang),
-                                fontSize = 13.sp,
-                                lineHeight = 18.sp,
-                                color = muted
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(remember { androidx.compose.foundation.interaction.MutableInteractionSource() }, null) {
+                onDismiss()
+            }
+            .background(Color.Black.copy(alpha = 0.4f)),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(Modifier.wrapContentSize()) {
+            Box(
+                Modifier
+                    .fillMaxWidth(0.92f)
+                    .clip(RoundedCornerShape(24.dp))
+                    .clickable(remember { androidx.compose.foundation.interaction.MutableInteractionSource() }, null) { }
+                    .background(
+                        if (isDark) {
+                            Brush.linearGradient(
+                                listOf(
+                                    Color(0xFF1E1E1E).copy(alpha = 0.95f),
+                                    Color(0xFF151515).copy(alpha = 0.97f)
+                                )
                             )
-
-                            Column(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(16.dp))
-                                    .background(if (isDark) Color.White.copy(alpha = 0.04f) else Color.Black.copy(alpha = 0.02f))
-                                    .border(1.dp, border, RoundedCornerShape(16.dp))
-                                    .padding(10.dp),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                presets.forEachIndexed { idx, (label, days) ->
-                                    val isSelected = selectedOption == idx
-                                    Row(
-                                        Modifier
-                                            .fillMaxWidth()
-                                            .clip(RoundedCornerShape(12.dp))
-                                            .background(if (isSelected) accent.copy(alpha = 0.12f) else Color.Transparent)
-                                            .border(
-                                                1.dp,
-                                                if (isSelected) accent.copy(alpha = 0.35f) else Color.Transparent,
-                                                RoundedCornerShape(12.dp)
-                                            )
-                                            .clickable {
-                                                selectedOption = idx
-                                            }
-                                            .padding(horizontal = 14.dp, vertical = 12.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Box(
-                                            Modifier
-                                                .size(20.dp)
-                                                .clip(CircleShape)
-                                                .border(2.dp, if (isSelected) accent else muted, CircleShape)
-                                                .background(if (isSelected) accent else Color.Transparent),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            if (isSelected) {
-                                                Box(
-                                                    Modifier
-                                                        .size(8.dp)
-                                                        .clip(CircleShape)
-                                                        .background(buttonContent)
-                                                )
-                                            }
-                                        }
-                                        Spacer(Modifier.width(12.dp))
-                                        Text(
-                                            label,
-                                            fontSize = 14.sp,
-                                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                                            color = text,
-                                            modifier = Modifier.weight(1f)
-                                        )
-                                    }
-                                }
-                            }
-
-                            if (currentOption == 4) {
-                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Text(
-                                        UpdateText.get("pause_custom_hint", lang),
-                                        fontSize = 12.sp,
-                                        color = muted
-                                    )
-                                    androidx.compose.material3.OutlinedTextField(
-                                        value = customDays,
-                                        onValueChange = { 
-                                            val filtered = it.filter { c -> c.isDigit() }
-                                            customDays = if (filtered.isNotEmpty() && filtered.toIntOrNull()?.let { n -> n > 9999 } == true) {
-                                                "9999"
-                                            } else {
-                                                filtered.take(4)
-                                            }
-                                        },
-                                        modifier = Modifier.fillMaxWidth(),
-                                        label = { Text(UpdateText.get("pause_custom_label", lang), fontSize = 12.sp) },
-                                        singleLine = true,
-                                        colors = androidx.compose.material3.TextFieldDefaults.colors(
-                                            focusedContainerColor = Color.Transparent,
-                                            unfocusedContainerColor = Color.Transparent,
-                                            focusedIndicatorColor = accent,
-                                            unfocusedIndicatorColor = border,
-                                            focusedTextColor = text,
-                                            unfocusedTextColor = text,
-                                            cursorColor = accent,
-                                            focusedLabelColor = accent,
-                                            unfocusedLabelColor = muted
-                                        )
-                                    )
-                                }
-                            }
-
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.End,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
+                        } else {
+                            Brush.linearGradient(
+                                listOf(
+                                    Color(0xFFFFFCFF).copy(alpha = 0.95f),
+                                    Color(0xFFFFF2FA).copy(alpha = 0.97f)
+                                )
+                            )
+                        }
+                    )
+                    .border(
+                        1.5.dp,
+                        if (isDark) Color.White.copy(alpha = 0.14f) else Color.Black.copy(alpha = 0.08f),
+                        RoundedCornerShape(24.dp)
+                    )
+            ) {
+                androidx.compose.animation.AnimatedContent(
+                    targetState = selectedOption,
+                    transitionSpec = {
+                        fadeIn(tween(300)) + expandVertically(tween(300)) togetherWith
+                                fadeOut(tween(200)) + shrinkVertically(tween(200))
+                    },
+                    label = "pause_content"
+                ) { currentOption ->
+                    Column(
+                        Modifier.padding(24.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column {
+                                Text(
+                                    UpdateText.get("pause_title", lang),
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = text
+                                )
                                 if (isPaused) {
-                                    TextButton(onClick = {
-                                        onResume()
-                                        onDismiss()
-                                    }) {
-                                        Text(UpdateText.get("pause_resume", lang), color = muted)
-                                    }
-                                    Spacer(Modifier.width(8.dp))
+                                    Spacer(Modifier.height(2.dp))
+                                    Text(
+                                        if (pausedForever) {
+                                            UpdateText.get("paused_forever_status", lang)
+                                        } else {
+                                            val days = ((pausedUntilMs - now) / (24 * 60 * 60 * 1000L)).toInt() + 1
+                                            UpdateText.get("paused_until_status", lang).replace("%d", days.toString())
+                                        },
+                                        fontSize = 11.sp,
+                                        color = Color(0xFFFFA726)
+                                    )
                                 }
-                                Button(
-                                    onClick = {
-                                        val option = selectedOption ?: return@Button
-                                        val (_, days) = presets[option]
-                                        when {
-                                            days == -1L -> {
-                                                onPause(0L, true)
-                                                onDismiss()
-                                            }
-                                            days == 0L -> {
-                                                val custom = customDays.toLongOrNull() ?: return@Button
-                                                if (custom < 1) return@Button
-                                                val until = now + custom * 24 * 60 * 60 * 1000L
-                                                onPause(until, false)
-                                                onDismiss()
-                                            }
-                                            else -> {
-                                                val until = now + days * 24 * 60 * 60 * 1000L
-                                                onPause(until, false)
-                                                onDismiss()
-                                            }
+                            }
+                            IconButton(onClick = onDismiss) {
+                                Icon(Icons.Filled.Close, null, tint = if (isDark) Color.White.copy(alpha = 0.85f) else muted)
+                            }
+                        }
+
+                        Text(
+                            UpdateText.get("pause_subtitle", lang),
+                            fontSize = 13.sp,
+                            lineHeight = 18.sp,
+                            color = muted
+                        )
+
+                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(if (isDark) Color.White.copy(alpha = 0.04f) else Color.Black.copy(alpha = 0.02f))
+                                .border(1.dp, border, RoundedCornerShape(16.dp))
+                                .padding(10.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            presets.forEachIndexed { idx, (label, days) ->
+                                val isSelected = selectedOption == idx
+                                Row(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .background(if (isSelected) accent.copy(alpha = 0.12f) else Color.Transparent)
+                                        .border(
+                                            1.dp,
+                                            if (isSelected) accent.copy(alpha = 0.35f) else Color.Transparent,
+                                            RoundedCornerShape(12.dp)
+                                        )
+                                        .clickable {
+                                            selectedOption = idx
+                                        }
+                                        .padding(horizontal = 14.dp, vertical = 12.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Box(
+                                        Modifier
+                                            .size(20.dp)
+                                            .clip(CircleShape)
+                                            .border(2.dp, if (isSelected) accent else muted, CircleShape)
+                                            .background(if (isSelected) accent else Color.Transparent),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        if (isSelected) {
+                                            Box(
+                                                Modifier
+                                                    .size(8.dp)
+                                                    .clip(CircleShape)
+                                                    .background(buttonContent)
+                                            )
+                                        }
+                                    }
+                                    Spacer(Modifier.width(12.dp))
+                                    Text(
+                                        label,
+                                        fontSize = 14.sp,
+                                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                        color = text,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
+                            }
+                        }
+
+                        if (currentOption == 4) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(
+                                    UpdateText.get("pause_custom_hint", lang),
+                                    fontSize = 12.sp,
+                                    color = muted
+                                )
+                                androidx.compose.material3.OutlinedTextField(
+                                    value = customDays,
+                                    onValueChange = { 
+                                        val filtered = it.filter { c -> c.isDigit() }
+                                        customDays = if (filtered.isNotEmpty() && filtered.toIntOrNull()?.let { n -> n > 9999 } == true) {
+                                            "9999"
+                                        } else {
+                                            filtered.take(4)
                                         }
                                     },
-                                    enabled = selectedOption != null && (selectedOption != 4 || customDays.isNotBlank()),
-                                    shape = RoundedCornerShape(13.dp),
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = accent,
-                                        contentColor = buttonContent
+                                    modifier = Modifier.fillMaxWidth(),
+                                    label = { Text(UpdateText.get("pause_custom_label", lang), fontSize = 12.sp) },
+                                    singleLine = true,
+                                    colors = androidx.compose.material3.TextFieldDefaults.colors(
+                                        focusedContainerColor = Color.Transparent,
+                                        unfocusedContainerColor = Color.Transparent,
+                                        focusedIndicatorColor = accent,
+                                        unfocusedIndicatorColor = border,
+                                        focusedTextColor = text,
+                                        unfocusedTextColor = text,
+                                        cursorColor = accent,
+                                        focusedLabelColor = accent,
+                                        unfocusedLabelColor = muted
                                     )
-                                ) {
-                                    Text(
-                                        UpdateText.get("pause_apply", lang),
-                                        fontWeight = FontWeight.SemiBold
-                                    )
+                                )
+                            }
+                        }
+
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            if (isPaused) {
+                                TextButton(onClick = {
+                                    onResume()
+                                    onDismiss()
+                                }) {
+                                    Text(UpdateText.get("pause_resume", lang), color = muted)
                                 }
+                                Spacer(Modifier.width(8.dp))
+                            }
+                            Button(
+                                onClick = {
+                                    val option = selectedOption ?: return@Button
+                                    val (_, days) = presets[option]
+                                    when {
+                                        days == -1L -> {
+                                            onPause(0L, true)
+                                            onDismiss()
+                                        }
+                                        days == 0L -> {
+                                            val custom = customDays.toLongOrNull() ?: return@Button
+                                            if (custom < 1) return@Button
+                                            val until = now + custom * 24 * 60 * 60 * 1000L
+                                            onPause(until, false)
+                                            onDismiss()
+                                        }
+                                        else -> {
+                                            val until = now + days * 24 * 60 * 60 * 1000L
+                                            onPause(until, false)
+                                            onDismiss()
+                                        }
+                                    }
+                                },
+                                enabled = selectedOption != null && (selectedOption != 4 || customDays.isNotBlank()),
+                                shape = RoundedCornerShape(13.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = accent,
+                                    contentColor = buttonContent
+                                )
+                            ) {
+                                Text(
+                                    UpdateText.get("pause_apply", lang),
+                                    fontWeight = FontWeight.SemiBold
+                                )
                             }
                         }
                     }

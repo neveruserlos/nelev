@@ -5586,9 +5586,9 @@ fun ConnectScreen(
                                         ) { status ->
                                             Text(
                                                 when (status) {
-                                                    "connected" -> if (lang == "ru") "Подключено" else "Connected"
-                                                    "waiting" -> if (lang == "ru") "Ожидание ПК" else "Waiting for PC"
-                                                    else -> if (lang == "ru") "Подключение" else "Connection"
+                                                    "connected" -> Strings.get("connected_pc", lang)
+                                                    "waiting" -> Strings.get("waiting_pc", lang)
+                                                    else -> Strings.get("connect_title", lang)
                                                 },
                                                 fontSize = 28.sp,
                                                 lineHeight = 30.sp,
@@ -5610,9 +5610,9 @@ fun ConnectScreen(
                                         ) { status ->
                                             Text(
                                                 when (status) {
-                                                    "connected" -> if (lang == "ru") "Подключено" else "Connected"
-                                                    "waiting" -> if (lang == "ru") "Ожидание ПК" else "Waiting for PC"
-                                                    else -> if (lang == "ru") "Подключение" else "Connection"
+                                                    "connected" -> Strings.get("connected_pc", lang)
+                                                    "waiting" -> Strings.get("waiting_pc", lang)
+                                                    else -> Strings.get("connect_title", lang)
                                                 },
                                                 fontSize = 28.sp,
                                                 lineHeight = 30.sp,
