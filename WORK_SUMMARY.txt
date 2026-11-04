@@ -1,30 +1,24 @@
 # NELEV Android App - Work Summary
 
-## Текущая версия: 1.9.9 (versionCode 44)
+## Текущая версия: 1.9.10 (versionCode 45)
 
-### Последний релиз: v1.9.9
+### Последний релиз: v1.9.10
 - **Дата:** 2026-11-04
-- **Коммит:** 87d5b41
-- **APK:** https://github.com/neveruserlos/nelev/releases/download/v1.9.9/nelev-app-release-1.9.9.apk
-- **SHA-256:** `0dcc9c024c540eb46dcffcc138a902d5fd978fbdbbd77ac64a6acad92567e199`
+- **Коммит:** 80ecd94
+- **APK:** https://github.com/neveruserlos/nelev/releases/download/v1.9.10/nelev-app-release-1.9.10.apk
+- **SHA-256:** `6174dfc59d0853837648d2f1e02c0460dd33ae312f3fb8099ba88b94d02b8566`
 
-### Что нового в 1.9.9
+### Что нового в 1.9.10
 
-#### Исправление переводов статусов подключения
-✅ "Connected", "Waiting for PC", "Connection" теперь переводятся на все 8 языков
-✅ Hardcoded тексты `if (lang == "ru")` заменены на `Strings.get()`
-✅ Исправлено в двух местах: большой текст (28sp) и обычный текст (15sp)
+#### Исправление анимации "Что нового" в диалоге обновления
+✅ Полностью устранена дёрганая анимация раскрытия changelog
+✅ Убран `fadeIn/fadeOut` - оставлен только `expandVertically/shrinkVertically`
+✅ Увеличено время анимации: 300ms раскрытие, 250ms сворачивание
+✅ Changelog обёрнут в отдельный Column для правильной работы AnimatedVisibility
+✅ Плавное раскрытие без лагов и рывков
+✅ `FastOutSlowInEasing` для естественного движения
 
-#### Редизайн диалога паузы обновлений (финальная версия)
-✅ Убрано стандартное затемнение Dialog - используется полноэкранный Box
-✅ Кастомное затемнение с alpha 0.4 (более мягкое)
-✅ Градиентный фон с увеличенной непрозрачностью (0.95-0.97)
-✅ Клик вне диалога закрывает его
-✅ BackHandler для кнопки назад на телефоне
-✅ Ширина диалога 92% экрана
-✅ Внутренний контент не реагирует на клики снаружи (stopPropagation)
-
-### Что было в 1.9.8
+### Что было в 1.9.9
 
 #### UX улучшения обновлений
 ✅ Окно «Что нового»: стрелочка-индикатор для прокрутки длинного текста
@@ -47,6 +41,14 @@
 ---
 
 ## История версий
+
+### 1.9.9 (versionCode 44) - 2026-11-04
+- Исправлены переводы "Connected", "Waiting for PC", "Connection" на все 8 языков
+- Hardcoded тексты заменены на Strings.get()
+- Диалог паузы обновлений без стандартного затемнения Dialog
+- Полноэкранный Box с кастомным затемнением (alpha 0.4)
+- Градиентный фон с увеличенной непрозрачностью (0.95-0.97)
+- BackHandler для кнопки назад
 
 ### 1.9.8 (versionCode 43) - 2026-11-04
 - Changelog в "Что нового" меняется при смене языка
@@ -268,11 +270,11 @@ cd X:\nelev\app
 
 - **GitHub:** https://github.com/neveruserlos/nelev
 - **Releases:** https://github.com/neveruserlos/nelev/releases
-- **Latest APK:** https://github.com/neveruserlos/nelev/releases/latest/download/nelev-app-release-1.9.9.apk
+- **Latest APK:** https://github.com/neveruserlos/nelev/releases/latest/download/nelev-app-release-1.9.10.apk
 - **Email:** vlasnikitkaa@gmail.com
 
 ---
 
 **Последнее обновление:** 2026-11-04
-**Версия документа:** 1.9.9
-**Статус:** Production-ready, переводы статусов исправлены, диалог без затемнения
+**Версия документа:** 1.9.10
+**Статус:** Production-ready, анимация "Что нового" плавная без лагов
