@@ -2296,10 +2296,21 @@ class MainActivity : ComponentActivity() {
                     }
                     whatsNewChecked = true
                     if (!launchInfo.updated) return@LaunchedEffect
-                    val notes = VersionHistory.changelog(ctx, launchInfo.currentCode)
+                    val currentLang = appSettings.value.language
+                    val notes = VersionHistory.changelog(ctx, launchInfo.currentCode, currentLang)
                         ?: Updater.changelogFor(ctx, launchInfo.currentCode)
                     whatsNewNotes = notes
                     whatsNewVersion = APP_VERSION
+                }
+                
+                // Обновление changelog при смене языка
+                LaunchedEffect(appSettings.value.language, whatsNewVersion) {
+                    if (whatsNewVersion != null) {
+                        val currentLang = appSettings.value.language
+                        val notes = VersionHistory.changelog(ctx, launchInfo.currentCode, currentLang)
+                            ?: Updater.changelogFor(ctx, launchInfo.currentCode)
+                        whatsNewNotes = notes
+                    }
                 }
 
                 Box(Modifier.fillMaxSize().background(appBg)) {
@@ -3621,14 +3632,15 @@ fun NelevMainScreen(
     val checkUpdates: () -> Unit = {
         if (!updateChecking) {
             updateChecking = true
-            Toast.makeText(ctx, UpdateText.get("checking", lang), Toast.LENGTH_SHORT).show()
+            val currentLang = appSettings.value.language
+            Toast.makeText(ctx, UpdateText.get("checking", currentLang), Toast.LENGTH_SHORT).show()
             updateScope.launch {
                 Updater.check(ctx, respectSkip = false)
                     .onSuccess { info ->
                         if (info != null) {
                             updateInfo = info
                         } else {
-                            Toast.makeText(ctx, UpdateText.get("up_to_date", lang), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(ctx, UpdateText.get("up_to_date", currentLang), Toast.LENGTH_SHORT).show()
                         }
                     }
                     .onFailure {
@@ -7771,6 +7783,8 @@ fun AboutAppOverlay(
     BackHandler {
         if (showPauseUpdates) {
             showPauseUpdates = false
+            selectedPauseOption = null
+            customDays = ""
         } else if (showFeedback) {
             showFeedback = false
         } else {
@@ -7789,6 +7803,8 @@ fun AboutAppOverlay(
                 .clickable(remember { MutableInteractionSource() }, null) {
                     if (showPauseUpdates) {
                         showPauseUpdates = false
+                        selectedPauseOption = null
+                        customDays = ""
                     } else if (showFeedback) {
                         showFeedback = false
                     } else {
@@ -7872,6 +7888,8 @@ fun AboutAppOverlay(
                                     onClick = {
                                         if (showPauseUpdates) {
                                             showPauseUpdates = false
+                                            selectedPauseOption = null
+                                            customDays = ""
                                         } else if (showFeedback) {
                                             showFeedback = false
                                         } else {
@@ -8415,16 +8433,22 @@ fun AboutAppOverlay(
                                         ) {
                                             presets.forEachIndexed { idx, (label, days) ->
                                                 val isSelected = selectedPauseOption == idx
+                                                val backgroundColor by animateColorAsState(
+                                                    if (isSelected) colors["accent"]!!.copy(alpha = 0.12f) else Color.Transparent,
+                                                    animationSpec = tween(250, easing = FastOutSlowInEasing),
+                                                    label = "pause_bg_$idx"
+                                                )
+                                                val borderColor by animateColorAsState(
+                                                    if (isSelected) colors["accent"]!!.copy(alpha = 0.35f) else Color.Transparent,
+                                                    animationSpec = tween(250, easing = FastOutSlowInEasing),
+                                                    label = "pause_border_$idx"
+                                                )
                                                 Row(
                                                     Modifier
                                                         .fillMaxWidth()
                                                         .clip(RoundedCornerShape(12.dp))
-                                                        .background(if (isSelected) colors["accent"]!!.copy(alpha = 0.12f) else Color.Transparent)
-                                                        .border(
-                                                            1.dp,
-                                                            if (isSelected) colors["accent"]!!.copy(alpha = 0.35f) else Color.Transparent,
-                                                            RoundedCornerShape(12.dp)
-                                                        )
+                                                        .background(backgroundColor)
+                                                        .border(1.dp, borderColor, RoundedCornerShape(12.dp))
                                                         .clickable {
                                                             if (soundClickEnabled) ClickPlayer.play(ctx)
                                                             selectedPauseOption = idx
@@ -8441,7 +8465,11 @@ fun AboutAppOverlay(
                                                             .background(if (isSelected) colors["accent"]!! else Color.Transparent),
                                                         contentAlignment = Alignment.Center
                                                     ) {
-                                                        if (isSelected) {
+                                                        androidx.compose.animation.AnimatedVisibility(
+                                                            visible = isSelected,
+                                                            enter = scaleIn(animationSpec = tween(150, easing = FastOutSlowInEasing)),
+                                                            exit = scaleOut(animationSpec = tween(150, easing = FastOutSlowInEasing))
+                                                        ) {
                                                             Box(
                                                                 Modifier
                                                                     .size(8.dp)
@@ -8462,7 +8490,17 @@ fun AboutAppOverlay(
                                             }
                                         }
                                         
-                                        if (selectedPauseOption == 4) {
+                                        androidx.compose.animation.AnimatedVisibility(
+                                            visible = selectedPauseOption == 4,
+                                            enter = expandVertically(
+                                                animationSpec = tween(320, easing = FastOutSlowInEasing),
+                                                expandFrom = Alignment.Top
+                                            ) + fadeIn(animationSpec = tween(250, easing = FastOutSlowInEasing)),
+                                            exit = shrinkVertically(
+                                                animationSpec = tween(280, easing = FastOutSlowInEasing),
+                                                shrinkTowards = Alignment.Top
+                                            ) + fadeOut(animationSpec = tween(200, easing = FastOutSlowInEasing))
+                                        ) {
                                             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                                 Text(
                                                     UpdateText.get("pause_custom_hint", lang),

@@ -1,0 +1,49 @@
+NELEV 1.9.12 - UX Polish & Localization Fixes
+
+🎨 Animation Improvements:
+• Smooth pause period selection with color transitions
+• Smooth "Custom period" field expansion with fade-in animation
+• Fixed window teleportation on changelog expansion
+• Radio button inner circle now animates with scale effect
+
+🌍 Localization:
+• Fixed notification localization - now updates on language change
+• Dynamic What's New translation loading when switching languages
+• All UI elements now properly react to language changes
+
+🐛 Bug Fixes:
+• Fixed selection reset bug when closing pause updates window
+• State properly resets on window close (selectedPauseOption, customDays)
+• Proper cleanup on back button press
+
+🔧 Technical:
+• Added animateColorAsState for smooth background/border transitions
+• Added LaunchedEffect to reload changelog on language change
+• Better state management for pause updates dialog
+
+---
+
+Русская версия:
+
+NELEV 1.9.12 - Доработка UX и исправления локализации
+
+🎨 Улучшения анимации:
+• Плавный выбор периодов паузы с переходами цветов
+• Плавное расширение поля "Свой срок" с анимацией появления
+• Убрано телепортирование окна при раскрытии changelog
+• Внутренний кружок радиокнопки теперь анимируется с эффектом масштаба
+
+🌍 Локализация:
+• Исправлена локализация уведомлений - теперь обновляется при смене языка
+• Динамическая загрузка переводов "Что нового" при переключении языков
+• Все элементы интерфейса теперь правильно реагируют на смену языка
+
+🐛 Исправления багов:
+• Исправлен баг сброса выбора при закрытии окна паузы обновлений
+• Состояние правильно сбрасывается при закрытии окна (selectedPauseOption, customDays)
+• Корректная очистка при нажатии кнопки назад
+
+🔧 Технические изменения:
+• Добавлен animateColorAsState для плавных переходов фона/границ
+• Добавлен LaunchedEffect для перезагрузки changelog при смене языка
+• Улучшено управление состоянием диалога паузы обновлений

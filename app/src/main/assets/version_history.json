@@ -1,18 +1,33 @@
 {
   "versions": [
     {
+      "versionCode": 47,
+      "versionName": "1.9.12",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Исправлена локализация уведомлений при смене языка\n• Плавная анимация выбора периодов в окне паузы обновлений\n• Плавное расширение поля \"Свой срок\" с анимацией\n• Исправлен баг с сбросом выбора при закрытии окна\n• Динамическая загрузка переводов \"Что нового\" при смене языка\n• Убрано телепортирование окна при раскрытии changelog",
+        "en": "• Fixed notification localization on language change\n• Smooth pause period selection animation\n• Smooth custom period field expansion with animation\n• Fixed selection reset bug on window close\n• Dynamic What's New translation loading on language change\n• Removed window teleportation on changelog expansion",
+        "es": "• Localización de notificaciones corregida al cambiar idioma\n• Animación suave de selección de período de pausa\n• Expansión suave del campo de período personalizado con animación\n• Bug de restablecimiento de selección corregido al cerrar ventana\n• Carga dinámica de traducciones de Novedades al cambiar idioma\n• Eliminado teletransporte de ventana en expansión de changelog",
+        "zh": "• 修复了更改语言时的通知本地化\n• 平滑的暂停期间选择动画\n• 平滑的自定义期间字段展开动画\n• 修复了关闭窗口时的选择重置错误\n• 更改语言时动态加载新功能翻译\n• 删除了更新日志展开时的窗口传送",
+        "ja": "• 言語変更時の通知ローカライゼーションを修正\n• スムーズな一時停止期間選択アニメーション\n• アニメーション付きスムーズなカスタム期間フィールド展開\n• ウィンドウを閉じたときの選択リセットバグを修正\n• 言語変更時の新機能翻訳の動的読み込み\n• 変更履歴展開時のウィンドウテレポートを削除",
+        "ko": "• 언어 변경 시 알림 현지화 수정\n• 부드러운 일시 중지 기간 선택 애니메이션\n• 애니메이션이 있는 부드러운 사용자 지정 기간 필드 확장\n• 창 닫기 시 선택 재설정 버그 수정\n• 언어 변경 시 새 기능 번역 동적 로딩\n• 변경 로그 확장 시 창 순간이동 제거",
+        "pt": "• Localização de notificações corrigida ao mudar idioma\n• Animação suave de seleção de período de pausa\n• Expansão suave do campo de período personalizado com animação\n• Bug de redefinição de seleção corrigido ao fechar janela\n• Carregamento dinâmico de traduções de Novidades ao mudar idioma\n• Removido teletransporte de janela na expansão do changelog",
+        "uk": "• Виправлено локалізацію сповіщень при зміні мови\n• Плавна анімація вибору періодів у вікні паузи оновлень\n• Плавне розширення поля \"Свій термін\" з анімацією\n• Виправлено баг зі скиданням вибору при закритті вікна\n• Динамічне завантаження перекладів \"Що нового\" при зміні мови\n• Прибрано телепортування вікна при розкритті changelog"
+      }
+    },
+    {
       "versionCode": 46,
       "versionName": "1.9.11",
       "releaseDate": "2026-11-04",
       "changelog": {
-        "ru": "• Исправлена анимация раскрытия списка изменений в диалоге обновления\n• Переработано окно приостановки обновлений с плавной трансформацией\n• Исправлена локализация уведомлений о проверке обновлений\n• Все переводы доступны без интернета",
-        "en": "• Fixed changelog expansion animation in update dialog\n• Redesigned update pause window with smooth transformation\n• Fixed localization of update check notifications\n• All translations available offline",
-        "es": "• Animación de expansión del changelog corregida en diálogo de actualización\n• Ventana de pausa de actualización rediseñada con transformación suave\n• Localización de notificaciones de verificación de actualización corregida\n• Todas las traducciones disponibles sin conexión",
-        "zh": "• 修复了更新对话框中的更新日志展开动画\n• 重新设计了更新暂停窗口，具有平滑转换\n• 修复了更新检查通知的本地化\n• 所有翻译均可离线使用",
-        "ja": "• 更新ダイアログの変更履歴展開アニメーションを修正\n• スムーズな変換を備えた更新一時停止ウィンドウを再設計\n• 更新チェック通知のローカライゼーションを修正\n• すべての翻訳をオフラインで利用可能",
-        "ko": "• 업데이트 대화상자의 변경 로그 확장 애니메이션 수정\n• 부드러운 전환을 갖춘 업데이트 일시 중지 창 재설계\n• 업데이트 확인 알림의 현지화 수정\n• 모든 번역을 오프라인에서 사용 가능",
-        "pt": "• Animação de expansão do changelog corrigida no diálogo de atualização\n• Janela de pausa de atualização redesenhada com transformação suave\n• Localização de notificações de verificação de atualização corrigida\n• Todas as traduções disponíveis offline",
-        "uk": "• Виправлено анімацію розкриття списку змін у діалозі оновлення\n• Перероблено вікно призупинення оновлень з плавною трансформацією\n• Виправлено локалізацію сповіщень про перевірку оновлень\n• Всі переклади доступні без інтернету"
+        "ru": "• Исправлена анимация раскрытия списка изменений\n• Плавная трансформация окна приостановки обновлений\n• Анимация выбора периодов паузы\n• Плавное расширение поля \"Свой срок\"\n• Исправлена локализация уведомлений\n• Динамическая загрузка переводов при смене языка",
+        "en": "• Fixed changelog expansion animation\n• Smooth update pause window transformation\n• Pause period selection animation\n• Smooth custom period field expansion\n• Fixed notification localization\n• Dynamic translation loading on language change",
+        "es": "• Animación de expansión del changelog corregida\n• Transformación suave de ventana de pausa de actualización\n• Animación de selección de período de pausa\n• Expansión suave del campo de período personalizado\n• Localización de notificaciones corregida\n• Carga dinámica de traducciones al cambiar idioma",
+        "zh": "• 修复了更新日志展开动画\n• 平滑的更新暂停窗口转换\n• 暂停期间选择动画\n• 平滑的自定义期间字段展开\n• 修复了通知本地化\n• 更改语言时动态加载翻译",
+        "ja": "• 変更履歴展開アニメーションを修正\n• スムーズな更新一時停止ウィンドウ変換\n• 一時停止期間選択アニメーション\n• スムーズなカスタム期間フィールド展開\n• 通知のローカライゼーションを修正\n• 言語変更時の動的翻訳読み込み",
+        "ko": "• 변경 로그 확장 애니메이션 수정\n• 부드러운 업데이트 일시 중지 창 전환\n• 일시 중지 기간 선택 애니메이션\n• 부드러운 사용자 지정 기간 필드 확장\n• 알림 현지화 수정\n• 언어 변경 시 동적 번역 로딩",
+        "pt": "• Animação de expansão do changelog corrigida\n• Transformação suave da janela de pausa de atualização\n• Animação de seleção de período de pausa\n• Expansão suave do campo de período personalizado\n• Localização de notificações corrigida\n• Carregamento dinâmico de traduções ao mudar idioma",
+        "uk": "• Виправлено анімацію розкриття списку змін\n• Плавна трансформація вікна призупинення оновлень\n• Анімація вибору періодів паузи\n• Плавне розширення поля \"Свій термін\"\n• Виправлено локалізацію сповіщень\n• Динамічне завантаження перекладів при зміні мови"
       }
     },
     {

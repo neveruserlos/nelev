@@ -155,7 +155,9 @@ fun UpdateDialog(
                                 tween(220),
                                 label = "update_notes_arrow"
                             )
-                            Column {
+                            Column(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -189,15 +191,15 @@ fun UpdateDialog(
                                         shrinkTowards = Alignment.Top
                                     )
                                 ) {
-                                    Column {
-                                        Text(
-                                            info.changelog,
-                                            fontSize = 13.sp,
-                                            lineHeight = 19.sp,
-                                            color = muted,
-                                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 12.dp)
-                                        )
-                                    }
+                                    Text(
+                                        info.changelog,
+                                        fontSize = 13.sp,
+                                        lineHeight = 19.sp,
+                                        color = muted,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 4.dp, vertical = 12.dp)
+                                    )
                                 }
                             }
                         }
