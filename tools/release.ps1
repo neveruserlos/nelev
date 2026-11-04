@@ -1,5 +1,6 @@
 param(
     [string]$Notes = "",
+    [string]$NotesFile = "",
     [switch]$SkipBuild
 )
 
@@ -45,7 +46,14 @@ try {
     }
 } catch { }
 
+if ($NotesFile) {
+    if (-not (Test-Path $NotesFile)) { throw "Notes file not found: $NotesFile" }
+    $Notes = [System.IO.File]::ReadAllText((Resolve-Path $NotesFile), (New-Object System.Text.UTF8Encoding($false))).Trim()
+}
 if (-not $Notes) { $Notes = "NELEV $versionName" }
+
+$notesPath = Join-Path ([System.IO.Path]::GetTempPath()) "nelev-release-notes.txt"
+[System.IO.File]::WriteAllText($notesPath, $Notes, (New-Object System.Text.UTF8Encoding($false)))
 
 $manifest = [ordered]@{
     versionCode = $versionCode
@@ -81,10 +89,12 @@ if ($LASTEXITCODE -ne 0) {
 
 $tags = (& $gh.Source release list --limit 100 2>$null)
 if ($tags -match [regex]::Escape($tag)) {
-    Write-Host "Release $tag exists, uploading assets with --clobber..."
+    Write-Host "Release $tag exists, updating notes and uploading assets with --clobber..."
+    & $gh.Source release edit $tag --notes-file $notesPath
+    if ($LASTEXITCODE -ne 0) { throw "gh release edit failed" }
     & $gh.Source release upload $tag $apkCopy $manifestPath --clobber
 } else {
-    & $gh.Source release create $tag $apkCopy $manifestPath --title "NELEV $versionName" --notes $Notes
+    & $gh.Source release create $tag $apkCopy $manifestPath --title "NELEV $versionName" --notes-file $notesPath
 }
 if ($LASTEXITCODE -ne 0) { throw "gh release failed" }
 
