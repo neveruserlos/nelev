@@ -1,0 +1,39 @@
+# Gradle
+.gradle/
+.kotlin/
+build/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local config (never commit)
+local.properties
+.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Logs and crash dumps
+*.log
+hs_err_pid*.log
+replay_pid*.log
+
+# Build artifacts: APK/AAB are published as GitHub Release assets, not committed
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# Signing / secrets
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+
+# Generated OTA manifest (built by tools/release.ps1)
+version.json
+
+# OS
+.DS_Store
+Thumbs.db

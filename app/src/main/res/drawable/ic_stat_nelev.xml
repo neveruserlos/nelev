@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Монохромная иконка для статус-бара/уведомлений (система сама её тонирует). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M4.5,3.5h3.6l7.4,11.2V3.5h4v17h-3.6L8.5,9.3v11.2h-4z" />
+</vector>

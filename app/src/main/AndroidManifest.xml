@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nelev.dev">
+
+    <!-- Микрофон -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Сеть — UDP сокет упадёт с EPERM без этого -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Камера нужна только для QR-сканера; приложение работает и без неё -->
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <!-- Информация о SIM и телефонии -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- Foreground service -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Android 14+ (targetSdk 34+): обязателен для FGS-типа microphone -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+
+    <!-- WakeLock — держим CPU во время стриминга -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Уведомления Android 13+ -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- AlarmManager для перезапуска сервиса -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/icon"
+        android:supportsRtl="true"
+        android:largeHeap="true"
+        android:theme="@style/Theme.Nelev">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Наш QR-сканер (CameraX + ML Kit) -->
+        <activity
+            android:name=".BarcodeScannerActivity"
+            android:exported="false"
+            android:label="QR Scanner"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Material.NoActionBar"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize" />
+
+        <!--
+            foregroundServiceType="microphone" обязателен на Android 14+
+            без него startForeground() бросает SecurityException
+        -->
+        <service
+            android:name=".NelevService"
+            android:exported="false"
+            android:foregroundServiceType="microphone"
+            android:stopWithTask="false" />
+
+    </application>
+</manifest>
