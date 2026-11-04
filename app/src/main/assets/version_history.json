@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 49,
+      "versionName": "1.9.14",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Исправлено расположение плашки выбора в паузе обновлений\n• Убрано дёрганье при раскрытии \"Что нового\" в уведомлении\n• Исправлено телепание окна \"Что нового\" вниз после появления\n• Все анимации теперь работают плавно и естественно",
+        "en": "• Fixed selection plate position in update pause\n• Removed jerking when expanding What's New in notification\n• Fixed What's New window jumping down after appearance\n• All animations now work smoothly and naturally",
+        "es": "• Corregida posición de placa de selección en pausa de actualización\n• Eliminado movimiento brusco al expandir Novedades en notificación\n• Corregido salto de ventana de Novedades hacia abajo después de aparecer\n• Todas las animaciones ahora funcionan suave y naturalmente",
+        "zh": "• 修复了更新暂停中的选择板位置\n• 移除了通知中展开新功能时的抖动\n• 修复了新功能窗口出现后向下跳动\n• 所有动画现在平滑自然地工作",
+        "ja": "• 更新一時停止での選択プレートの位置を修正\n• 通知で新機能を展開する際のガタつきを削除\n• 新機能ウィンドウの表示後の下へのジャンプを修正\n• すべてのアニメーションがスムーズで自然に動作するようになりました",
+        "ko": "• 업데이트 일시 중지에서 선택 플레이트 위치 수정\n• 알림에서 새 기능 확장 시 떨림 제거\n• 새 기능 창이 나타난 후 아래로 점프하는 현상 수정\n• 모든 애니메이션이 이제 부드럽고 자연스럽게 작동합니다",
+        "pt": "• Corrigida posição da placa de seleção na pausa de atualização\n• Removido movimento brusco ao expandir Novidades na notificação\n• Corrigido salto da janela de Novidades para baixo após aparecer\n• Todas as animações agora funcionam suave e naturalmente",
+        "uk": "• Виправлено розташування плашки вибору в паузі оновлень\n• Прибрано смикання при розкритті \"Що нового\" в сповіщенні\n• Виправлено телепання вікна \"Що нового\" вниз після появи\n• Всі анімації тепер працюють плавно та природно"
+      }
+    },
+    {
       "versionCode": 48,
       "versionName": "1.9.13",
       "releaseDate": "2026-11-04",
