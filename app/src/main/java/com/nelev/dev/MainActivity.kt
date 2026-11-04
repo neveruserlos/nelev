@@ -3221,6 +3221,9 @@ fun NelevMainScreen(
     val colors         = nelevColors(isDark, effectsEnabled)
     val showHistory    = remember { mutableStateOf(false) }
     val showAbout      = remember { mutableStateOf(false) }
+    var updateInfo by remember { mutableStateOf<UpdateInfo?>(null) }
+    var updateChecking by remember { mutableStateOf(false) }
+    val updateScope = rememberCoroutineScope()
     var isTransitioning by remember { mutableStateOf(false) }
     val showStats      = remember { mutableStateOf(false) }
     var statsTapCount  by remember { mutableStateOf(0) }
@@ -3235,6 +3238,38 @@ fun NelevMainScreen(
         // Восстановление сессии, если приложение завершилось аварийно
         if (!NelevService.streaming) {
             try { SessionStore.recoverCrashedSession(ctx) } catch (_: Exception) {}
+        }
+    }
+
+    // OTA: тихая проверка обновлений при запуске (не чаще раза в 3 часа)
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(3000)
+        if (Updater.shouldAutoCheck(ctx)) {
+            Updater.markChecked(ctx)
+            Updater.check(ctx, respectSkip = true).onSuccess { info ->
+                if (info != null) updateInfo = info
+            }
+        }
+    }
+
+    val checkUpdates: () -> Unit = {
+        if (!updateChecking) {
+            updateChecking = true
+            Toast.makeText(ctx, UpdateText.get("checking", lang), Toast.LENGTH_SHORT).show()
+            updateScope.launch {
+                Updater.check(ctx, respectSkip = false)
+                    .onSuccess { info ->
+                        if (info != null) {
+                            updateInfo = info
+                        } else {
+                            Toast.makeText(ctx, UpdateText.get("up_to_date", lang), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    .onFailure {
+                        Toast.makeText(ctx, UpdateText.get("error_check", lang), Toast.LENGTH_SHORT).show()
+                    }
+                updateChecking = false
+            }
         }
     }
     LaunchedEffect(showStats.value) {
@@ -3623,7 +3658,7 @@ fun NelevMainScreen(
                             }
                             .graphicsLayer { alpha = (abs(dragOffset.value) / screenWidth).coerceIn(0f, 1f) }) {
                             TabContent(tabOrder[neighborIdx], appState, appSettings, colors, lang, isDark, sliderDragging,
-                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onScanQr = qrScanCallback)
+                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback)
                         }
                     }
 
@@ -3631,7 +3666,7 @@ fun NelevMainScreen(
                         .offset { IntOffset(dragOffset.value.toInt(), 0) }
                         .graphicsLayer { alpha = 1f - (abs(dragOffset.value) / screenWidth).coerceIn(0f, 1f) * 0.3f }) {
                         TabContent(selectedTab.value, appState, appSettings, colors, lang, isDark, sliderDragging,
-                            effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onScanQr = qrScanCallback)
+                            effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback)
                     }
                 }
 
@@ -3699,6 +3734,19 @@ fun NelevMainScreen(
                 showStatsToggle = showStatsToggle,
                 showStats = showStats
             )
+
+            updateInfo?.let { info ->
+                UpdateDialog(
+                    info = info,
+                    colors = colors,
+                    lang = lang,
+                    isDark = isDark,
+                    onDismiss = {
+                        Updater.markSkipped(ctx, info.versionCode)
+                        updateInfo = null
+                    }
+                )
+            }
         }
 
         // ── Навигационная панель поверх контента ──
@@ -4016,6 +4064,7 @@ private fun TabContent(
     showHistory: MutableState<Boolean>,
     selectedTab: MutableState<NelevTab>,
     showAbout: MutableState<Boolean>,
+    onCheckUpdates: () -> Unit = {},
     onScanQr: () -> Unit = {}
 ) {
     val ctx = LocalContext.current
@@ -4025,7 +4074,7 @@ private fun TabContent(
             menuCentered = appSettings.value.menuCentered, onScanQr = onScanQr)
         NelevTab.FILTERS  -> FiltersScreen(appState, colors, lang, sliderDragging, appSettings.value.soundClickEnabled, effectsEnabled, isDark, menuCentered = appSettings.value.menuCentered)
         NelevTab.INFO     -> InfoScreen(colors, lang, effectsEnabled)
-        NelevTab.SETTINGS -> SettingsScreen(appSettings, colors, lang, ctx, showHistory, selectedTab, showAbout)
+        NelevTab.SETTINGS -> SettingsScreen(appSettings, colors, lang, ctx, showHistory, selectedTab, showAbout, onCheckUpdates)
     }
 }
 
@@ -6101,11 +6150,6 @@ fun TelegramLink(isDark: Boolean, effectsEnabled: Boolean = true, onClickSound: 
     }
 }
 
-fun checkForUpdatesStub(ctx: Context, lang: String) {
-    val msg = Strings.get("check_update_stub", lang)
-    Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show()
-}
-
 @Composable
 fun GlassSwitch(
     checked: Boolean,
@@ -6700,7 +6744,8 @@ fun SettingsScreen(
     ctx: Context,
     showHistory: MutableState<Boolean>,
     selectedTab: MutableState<NelevTab>,
-    showAbout: MutableState<Boolean>
+    showAbout: MutableState<Boolean>,
+    onCheckUpdates: () -> Unit = {}
 ) {
     val bg = colors["bg"]!!
     val text = colors["text"]!!
@@ -6894,7 +6939,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
         AnimatedOutlinedButton(
             onClick = {
                 if (soundClickEnabled) ClickPlayer.play(ctx)
-                checkForUpdatesStub(ctx, lang)
+                onCheckUpdates()
             },
             modifier = Modifier.fillMaxWidth().height(48.dp),
             shape = RoundedCornerShape(16.dp),

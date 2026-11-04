@@ -58,7 +58,8 @@ $manifest = [ordered]@{
     changelog   = $Notes
 }
 $manifestPath = Join-Path $root "version.json"
-$manifest | ConvertTo-Json -Depth 4 | Set-Content -Path $manifestPath -Encoding UTF8
+$jsonText = $manifest | ConvertTo-Json -Depth 4
+[System.IO.File]::WriteAllText($manifestPath, $jsonText, (New-Object System.Text.UTF8Encoding($false)))
 
 Write-Host ""
 Write-Host "APK:      $apkCopy"
