@@ -62,8 +62,24 @@ object VersionHistory {
         return LaunchUpdateInfo(
             previousCode = previous,
             currentCode = BuildConfig.VERSION_CODE,
-            updated = previous > 0 && previous != BuildConfig.VERSION_CODE
+            updated = if (previous > 0) {
+                previous != BuildConfig.VERSION_CODE
+            } else {
+                // Миграция с версий без VersionHistory: файла ещё нет, но
+                // lastUpdateTime > firstInstallTime означает, что это обновление.
+                wasUpdated(ctx)
+            }
         )
+    }
+
+    @Suppress("DEPRECATION")
+    private fun wasUpdated(ctx: Context): Boolean {
+        return try {
+            val info = ctx.packageManager.getPackageInfo(ctx.packageName, 0)
+            info.lastUpdateTime - info.firstInstallTime > 60_000L
+        } catch (_: Exception) {
+            false
+        }
     }
 
     fun saveChangelog(ctx: Context, versionCode: Int, changelog: String) {
