@@ -1,0 +1,49 @@
+NELEV 1.9.11 - Bug Fixes & Improvements
+
+🎨 UI/UX Improvements:
+• Fixed changelog expansion animation in update dialog - now smooth without jerks
+• Redesigned update pause window with smooth transformation (no more broken menu)
+• Improved animation timing for natural movement (320ms expand, 280ms collapse)
+
+🌍 Localization:
+• Fixed update check notifications - now displayed in selected language
+• All translations available offline (embedded in APK)
+• Added full localization for version 1.9.11 changelog (8 languages)
+
+🔧 Technical:
+• Integrated UpdatePause into AboutAppOverlay using AnimatedContent
+• Unified state management for About/Feedback/UpdatePause (0/1/2 states)
+• Enhanced BackHandler for proper navigation through all states
+
+📦 What's Fixed:
+✅ Smooth changelog expansion without lags
+✅ Update pause dialog transformation works correctly
+✅ Notifications respect language settings
+✅ All changelogs available in 8 languages offline
+
+---
+
+Русская версия:
+
+NELEV 1.9.11 - Исправления и улучшения
+
+🎨 Улучшения интерфейса:
+• Исправлена анимация раскрытия списка изменений - теперь плавная без рывков
+• Переработано окно приостановки обновлений с плавной трансформацией (больше никаких сломанных меню)
+• Улучшено время анимации для естественного движения (320мс раскрытие, 280мс сворачивание)
+
+🌍 Локализация:
+• Исправлены уведомления о проверке обновлений - теперь на выбранном языке
+• Все переводы доступны без интернета (встроены в APK)
+• Добавлена полная локализация changelog версии 1.9.11 (8 языков)
+
+🔧 Технические изменения:
+• Интегрирована приостановка обновлений в AboutAppOverlay через AnimatedContent
+• Унифицировано управление состояниями О приложении/Обратная связь/Приостановка (0/1/2)
+• Улучшен BackHandler для корректной навигации по всем состояниям
+
+📦 Что исправлено:
+✅ Плавное раскрытие changelog без лагов
+✅ Трансформация диалога паузы работает корректно
+✅ Уведомления учитывают настройки языка
+✅ Все changelog доступны на 8 языках офлайн

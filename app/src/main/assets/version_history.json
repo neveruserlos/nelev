@@ -1,6 +1,36 @@
 {
   "versions": [
     {
+      "versionCode": 46,
+      "versionName": "1.9.11",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Исправлена анимация раскрытия списка изменений в диалоге обновления\n• Переработано окно приостановки обновлений с плавной трансформацией\n• Исправлена локализация уведомлений о проверке обновлений\n• Все переводы доступны без интернета",
+        "en": "• Fixed changelog expansion animation in update dialog\n• Redesigned update pause window with smooth transformation\n• Fixed localization of update check notifications\n• All translations available offline",
+        "es": "• Animación de expansión del changelog corregida en diálogo de actualización\n• Ventana de pausa de actualización rediseñada con transformación suave\n• Localización de notificaciones de verificación de actualización corregida\n• Todas las traducciones disponibles sin conexión",
+        "zh": "• 修复了更新对话框中的更新日志展开动画\n• 重新设计了更新暂停窗口，具有平滑转换\n• 修复了更新检查通知的本地化\n• 所有翻译均可离线使用",
+        "ja": "• 更新ダイアログの変更履歴展開アニメーションを修正\n• スムーズな変換を備えた更新一時停止ウィンドウを再設計\n• 更新チェック通知のローカライゼーションを修正\n• すべての翻訳をオフラインで利用可能",
+        "ko": "• 업데이트 대화상자의 변경 로그 확장 애니메이션 수정\n• 부드러운 전환을 갖춘 업데이트 일시 중지 창 재설계\n• 업데이트 확인 알림의 현지화 수정\n• 모든 번역을 오프라인에서 사용 가능",
+        "pt": "• Animação de expansão do changelog corrigida no diálogo de atualização\n• Janela de pausa de atualização redesenhada com transformação suave\n• Localização de notificações de verificação de atualização corrigida\n• Todas as traduções disponíveis offline",
+        "uk": "• Виправлено анімацію розкриття списку змін у діалозі оновлення\n• Перероблено вікно призупинення оновлень з плавною трансформацією\n• Виправлено локалізацію сповіщень про перевірку оновлень\n• Всі переклади доступні без інтернету"
+      }
+    },
+    {
+      "versionCode": 45,
+      "versionName": "1.9.10",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Исправлена анимация раскрытия «Что нового»\n• Плавное раскрытие списка изменений без рывков\n• Оптимизация времени анимации для естественного движения",
+        "en": "• Fixed What's New expansion animation\n• Smooth changelog list expansion without jerks\n• Optimized animation timing for natural movement",
+        "es": "• Animación de expansión de Novedades corregida\n• Expansión suave de lista de cambios sin tirones\n• Tiempo de animación optimizado para movimiento natural",
+        "zh": "• 修复了"新功能"展开动画\n• 平滑的更新日志列表展开，无卡顿\n• 优化动画时间以实现自然运动",
+        "ja": "• 新機能の展開アニメーションを修正\n• スムーズな変更履歴リストの展開（ぎこちなさなし）\n• 自然な動きのためのアニメーションタイミングの最適化",
+        "ko": "• 새 기능 확장 애니메이션 수정\n• 끊김 없는 부드러운 변경 로그 목록 확장\n• 자연스러운 움직임을 위한 애니메이션 타이밍 최적화",
+        "pt": "• Animação de expansão de Novidades corrigida\n• Expansão suave da lista de mudanças sem travamentos\n• Tempo de animação otimizado para movimento natural",
+        "uk": "• Виправлено анімацію розкриття «Що нового»\n• Плавне розкриття списку змін без ривків\n• Оптимізація часу анімації для природного руху"
+      }
+    },
+    {
       "versionCode": 41,
       "versionName": "1.9.6",
       "releaseDate": "2026-11-04",

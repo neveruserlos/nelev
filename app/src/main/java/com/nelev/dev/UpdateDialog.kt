@@ -180,16 +180,24 @@ fun UpdateDialog(
                                 }
                                 androidx.compose.animation.AnimatedVisibility(
                                     visible = showNotes,
-                                    enter = expandVertically(animationSpec = tween(300, easing = FastOutSlowInEasing)),
-                                    exit = shrinkVertically(animationSpec = tween(250, easing = FastOutSlowInEasing))
-                                ) {
-                                    Text(
-                                        info.changelog,
-                                        fontSize = 13.sp,
-                                        lineHeight = 19.sp,
-                                        color = muted,
-                                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 12.dp)
+                                    enter = expandVertically(
+                                        animationSpec = tween(320, easing = FastOutSlowInEasing),
+                                        expandFrom = Alignment.Top
+                                    ),
+                                    exit = shrinkVertically(
+                                        animationSpec = tween(280, easing = FastOutSlowInEasing),
+                                        shrinkTowards = Alignment.Top
                                     )
+                                ) {
+                                    Column {
+                                        Text(
+                                            info.changelog,
+                                            fontSize = 13.sp,
+                                            lineHeight = 19.sp,
+                                            color = muted,
+                                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 12.dp)
+                                        )
+                                    }
                                 }
                             }
                         }

@@ -32,6 +32,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -7762,9 +7764,18 @@ fun AboutAppOverlay(
     var feedbackText by remember { mutableStateOf("") }
     var contactInfo by remember { mutableStateOf("") }
     var showContactField by remember { mutableStateOf(false) }
+    var showPauseUpdates by remember { mutableStateOf(false) }
+    var selectedPauseOption by remember { mutableStateOf<Int?>(null) }
+    var customDays by remember { mutableStateOf("") }
 
     BackHandler {
-        if (showFeedback) showFeedback = false else onDismiss()
+        if (showPauseUpdates) {
+            showPauseUpdates = false
+        } else if (showFeedback) {
+            showFeedback = false
+        } else {
+            onDismiss()
+        }
     }
 
     AnimatedVisibility(
@@ -7776,7 +7787,9 @@ fun AboutAppOverlay(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable(remember { MutableInteractionSource() }, null) {
-                    if (showFeedback) {
+                    if (showPauseUpdates) {
+                        showPauseUpdates = false
+                    } else if (showFeedback) {
                         showFeedback = false
                     } else {
                         onDismiss()
@@ -7847,7 +7860,9 @@ fun AboutAppOverlay(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Text(
-                                        if (showFeedback) Strings.get("feedback_title", lang) else Strings.get("about_app", lang),
+                                        if (showPauseUpdates) UpdateText.get("pause_title", lang)
+                                        else if (showFeedback) Strings.get("feedback_title", lang) 
+                                        else Strings.get("about_app", lang),
                                         color = text,
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.Bold
@@ -7855,7 +7870,9 @@ fun AboutAppOverlay(
                                 }
                                 IconButton(
                                     onClick = {
-                                        if (showFeedback) {
+                                        if (showPauseUpdates) {
+                                            showPauseUpdates = false
+                                        } else if (showFeedback) {
                                             showFeedback = false
                                         } else {
                                             onDismiss()
@@ -7879,12 +7896,12 @@ fun AboutAppOverlay(
                             Box(Modifier.fillMaxWidth().height(1.dp).background(border))
 
                             // Единый контейнер содержимого: при переключении
-                            // «О приложении» ⇄ «Обратная связь» высота карточки плавно
+                            // «О приложении» ⇄ «Обратная связь» ⇄ «Приостановка обновлений» высота карточки плавно
                             // перетекает из одной в другую через SizeTransform, вместо
                             // двух встречных expand/shrink, из-за которых окно
                             // «телепортировало» в конце анимации.
                             AnimatedContent(
-                                targetState = showFeedback,
+                                targetState = if (showPauseUpdates) 2 else if (showFeedback) 1 else 0,
                                 transitionSpec = {
                                     val enterSpec = tween<Float>(
                                         if (effectsEnabled) 280 else 0,
@@ -7902,9 +7919,9 @@ fun AboutAppOverlay(
                                         .togetherWith(fadeOut(exitSpec))
                                         .using(SizeTransform(clip = true) { _, _ -> sizeSpec })
                                 },
-                                label = "about_feedback_swap"
-                            ) { feedbackOpen ->
-                                if (!feedbackOpen) {
+                                label = "about_content_swap"
+                            ) { currentView ->
+                                if (currentView == 0) {
                                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
 
@@ -8100,7 +8117,6 @@ fun AboutAppOverlay(
                                         }
                                         
                                         // Кнопка приостановки обновлений
-                                        var showPauseDialogLocal by remember { mutableStateOf(false) }
                                         Row(
                                             modifier = Modifier
                                                 .fillMaxWidth()
@@ -8110,7 +8126,7 @@ fun AboutAppOverlay(
                                                 )
                                                 .clickable {
                                                     if (soundClickEnabled) ClickPlayer.play(ctx)
-                                                    showPauseDialogLocal = true
+                                                    showPauseUpdates = true
                                                 }
                                                 .padding(horizontal = 12.dp, vertical = 12.dp),
                                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -8142,29 +8158,6 @@ fun AboutAppOverlay(
                                                 null,
                                                 Modifier.size(20.dp),
                                                 tint = muted
-                                            )
-                                        }
-                                        
-                                        if (showPauseDialogLocal) {
-                                            UpdatePauseDialog(
-                                                colors = colors,
-                                                lang = lang,
-                                                isDark = isDark,
-                                                pausedUntilMs = appSettings.value.updatesPausedUntilMs,
-                                                pausedForever = appSettings.value.updatesPausedForever,
-                                                onPause = { untilMs, forever ->
-                                                    save(appSettings.value.copy(
-                                                        updatesPausedUntilMs = untilMs,
-                                                        updatesPausedForever = forever
-                                                    ))
-                                                },
-                                                onResume = {
-                                                    save(appSettings.value.copy(
-                                                        updatesPausedUntilMs = 0L,
-                                                        updatesPausedForever = false
-                                                    ))
-                                                },
-                                                onDismiss = { showPauseDialogLocal = false }
                                             )
                                         }
                                     }
@@ -8257,7 +8250,7 @@ fun AboutAppOverlay(
                                         }
                                     }
                                     }
-                                } else {
+                                } else if (currentView == 1) {
                                     // Форма обратной связи
                                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                                     OutlinedTextField(
@@ -8377,8 +8370,202 @@ fun AboutAppOverlay(
                                         Text(Strings.get("feedback_send", lang), fontWeight = FontWeight.SemiBold)
                                     }
                                 }
+                                } else {
+                                    // Форма приостановки обновлений
+                                    val now = System.currentTimeMillis()
+                                    val isPaused = appSettings.value.updatesPausedForever || appSettings.value.updatesPausedUntilMs > now
+                                    
+                                    val presets = listOf(
+                                        UpdateText.get("pause_1week", lang) to 7L,
+                                        UpdateText.get("pause_2weeks", lang) to 14L,
+                                        UpdateText.get("pause_1month", lang) to 30L,
+                                        UpdateText.get("pause_forever", lang) to -1L,
+                                        UpdateText.get("pause_custom", lang) to 0L
+                                    )
+                                    
+                                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                                        if (isPaused) {
+                                            Text(
+                                                if (appSettings.value.updatesPausedForever) {
+                                                    UpdateText.get("paused_forever_status", lang)
+                                                } else {
+                                                    val days = ((appSettings.value.updatesPausedUntilMs - now) / (24 * 60 * 60 * 1000L)).toInt() + 1
+                                                    UpdateText.get("paused_until_status", lang).replace("%d", days.toString())
+                                                },
+                                                fontSize = 12.sp,
+                                                color = Color(0xFFFFA726)
+                                            )
+                                        }
+                                        
+                                        Text(
+                                            UpdateText.get("pause_subtitle", lang),
+                                            fontSize = 13.sp,
+                                            lineHeight = 18.sp,
+                                            color = muted
+                                        )
+                                        
+                                        Column(
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .clip(RoundedCornerShape(16.dp))
+                                                .background(if (isDark) Color.White.copy(alpha = 0.04f) else Color.Black.copy(alpha = 0.02f))
+                                                .border(1.dp, border, RoundedCornerShape(16.dp))
+                                                .padding(10.dp),
+                                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                                        ) {
+                                            presets.forEachIndexed { idx, (label, days) ->
+                                                val isSelected = selectedPauseOption == idx
+                                                Row(
+                                                    Modifier
+                                                        .fillMaxWidth()
+                                                        .clip(RoundedCornerShape(12.dp))
+                                                        .background(if (isSelected) colors["accent"]!!.copy(alpha = 0.12f) else Color.Transparent)
+                                                        .border(
+                                                            1.dp,
+                                                            if (isSelected) colors["accent"]!!.copy(alpha = 0.35f) else Color.Transparent,
+                                                            RoundedCornerShape(12.dp)
+                                                        )
+                                                        .clickable {
+                                                            if (soundClickEnabled) ClickPlayer.play(ctx)
+                                                            selectedPauseOption = idx
+                                                        }
+                                                        .padding(horizontal = 14.dp, vertical = 12.dp),
+                                                    verticalAlignment = Alignment.CenterVertically
+                                                ) {
+                                                    val buttonContent = if (isDark) Color.Black else Color.White
+                                                    Box(
+                                                        Modifier
+                                                            .size(20.dp)
+                                                            .clip(CircleShape)
+                                                            .border(2.dp, if (isSelected) colors["accent"]!! else muted, CircleShape)
+                                                            .background(if (isSelected) colors["accent"]!! else Color.Transparent),
+                                                        contentAlignment = Alignment.Center
+                                                    ) {
+                                                        if (isSelected) {
+                                                            Box(
+                                                                Modifier
+                                                                    .size(8.dp)
+                                                                    .clip(CircleShape)
+                                                                    .background(buttonContent)
+                                                            )
+                                                        }
+                                                    }
+                                                    Spacer(Modifier.width(12.dp))
+                                                    Text(
+                                                        label,
+                                                        fontSize = 14.sp,
+                                                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                                        color = text,
+                                                        modifier = Modifier.weight(1f)
+                                                    )
+                                                }
+                                            }
+                                        }
+                                        
+                                        if (selectedPauseOption == 4) {
+                                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                                Text(
+                                                    UpdateText.get("pause_custom_hint", lang),
+                                                    fontSize = 12.sp,
+                                                    color = muted
+                                                )
+                                                OutlinedTextField(
+                                                    value = customDays,
+                                                    onValueChange = { 
+                                                        val filtered = it.filter { c -> c.isDigit() }
+                                                        customDays = if (filtered.isNotEmpty() && filtered.toIntOrNull()?.let { n -> n > 9999 } == true) {
+                                                            "9999"
+                                                        } else {
+                                                            filtered.take(4)
+                                                        }
+                                                    },
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    label = { Text(UpdateText.get("pause_custom_label", lang), fontSize = 12.sp) },
+                                                    singleLine = true,
+                                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                                    colors = OutlinedTextFieldDefaults.colors(
+                                                        focusedContainerColor = Color.Transparent,
+                                                        unfocusedContainerColor = Color.Transparent,
+                                                        focusedBorderColor = colors["accent"]!!,
+                                                        unfocusedBorderColor = border,
+                                                        focusedTextColor = text,
+                                                        unfocusedTextColor = text,
+                                                        cursorColor = colors["accent"]!!,
+                                                        focusedLabelColor = colors["accent"]!!,
+                                                        unfocusedLabelColor = muted
+                                                    ),
+                                                    shape = RoundedCornerShape(12.dp)
+                                                )
+                                            }
+                                        }
+                                        
+                                        Row(
+                                            Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.End,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            if (isPaused) {
+                                                TextButton(onClick = {
+                                                    if (soundClickEnabled) ClickPlayer.play(ctx)
+                                                    save(appSettings.value.copy(
+                                                        updatesPausedUntilMs = 0L,
+                                                        updatesPausedForever = false
+                                                    ))
+                                                    showPauseUpdates = false
+                                                }) {
+                                                    Text(UpdateText.get("pause_resume", lang), color = muted)
+                                                }
+                                                Spacer(Modifier.width(8.dp))
+                                            }
+                                            Button(
+                                                onClick = {
+                                                    if (soundClickEnabled) ClickPlayer.play(ctx)
+                                                    val option = selectedPauseOption ?: return@Button
+                                                    val (_, days) = presets[option]
+                                                    when {
+                                                        days == -1L -> {
+                                                            save(appSettings.value.copy(
+                                                                updatesPausedUntilMs = 0L,
+                                                                updatesPausedForever = true
+                                                            ))
+                                                            showPauseUpdates = false
+                                                        }
+                                                        days == 0L -> {
+                                                            val custom = customDays.toLongOrNull() ?: return@Button
+                                                            if (custom < 1) return@Button
+                                                            val until = now + custom * 24 * 60 * 60 * 1000L
+                                                            save(appSettings.value.copy(
+                                                                updatesPausedUntilMs = until,
+                                                                updatesPausedForever = false
+                                                            ))
+                                                            showPauseUpdates = false
+                                                        }
+                                                        else -> {
+                                                            val until = now + days * 24 * 60 * 60 * 1000L
+                                                            save(appSettings.value.copy(
+                                                                updatesPausedUntilMs = until,
+                                                                updatesPausedForever = false
+                                                            ))
+                                                            showPauseUpdates = false
+                                                        }
+                                                    }
+                                                },
+                                                enabled = selectedPauseOption != null && (selectedPauseOption != 4 || customDays.isNotBlank()),
+                                                shape = RoundedCornerShape(13.dp),
+                                                colors = ButtonDefaults.buttonColors(
+                                                    containerColor = colors["accent"]!!,
+                                                    contentColor = if (isDark) Color.Black else Color.White
+                                                )
+                                            ) {
+                                                Text(
+                                                    UpdateText.get("pause_apply", lang),
+                                                    fontWeight = FontWeight.SemiBold
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
-                            }
+                                }
                         }
                     }
                 }
