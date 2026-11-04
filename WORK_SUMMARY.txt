@@ -1,38 +1,30 @@
 # NELEV Android App - Work Summary
 
-## Текущая версия: 1.9.8 (versionCode 43)
+## Текущая версия: 1.9.9 (versionCode 44)
 
-### Последний релиз: v1.9.8
+### Последний релиз: v1.9.9
 - **Дата:** 2026-11-04
-- **Коммит:** bcfdfab
-- **APK:** https://github.com/neveruserlos/nelev/releases/download/v1.9.8/nelev-app-release-1.9.8.apk
-- **SHA-256:** `a7384f335dc5040a5aa74fdbda19382e26cb2aaab6072f71709a7c79f8bf3fe5`
+- **Коммит:** 87d5b41
+- **APK:** https://github.com/neveruserlos/nelev/releases/download/v1.9.9/nelev-app-release-1.9.9.apk
+- **SHA-256:** `0dcc9c024c540eb46dcffcc138a902d5fd978fbdbbd77ac64a6acad92567e199`
 
-### Что нового в 1.9.8
+### Что нового в 1.9.9
 
-#### Исправление смены языка
-✅ Changelog в "Что нового" теперь меняется при смене языка
-✅ Загрузка переводов changelog из встроенного JSON (version_history.json)
-✅ Текст проверки обновлений в onboarding меняется при смене языка
-✅ AnimatedContent реагирует на изменение языка (добавлен currentLang в targetState)
+#### Исправление переводов статусов подключения
+✅ "Connected", "Waiting for PC", "Connection" теперь переводятся на все 8 языков
+✅ Hardcoded тексты `if (lang == "ru")` заменены на `Strings.get()`
+✅ Исправлено в двух местах: большой текст (28sp) и обычный текст (15sp)
 
-#### Редизайн диалога паузы обновлений
-✅ Переделан в стиле "Обратная связь" и "О приложении":
-  - Полноэкранный диалог с градиентным фоном
-  - Плавная анимация изменения высоты (AnimatedContent с expandVertically/shrinkVertically)
-  - Кнопка закрытия (X) в правом верхнем углу
-  - Увеличен размер шрифта заголовка до 20sp
-  - Удалена иконка уведомлений
-✅ Поле ввода своего срока появляется/исчезает плавно
-✅ Радио-кнопки с плавной анимацией перехода
+#### Редизайн диалога паузы обновлений (финальная версия)
+✅ Убрано стандартное затемнение Dialog - используется полноэкранный Box
+✅ Кастомное затемнение с alpha 0.4 (более мягкое)
+✅ Градиентный фон с увеличенной непрозрачностью (0.95-0.97)
+✅ Клик вне диалога закрывает его
+✅ BackHandler для кнопки назад на телефоне
+✅ Ширина диалога 92% экрана
+✅ Внутренний контент не реагирует на клики снаружи (stopPropagation)
 
-#### Улучшения системы changelog
-✅ Метод `VersionHistory.changelog()` теперь принимает параметр `lang`
-✅ Сохранение changelog с указанием языка (changelog_42_ru.txt)
-✅ Автоматическая загрузка из assets если файл не найден
-✅ Fallback на английский если перевод отсутствует
-
-### Что было в 1.9.7
+### Что было в 1.9.8
 
 #### UX улучшения обновлений
 ✅ Окно «Что нового»: стрелочка-индикатор для прокрутки длинного текста
@@ -55,6 +47,14 @@
 ---
 
 ## История версий
+
+### 1.9.8 (versionCode 43) - 2026-11-04
+- Changelog в "Что нового" меняется при смене языка
+- Загрузка переводов changelog из встроенного JSON (version_history.json)
+- Текст проверки обновлений в onboarding меняется при смене языка
+- Диалог паузы обновлений переделан в стиле "Обратная связь"
+- Плавная анимация изменения высоты (expandVertically/shrinkVertically)
+- Метод VersionHistory.changelog() принимает параметр lang
 
 ### 1.9.7 (versionCode 42) - 2026-11-04
 - Добавлена строка "Приостановить обновления" на все 8 языков
@@ -268,11 +268,11 @@ cd X:\nelev\app
 
 - **GitHub:** https://github.com/neveruserlos/nelev
 - **Releases:** https://github.com/neveruserlos/nelev/releases
-- **Latest APK:** https://github.com/neveruserlos/nelev/releases/latest/download/nelev-app-release-1.9.8.apk
+- **Latest APK:** https://github.com/neveruserlos/nelev/releases/latest/download/nelev-app-release-1.9.9.apk
 - **Email:** vlasnikitkaa@gmail.com
 
 ---
 
 **Последнее обновление:** 2026-11-04
-**Версия документа:** 1.9.8
-**Статус:** Production-ready, смена языка исправлена, диалог паузы переделан
+**Версия документа:** 1.9.9
+**Статус:** Production-ready, переводы статусов исправлены, диалог без затемнения
