@@ -16,6 +16,8 @@ object SessionStore {
         }
     } catch (_: Exception) { emptyList() }
     fun append(ctx: Context, record: SessionRecord) {
+        // Не сохраняем сессии короче 2 секунд
+        if (record.durationMs < 2000) return
         val list = load(ctx).toMutableList().also { it.add(record) }.takeLast(MAX)
         try { File(ctx.filesDir, FILE).writeText(list.joinToString("\n") { "${it.startMs},${it.durationMs},${it.avgPingMs}" }) } catch (_: Exception) {}
     }

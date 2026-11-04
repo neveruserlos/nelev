@@ -2269,7 +2269,7 @@ class MainActivity : ComponentActivity() {
                     while (true) {
                         val now = withFrameMillis { it }
                         if (now - lastFrame >= 16) {
-                            val t = ((now - start).toFloat() / 250f).coerceIn(0f, 1f)
+                            val t = ((now - start).toFloat() / 500f).coerceIn(0f, 1f)
                             uiAlpha = t
                             if (t >= 1f) break
                             lastFrame = now
@@ -7367,85 +7367,59 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                     if (soundClickEnabled) ClickPlayer.play(ctx)
                     onCheckUpdates()
                 },
-                modifier = Modifier.weight(1f).height(68.dp),
-                shape = RoundedCornerShape(20.dp),
-                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Transparent, contentColor = text),
-                border = androidx.compose.foundation.BorderStroke(1.dp, accent.copy(alpha = 0.35f)),
+                modifier = Modifier.weight(1f).height(64.dp),
+                shape = RoundedCornerShape(18.dp),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = card,
+                    contentColor = text
+                ),
+                border = androidx.compose.foundation.BorderStroke(1.dp, border),
                 effectsEnabled = effectsEnabled
             ) {
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(
-                            Brush.linearGradient(
-                                listOf(
-                                    accent.copy(alpha = 0.22f),
-                                    accent.copy(alpha = 0.08f),
-                                    card.copy(alpha = 0.55f)
-                                )
-                            )
-                        )
+                Row(
+                    Modifier.fillMaxWidth().padding(horizontal = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(
                         Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(end = 10.dp)
-                            .size(72.dp)
-                            .clip(CircleShape)
-                            .background(accent.copy(alpha = 0.07f))
-                    )
-                    Row(
-                        Modifier.fillMaxSize().padding(horizontal = 14.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                            .size(40.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(accent.copy(alpha = 0.12f)),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Box(
-                            Modifier
-                                .size(42.dp)
-                                .clip(RoundedCornerShape(14.dp))
-                                .background(
-                                    Brush.linearGradient(
-                                        listOf(accent, accent.copy(alpha = 0.68f))
-                                    )
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(IconsEx.SystemUpdate, null, Modifier.size(23.dp), tint = buttonContent)
-                        }
-                        Spacer(Modifier.width(12.dp))
-                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                            Text(
-                                Strings.get("check_update", lang),
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = text
-                            )
-                            Text(
-                                "${Strings.get("version", lang)} $APP_VERSION",
-                                fontSize = 11.sp,
-                                color = muted
-                            )
-                        }
+                        Icon(IconsEx.SystemUpdate, null, Modifier.size(22.dp), tint = accent)
+                    }
+                    Spacer(Modifier.width(11.dp))
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text(
+                            Strings.get("check_update", lang),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = text
+                        )
+                        Text(
+                            "${Strings.get("version", lang)} $APP_VERSION",
+                            fontSize = 11.sp,
+                            color = muted
+                        )
                     }
                 }
             }
-            // Иконка «Что нового» справа от кнопки обновления
             Box(
                 Modifier
-                    .size(68.dp)
-                    .clip(RoundedCornerShape(20.dp))
+                    .size(64.dp)
+                    .clip(RoundedCornerShape(18.dp))
                     .background(card)
-                    .border(1.dp, border, RoundedCornerShape(20.dp))
+                    .border(1.dp, border, RoundedCornerShape(18.dp))
                     .clickable {
                         if (soundClickEnabled) ClickPlayer.play(ctx)
-                        // Просто открываем меню, чтобы показать текущую версию
-                        selectedTab.value = NelevTab.SETTINGS
+                        // TODO: показать WhatsNewDialog для текущей версии
                     },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    Icons.Filled.CheckCircle, null,
-                    Modifier.size(28.dp), tint = accent
+                    Icons.Filled.Info, null,
+                    Modifier.size(24.dp), tint = muted
                 )
             }
         }
