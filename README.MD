@@ -55,6 +55,9 @@ https://github.com/neveruserlos/nelev/releases/latest/download/version.json
 .\tools\release.ps1 -Notes "Что нового"
 ```
 
+Если кириллица в заметках ломается в консоли, сохрани текст в UTF-8-файл и
+передай `-NotesFile notes.txt`.
+
 Скрипт собирает APK, создаёт `version.json`, тег `v<версия>` и прикрепляет
 оба файла к GitHub Release.
 
