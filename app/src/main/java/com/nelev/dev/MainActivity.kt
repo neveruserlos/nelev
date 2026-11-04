@@ -2964,14 +2964,14 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                                         onbVersionFailed -> 1
                                         onbUpdateInfo != null -> 2
                                         else -> 3
-                                    },
+                                    } to currentLang,
                                     transitionSpec = {
                                         fadeIn(tween(400, easing = FastOutSlowInEasing)) + 
                                             scaleIn(initialScale = 0.92f, animationSpec = tween(400, easing = FastOutSlowInEasing)) togetherWith
                                             fadeOut(tween(200, easing = FastOutSlowInEasing))
                                     },
                                     label = "version_check_content"
-                                ) { state ->
+                                ) { (state, _) ->
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally,
                                         verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -7449,7 +7449,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                         }
                     }
                 } catch (_: Exception) { 0 }
-                val changelog = remember(currentCode) { VersionHistory.changelog(ctx, currentCode) ?: "" }
+                val changelog = remember(currentCode, lang) { VersionHistory.changelog(ctx, currentCode, lang) ?: "" }
                 WhatsNewDialog(
                     versionName = APP_VERSION,
                     changelog = changelog,

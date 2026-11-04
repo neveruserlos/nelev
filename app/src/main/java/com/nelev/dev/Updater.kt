@@ -82,19 +82,46 @@ object VersionHistory {
         }
     }
 
-    fun saveChangelog(ctx: Context, versionCode: Int, changelog: String) {
+    fun saveChangelog(ctx: Context, versionCode: Int, changelog: String, lang: String = "ru") {
         if (changelog.isBlank()) return
         try {
-            val file = File(ctx.filesDir, "$CHANGELOG_PREFIX$versionCode.txt")
+            val file = File(ctx.filesDir, "${CHANGELOG_PREFIX}${versionCode}_${lang}.txt")
             file.writeText(changelog.take(MAX_CHANGELOG_CHARS))
             pruneChangelogs(ctx)
         } catch (_: Exception) {}
     }
 
-    fun changelog(ctx: Context, versionCode: Int): String? {
+    fun changelog(ctx: Context, versionCode: Int, lang: String = "ru"): String? {
         return try {
-            val file = File(ctx.filesDir, "$CHANGELOG_PREFIX$versionCode.txt")
-            if (file.exists()) file.readText().trim().ifBlank { null } else null
+            val file = File(ctx.filesDir, "${CHANGELOG_PREFIX}${versionCode}_${lang}.txt")
+            if (file.exists()) {
+                file.readText().trim().ifBlank { null }
+            } else {
+                // Попробовать загрузить из встроенного JSON
+                loadChangelogFromAssets(ctx, versionCode, lang)
+            }
+        } catch (_: Exception) {
+            null
+        }
+    }
+    
+    private fun loadChangelogFromAssets(ctx: Context, versionCode: Int, lang: String): String? {
+        return try {
+            val json = ctx.assets.open("version_history.json").bufferedReader().use { it.readText() }
+            val root = org.json.JSONObject(json)
+            val versions = root.getJSONArray("versions")
+            for (i in 0 until versions.length()) {
+                val v = versions.getJSONObject(i)
+                if (v.getInt("versionCode") == versionCode) {
+                    val changelog = v.getJSONObject("changelog")
+                    return if (changelog.has(lang)) {
+                        changelog.getString(lang)
+                    } else {
+                        changelog.optString("en", null)
+                    }
+                }
+            }
+            null
         } catch (_: Exception) {
             null
         }
