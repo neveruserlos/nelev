@@ -1,0 +1,220 @@
+# NELEV Android App - Work Summary
+
+## Текущая версия: 1.9.4 (versionCode 39)
+
+### Последний релиз: v1.9.4
+- **Дата:** 2026-11-04
+- **Коммит:** 054a158
+- **APK:** https://github.com/neveruserlos/nelev/releases/download/v1.9.4/nelev-app-release-1.9.4.apk
+- **SHA-256:** `6eb390cd5d69722d8bbba7dafde6b63d8bbad99066939c6bfaecb5e79d07df19`
+
+### Что нового в 1.9.4
+
+#### UX улучшения обновлений
+✅ Окно «Что нового»: стрелочка-индикатор для прокрутки длинного текста
+✅ Кнопка «Проверить обновление»: упрощённый дизайн, справа кнопка ℹ️ «Что нового в текущей версии»
+✅ Диалог приостановки обновлений с выбором срока:
+  - 1 неделя, 2 недели, 1 месяц
+  - Навсегда
+  - Свой срок в днях (ручной ввод)
+✅ Тихое уведомление о новой версии при запуске (если обновления не приостановлены)
+
+#### Система и производительность
+✅ История сессий: не сохраняются сессии короче 2 секунд
+✅ Анимация заставки замедлена в 2 раза (250мс → 500мс) для более плавного эффекта
+✅ Статистика отправляется раз в 2 дня при запуске (ориентируется на дату телефона)
+✅ UID теперь постоянный: основан на ANDROID_ID, сохраняется при переустановке
+
+#### Безопасность
+✅ Диалог разрешения на установку: сначала показывается предупреждение с кнопкой «Разрешить доступ», только после нажатия открываются настройки Android
+
+---
+
+## История версий
+
+### 1.9.3 (versionCode 37) - 2024
+- Redesigned update dialog with version badges, gradient header, progress bar
+- Expandable "Что нового" section in update dialog
+- Added `WhatsNewDialog` shown after splash when version changed
+- Migration for versions without launch history (PackageManager fallback)
+- On-device version tracking via `filesDir/last_run_version.txt`
+- Changelog storage: `filesDir/changelog_<code>.txt`
+
+### 1.9.2 (versionCode 36)
+- New update UI without migration fallback
+
+### 1.9.1 (versionCode 35)
+- OTA improvements
+
+### 1.9 (versionCode 34)
+- Initial OTA implementation via GitHub Releases
+
+---
+
+## Архитектура OTA
+
+### Компоненты
+- **Updater.kt**: проверка обновлений, загрузка APK, SHA-256 верификация, установка
+- **UpdateDialog.kt**: диалоги обновлений, ошибок, «Что нового», разрешений, паузы
+- **VersionHistory**: отслеживание запусков для показа «Что нового»
+- **MainActivity.kt**: интеграция OTA в UI, автопроверка при запуске
+
+### Источник обновлений
+- **Манифест:** `https://github.com/neveruserlos/nelev/releases/latest/download/version.json`
+- **Структура:**
+  ```json
+  {
+    "versionCode": 39,
+    "versionName": "1.9.4",
+    "apkUrl": "https://github.com/.../nelev-app-release-1.9.4.apk",
+    "apkSha256": "6eb390cd5d69722d8bbba7dafde6b63d8bbad99066939c6bfaecb5e79d07df19",
+    "changelog": "..."
+  }
+  ```
+
+### Логика проверки обновлений
+- **Автопроверка:** при запуске приложения (не чаще раза в 3 часа)
+- **Тихая:** если обновления не приостановлены, показывается уведомление
+- **Ручная:** кнопка «Проверить обновление» в Settings
+- **Пауза:** пользователь может приостановить на выбранный срок
+
+### Безопасность
+- SHA-256 верификация загруженного APK
+- FileProvider для безопасного доступа к APK
+- Разрешение `REQUEST_INSTALL_PACKAGES` (Android 8+)
+- Диалог предупреждения перед запросом разрешения
+
+---
+
+## Репозитории
+
+### Android (текущий)
+- **URL:** https://github.com/neveruserlos/nelev
+- **Владелец:** neveruserlos
+- **Email:** vlasnikitkaa@gmail.com
+- **Локальный путь:** `X:\nelev\app`
+
+### PC (будущий)
+- **Статус:** планируется отдельный репозиторий
+- **Требование:** должен быть публичным на GitHub
+
+---
+
+## Техническая информация
+
+### Версионирование
+- **Единственный источник:** `X:\nelev\app\version.properties`
+- **Формат:**
+  ```properties
+  versionCode=39
+  versionName=1.9.4
+  ```
+- **Автоматизация:** `tools/bump-version.ps1`
+
+### Сборка и релиз
+```powershell
+# Сборка
+cd X:\nelev\app
+.\gradlew.bat assembleRelease -x lintVitalAnalyzeRelease -x lintVitalReportRelease -x lintVitalRelease
+
+# Bump версии
+.\tools\bump-version.ps1 -VersionName "1.9.5"
+
+# Релиз (создаёт GitHub Release + загружает APK и version.json)
+.\tools\release.ps1 -NotesFile notes.txt
+# или если APK уже собран:
+.\tools\release.ps1 -SkipBuild -NotesFile notes.txt
+```
+
+### Подпись APK
+- **Keystore:** Android debug keystore
+- **CN:** Android Debug
+- **SHA-256:** `26c900cf9ee85cf26506ebbd2f369158a130d37d9d66fe8bee2766d4ca715e98`
+- **Примечание:** обновления устанавливаются поверх предыдущих версий
+
+### Кодовая база
+- **Язык:** Kotlin
+- **UI:** Jetpack Compose
+- **Min SDK:** 21 (Android 5.0)
+- **Target SDK:** 34 (Android 14)
+
+---
+
+## Планы развития
+
+### 📋 Готовые планы (в docs/)
+1. **PUSH_NOTIFICATIONS_PLAN.md** - реализация push-уведомлений по UID
+   - Рекомендация: Telegram Bot для быстрого старта
+   - Альтернатива: Firebase Cloud Messaging для нативных уведомлений
+   - Backend: простой Python/Node.js скрипт
+   - База данных: SQLite/PostgreSQL
+
+2. **BETA_VERSIONS_PLAN.md** - система бета-тестирования
+   - Рекомендация: один APK + переключатель в Settings
+   - Два канала: stable и beta (GitHub pre-releases)
+   - Диалог `BetaProgramDialog` с предупреждениями
+   - Процесс релиза beta → stable
+
+### 🔄 В работе
+- *(нет активных задач)*
+
+### ✅ Завершено в 1.9.4
+- Стрелочка-индикатор прокрутки в «Что нового»
+- Упрощённая кнопка «Проверить обновление»
+- Диалог приостановки обновлений
+- Фильтрация коротких сессий (< 2 сек)
+- Замедленная анимация заставки
+- Постоянный UID на основе ANDROID_ID
+- Автоотправка статистики раз в 2 дня
+
+### 🚀 Следующие шаги
+1. **Тестирование 1.9.4:** установить на устройство, проверить все новые функции
+2. **Реализация бета-канала:** добавить переключатель в Settings (2-3 дня)
+3. **Push-уведомления:** создать Telegram-бота для анонсов (1-2 дня)
+4. **PC версия:** начать разработку отдельного приложения
+
+---
+
+## Важные файлы
+
+### Основные модули
+- `app/src/main/java/com/nelev/dev/MainActivity.kt` - главная активность, UI, Settings
+- `app/src/main/java/com/nelev/dev/Updater.kt` - OTA логика
+- `app/src/main/java/com/nelev/dev/UpdateDialog.kt` - все диалоги обновлений
+- `app/src/main/java/com/nelev/dev/NelevService.kt` - фоновый сервис
+- `app/src/main/java/com/nelev/dev/data/SessionStore.kt` - хранение истории сессий
+- `app/src/main/AndroidManifest.xml` - разрешения, сервисы, провайдеры
+
+### Конфигурация
+- `version.properties` - текущая версия (единственный источник правды)
+- `app/src/main/res/xml/file_paths.xml` - FileProvider пути
+- `tools/release.ps1` - скрипт релиза
+- `tools/bump-version.ps1` - помощник версионирования
+
+### Документация
+- `docs/PUSH_NOTIFICATIONS_PLAN.md` - план push-уведомлений
+- `docs/BETA_VERSIONS_PLAN.md` - план бета-версий
+- `WORK_SUMMARY.txt` - этот файл
+
+---
+
+## Известные ограничения
+
+1. **On-device тестирование:** нет доступа к физическому устройству или эмулятору через adb
+2. **CDN задержка:** GitHub Releases CDN может задерживать обновление `/latest/download` на несколько минут
+3. **Debug keystore:** использование отладочного хранилища ключей (для production нужен release keystore)
+
+---
+
+## Контакты и ресурсы
+
+- **GitHub:** https://github.com/neveruserlos/nelev
+- **Releases:** https://github.com/neveruserlos/nelev/releases
+- **Latest APK:** https://github.com/neveruserlos/nelev/releases/latest/download/nelev-app-release-1.9.4.apk
+- **Email:** vlasnikitkaa@gmail.com
+
+---
+
+**Последнее обновление:** 2026-11-04
+**Версия документа:** 1.9.4
+**Статус:** Production-ready, awaiting device testing
