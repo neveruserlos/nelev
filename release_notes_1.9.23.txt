@@ -1,0 +1,20 @@
+✨ NELEV 1.9.23 — Обновления на вашем языке, всегда
+
+## Что изменилось
+
+• **Список изменений в окне «Доступно обновление» теперь берётся из самого манифеста обновления.** Раньше перевод догружался с `raw.githubusercontent.com`, который в некоторых регионах недоступен — поэтому показывался английский текст. Теперь все 8 языков лежат прямо в `version.json` рядом с APK и загружаются с того же домена, что и сама проверка обновлений
+• **Исправлены подписи версий**, где вместо текста оставался `%s` (например, «当前版本：%s» в китайском)
+• Переводы во всех 8 языках теперь отображаются надёжно: ru, en, es, zh, ja, ko, pt, uk
+
+---
+
+## What's Changed
+
+• **The changelog in the update window now comes from the update manifest itself.** Previously the translation was fetched from `raw.githubusercontent.com`, which is unavailable in some regions — that's why English text appeared. Now all 8 languages are stored right in `version.json` next to the APK and load from the same host as the update check
+• **Fixed version labels** that kept a `%s` placeholder instead of text (e.g. "当前版本：%s" in Chinese)
+• Translations now display reliably in all 8 languages: ru, en, es, zh, ja, ko, pt, uk
+
+---
+
+**Download:** nelev-app-release-1.9.23.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

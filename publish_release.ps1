@@ -1,10 +1,10 @@
-# NELEV Release Script v1.9.22
+# NELEV Release Script v1.9.23
 # Automated GitHub Release Upload
 
 $apkPath = "app\build\outputs\apk\release\app-release.apk"
-$versionName = "1.9.22"
-$versionCode = "57"
-$notesFile = "release_notes_1.9.22.txt"
+$versionName = "1.9.23"
+$versionCode = "58"
+$notesFile = "release_notes_1.9.23.txt"
 
 Write-Host "=== NELEV Release v$versionName ===" -ForegroundColor Cyan
 
@@ -32,7 +32,21 @@ Write-Host "Size: $sizeBytes bytes" -ForegroundColor Green
 # Create version.json
 # NOTE: must be UTF-8 WITHOUT BOM and ASCII-safe bullets, otherwise
 # org.json.JSONObject() in Updater.kt fails and the update is never found.
-$changelog = "- Prettier Custom period input (tinted background, border, unit label)`n- Selection plate appears immediately on the tapped option, then slides smoothly`n- Text in update and What's New windows is as readable as in other windows"
+$changelog = "- Localized changelog directly in the update manifest`n- Fixed version labels stuck with a %s placeholder`n- More reliable translations in the update window"
+# Localized changelogs for all languages, so the update window does not depend
+# on raw.githubusercontent.com (which can be blocked). Old clients ignore this
+# field and keep using the plain "changelog" above.
+$historyPath = "app\src\main\assets\version_history.json"
+$history = Get-Content $historyPath -Raw -Encoding UTF8 | ConvertFrom-Json
+$historyEntry = $history.versions | Where-Object { $_.versionCode -eq [int]$versionCode } | Select-Object -First 1
+$changelogs = @{}
+if ($null -ne $historyEntry) {
+    foreach ($p in $historyEntry.changelog.PSObject.Properties) {
+        $changelogs[$p.Name] = $p.Value
+    }
+} else {
+    Write-Host "WARNING: no version_history entry for $versionCode, changelogs will be empty" -ForegroundColor Yellow
+}
 $versionJson = @{
     versionCode = [int]$versionCode
     versionName = $versionName
@@ -40,8 +54,9 @@ $versionJson = @{
     sha256 = $hash
     sizeBytes = $sizeBytes
     changelog = $changelog
+    changelogs = $changelogs
     minSdk = 26
-} | ConvertTo-Json
+} | ConvertTo-Json -Depth 6
 
 $versionJsonPath = "app\build\outputs\apk\release\version.json"
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)

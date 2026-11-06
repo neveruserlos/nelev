@@ -110,12 +110,12 @@ fun UpdateDialog(
     var showPermissionDialog by remember { mutableStateOf(false) }
     var showNotes by remember { mutableStateOf(false) }
 
-    // Манифест version.json содержит только английский changelog.
-    // Сначала пробуем локализованный текст из встроенного version_history.json,
-    // затем — с GitHub (raw main), и только потом английский из манифеста.
-    var localizedNotes by remember(info.versionCode, lang) { mutableStateOf<String?>(null) }
-    LaunchedEffect(info.versionCode, lang) {
-        if (lang != "en") {
+    // Приоритет: переводы из манифеста (тот же домен, что и проверка обновлений),
+    // затем встроенные assets, затем raw GitHub и в конце английский из манифеста.
+    val manifestNote = info.changelogs[lang]?.takeIf { it.isNotBlank() }
+    var localizedNotes by remember(info.versionCode, lang, manifestNote) { mutableStateOf<String?>(manifestNote) }
+    LaunchedEffect(info.versionCode, lang, manifestNote) {
+        if (manifestNote == null && lang != "en") {
             localizedNotes = VersionHistory.changelog(ctx, info.versionCode, lang)
                 ?: VersionHistoryManager.fetchChangelogFromGitHub(info.versionName, lang)
         }
@@ -173,13 +173,13 @@ fun UpdateDialog(
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             VersionBadge(
-                                label = UpdateText.get("current", lang).replace(": %s", ""),
+                                label = versionLabel("current", lang),
                                 value = APP_VERSION,
                                 text = text, muted = muted, border = border,
                                 modifier = Modifier.weight(1f)
                             )
                             VersionBadge(
-                                label = UpdateText.get("new_version", lang).replace(": %s", ""),
+                                label = versionLabel("new_version", lang),
                                 value = info.versionName,
                                 text = text, muted = muted, border = accent.copy(alpha = 0.45f),
                                 highlighted = true, accent = accent,
@@ -353,6 +353,15 @@ fun UpdateDialog(
         }
     }
 }
+
+// Убирает плейсхолдер и разделитель из подписи версии:
+// «Текущая версия: %s» -> «Текущая версия», «当前版本：%s» -> «当前版本».
+private fun versionLabel(key: String, lang: String): String =
+    UpdateText.get(key, lang)
+        .replace("%s", "")
+        .trim()
+        .trimEnd(':', '：')
+        .trim()
 
 @Composable
 private fun UpdateHero(

@@ -30,7 +30,9 @@ data class UpdateInfo(
     val sha256: String,
     val sizeBytes: Long,
     val changelog: String,
-    val minSdk: Int
+    val minSdk: Int,
+    /** Локализованные списки изменений прямо из манифеста: lang -> text. */
+    val changelogs: Map<String, String> = emptyMap()
 )
 
 data class LaunchUpdateInfo(
@@ -304,7 +306,8 @@ object Updater {
                 sha256 = o.optString("sha256", "").trim().lowercase(),
                 sizeBytes = o.optLong("sizeBytes", 0L),
                 changelog = o.optString("changelog", "").trim(),
-                minSdk = o.optInt("minSdk", 26)
+                minSdk = o.optInt("minSdk", 26),
+                changelogs = parseChangelogs(o.optJSONObject("changelogs"))
             )
             when {
                 info.versionCode <= BuildConfig.VERSION_CODE -> Result.success(null)
@@ -318,8 +321,17 @@ object Updater {
         }
     }
 
-    suspend fun changelogFor(ctx: Context, versionCode: Int): String? = withContext(Dispatchers.IO) {
-        try {
+    private fun parseChangelogs(obj: org.json.JSONObject?): Map<String, String> {
+        if (obj == null) return emptyMap()
+        val result = mutableMapOf<String, String>()
+        obj.keys().forEach { key ->
+            val value = obj.optString(key, "").trim()
+            if (value.isNotEmpty()) result[key] = value
+        }
+        return result
+    }
+
+    suspend fun changelogFor(ctx: Context, versionCode: Int): String? = withContext(Dispatchers.IO) {        try {
             val o = JSONObject(fetchText(MANIFEST_URL))
             if (o.optInt("versionCode", 0) == versionCode) {
                 o.optString("changelog", "").trim().ifBlank { null }
