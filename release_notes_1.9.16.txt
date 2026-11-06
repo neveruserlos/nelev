@@ -1,0 +1,28 @@
+🎨 NELEV 1.9.16 — UI Improvements
+
+## Что улучшено
+
+• **Улучшено центрирование текста** в элементах списка паузы обновлений
+• **Добавлено описание выбранного периода** серым текстом под списком
+• **Текст "Вы не будете видеть уведомления"** показывается для каждого варианта
+
+---
+
+## What's Improved
+
+• **Improved text centering** in update pause list items
+• **Added selected period description** in muted text below the list
+• **"You won't see update notifications" text** shown for each option
+
+---
+
+## Lo que se mejoró
+
+• **Centrado de texto mejorado** en elementos de lista de pausa de actualización
+• **Descripción del período seleccionado agregada** en texto atenuado debajo de la lista
+• **Texto "No verás notificaciones de actualización"** mostrado para cada opción
+
+---
+
+**Download:** nelev-app-release-1.9.16.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

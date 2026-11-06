@@ -8477,7 +8477,7 @@ fun AboutAppOverlay(
                                                                 if (soundClickEnabled) ClickPlayer.play(ctx)
                                                                 selectedPauseOption = idx
                                                             }
-                                                            .padding(horizontal = 14.dp, vertical = 12.dp),
+                                                            .padding(horizontal = 14.dp),
                                                         verticalAlignment = Alignment.CenterVertically
                                                     ) {
                                                         val buttonContent = if (isDark) Color.Black else Color.White
@@ -8514,6 +8514,26 @@ fun AboutAppOverlay(
                                                 }
                                             }
                                         }
+                                            }
+                                        }
+                                        
+                                        // Описание выбранного периода
+                                        if (selectedPauseOption != null) {
+                                            val description = when (selectedPauseOption) {
+                                                0 -> UpdateText.get("pause_desc_1day", lang)
+                                                1 -> UpdateText.get("pause_desc_3days", lang)
+                                                2 -> UpdateText.get("pause_desc_7days", lang)
+                                                3 -> UpdateText.get("pause_desc_forever", lang)
+                                                4 -> UpdateText.get("pause_desc_custom", lang)
+                                                else -> ""
+                                            }
+                                            if (description.isNotEmpty()) {
+                                                Text(
+                                                    description,
+                                                    fontSize = 12.sp,
+                                                    lineHeight = 16.sp,
+                                                    color = muted
+                                                )
                                             }
                                         }
                                         

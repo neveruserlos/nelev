@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 51,
+      "versionName": "1.9.16",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Улучшено центрирование текста в элементах списка паузы обновлений\n• Добавлено описание выбранного периода серым текстом\n• Текст \"Вы не будете видеть уведомления об обновлениях\" показывается для каждого варианта",
+        "en": "• Improved text centering in update pause list items\n• Added selected period description in muted text\n• \"You won't see update notifications\" text shown for each option",
+        "es": "• Centrado de texto mejorado en elementos de lista de pausa de actualización\n• Descripción del período seleccionado agregada en texto atenuado\n• Texto \"No verás notificaciones de actualización\" mostrado para cada opción",
+        "zh": "• 改进了更新暂停列表项中的文本居中\n• 添加了灰色文本的选定期间描述\n• 为每个选项显示"您将看不到更新通知"文本",
+        "ja": "• 更新一時停止リスト項目のテキスト中央揃えを改善\n• ミュートテキストで選択期間の説明を追加\n• 各オプションに「更新通知は表示されません」テキストを表示",
+        "ko": "• 업데이트 일시 중지 목록 항목의 텍스트 중앙 정렬 개선\n• 음소거된 텍스트로 선택한 기간 설명 추가\n• 각 옵션에 대해 \"업데이트 알림이 표시되지 않습니다\" 텍스트 표시",
+        "pt": "• Centralização de texto melhorada em itens da lista de pausa de atualização\n• Descrição do período selecionado adicionada em texto silenciado\n• Texto \"Você não verá notificações de atualização\" mostrado para cada opção",
+        "uk": "• Покращено центрування тексту в елементах списку паузи оновлень\n• Додано опис обраного періоду сірим текстом\n• Текст \"Ви не бачитимете сповіщень про оновлення\" показується для кожного варіанту"
+      }
+    },
+    {
       "versionCode": 50,
       "versionName": "1.9.15",
       "releaseDate": "2026-11-06",
