@@ -4201,6 +4201,8 @@ fun NelevMainScreen(
                         if (showAbout.value) {
                             showAbout.value = false
                         } else if (selectedTab.value != tab) {
+                            val soundEnabled = appSettings.value.soundClickEnabled && !showAbout.value
+                            if (soundEnabled) ClickPlayer.play(ctx)
                             FpsLogger.trackInteraction("tab→$tab")
                             selectedTab.value = tab
                         }
@@ -4660,8 +4662,6 @@ fun ModernNavBar(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null
                             ) {
-                                val soundEnabled = appSettings?.value?.soundClickEnabled ?: soundClickEnabled
-                                if (soundEnabled) ClickPlayer.play(ctx)
                                 pressTokens[tab] = (pressTokens[tab] ?: 0) + 1
                                 onSelectTab(tab)
                             },
@@ -7205,7 +7205,6 @@ fun SettingsScreen(
     val accent = colors["accent"] ?: text
     val isDark = appSettings.value.isDark
     val buttonContent = if (isDark) Color.Black else Color.White
-    val soundClickEnabled = appSettings.value.soundClickEnabled
     val effectsEnabled = appSettings.value.visualEffectsEnabled
     val backScale = remember { mutableStateOf(1f) }
     val trashScale = remember { mutableStateOf(1f) }
@@ -7253,7 +7252,7 @@ fun SettingsScreen(
         Text(Strings.get("lang_label", lang), color = muted, fontSize = 12.sp)
         Box {
             OutlinedButton(
-                onClick = { if (soundClickEnabled) ClickPlayer.play(ctx); langExpanded = !langExpanded },
+                onClick = { if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx); langExpanded = !langExpanded },
                 shape = panelShape, modifier = Modifier.fillMaxWidth().height(56.dp),
                 colors = ButtonDefaults.outlinedButtonColors(containerColor = card, contentColor = text),
                 border = androidx.compose.foundation.BorderStroke(1.dp, border)
@@ -7288,7 +7287,7 @@ fun SettingsScreen(
                                                 }
                                             )
                                             .clickable {
-                                                if (soundClickEnabled) ClickPlayer.play(ctx)
+                                                if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                                                 save(appSettings.value.copy(language = code)); langExpanded = false
                                                 try {
                                                     val intent = Intent(ctx, NelevService::class.java).apply {
@@ -7353,7 +7352,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
         }
 
         val themeLabel = remember(lang, isDark) { if (isDark) Strings.get("switch_to_light", lang) else Strings.get("switch_to_dark", lang) }
-        Button(onClick = { if (soundClickEnabled) ClickPlayer.play(ctx); save(appSettings.value.copy(isDark = !isDark)) },
+        Button(onClick = { if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx); save(appSettings.value.copy(isDark = !isDark)) },
             modifier = Modifier.fillMaxWidth().height(56.dp), shape = panelShape,
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
             elevation = ButtonDefaults.buttonElevation(0.dp), contentPadding = PaddingValues(0.dp)) {
@@ -7375,7 +7374,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
         }
 
         AnimatedOutlinedButton(
-            onClick = { if (soundClickEnabled) ClickPlayer.play(ctx); showHistory.value = true },
+            onClick = { if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx); showHistory.value = true },
             modifier = Modifier.fillMaxWidth().height(56.dp),
             shape = panelShape,
             colors = ButtonDefaults.outlinedButtonColors(containerColor = card, contentColor = text),
@@ -7395,7 +7394,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
         ) {
             AnimatedOutlinedButton(
                 onClick = {
-                    if (soundClickEnabled) ClickPlayer.play(ctx)
+                    if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                     onCheckUpdates()
                 },
                 modifier = Modifier.weight(1f).height(54.dp),
@@ -7407,33 +7406,23 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                 border = androidx.compose.foundation.BorderStroke(1.dp, border),
                 effectsEnabled = effectsEnabled
             ) {
-                Row(
-                    Modifier.fillMaxWidth().padding(horizontal = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                Column(
+                    Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Box(
-                        Modifier
-                            .size(34.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(accent.copy(alpha = 0.10f)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(Icons.Filled.Refresh, null, Modifier.size(18.dp), tint = accent)
-                    }
-                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(0.dp)) {
-                        Text(
-                            Strings.get("check_update", lang),
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = text
-                        )
-                        Text(
-                            "v$APP_VERSION",
-                            fontSize = 10.sp,
-                            color = muted
-                        )
-                    }
+                    Text(
+                        Strings.get("check_update", lang),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = text
+                    )
+                    Text(
+                        "v$APP_VERSION",
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = muted
+                    )
                 }
             }
             
@@ -7445,7 +7434,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                     .background(card)
                     .border(1.dp, border, RoundedCornerShape(14.dp))
                     .clickable {
-                        if (soundClickEnabled) ClickPlayer.play(ctx)
+                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                         showWhatsNewLocal = true
                     },
                 contentAlignment = Alignment.Center
@@ -7525,7 +7514,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                         }
                     }
                     .clickable {
-                        if (soundClickEnabled) ClickPlayer.play(ctx)
+                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                         onChange(!checked)
                     }
                     .padding(horizontal = 16.dp, vertical = 14.dp),
@@ -7534,7 +7523,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                 GlassSwitch(
                     checked = checked,
                     onCheckedChange = {
-                        if (soundClickEnabled) ClickPlayer.play(ctx)
+                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                         onChange(it)
                     },
                     isDark = isDark,
@@ -7596,7 +7585,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                 verticalAlignment = Alignment.CenterVertically) {
                 Row(modifier = Modifier.weight(1f)
                     .clickable(remember { MutableInteractionSource() }, null) {
-                        if (soundClickEnabled) ClickPlayer.play(ctx); soundMenuExpanded = !soundMenuExpanded
+                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx); soundMenuExpanded = !soundMenuExpanded
                     }
                     .padding(horizontal = 16.dp, vertical = 15.dp),
                     verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -7609,7 +7598,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                     GlassSwitch(
                         checked = anySoundOn,
                         onCheckedChange = { on ->
-                            if (soundClickEnabled) ClickPlayer.play(ctx)
+                            if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                             val ns = if (on) {
                                 appSettings.value.copy(soundNotifEnabled = appSettings.value.soundNotifEnabledBeforeMaster, soundClickEnabled = appSettings.value.soundClickEnabledBeforeMaster)
                             } else {
@@ -7633,7 +7622,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                             Box(Modifier.fillMaxWidth().height(0.5.dp).background(border))
                             listOf(
                                 SndItem("sound_notif_label", appSettings.value.soundNotifEnabled) {
-                                    if (soundClickEnabled) ClickPlayer.play(ctx)
+                                    if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                                     val newVal = !appSettings.value.soundNotifEnabled
                                     val ns = appSettings.value.copy(soundNotifEnabled = newVal, soundNotifEnabledBeforeMaster = newVal)
                                     save(ns)
@@ -7691,7 +7680,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
         }
 
         AnimatedOutlinedButton(
-            onClick = { if (soundClickEnabled) ClickPlayer.play(ctx); showAbout.value = !showAbout.value },
+            onClick = { if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx); showAbout.value = !showAbout.value },
             modifier = Modifier.fillMaxWidth().height(56.dp),
             shape = panelShape,
             colors = ButtonDefaults.outlinedButtonColors(containerColor = card, contentColor = text),

@@ -1,0 +1,18 @@
+✨ NELEV 1.9.25 — Звуки работают правильно
+
+## Что изменилось
+
+• **Исправлены звуки нажатий на вкладки** — теперь звук не воспроизводится при нажатии на уже активную вкладку, и настройка применяется мгновенно ко всем элементам на экране (кнопкам, переключателям и т.д.)
+• **Кнопка "Проверить обновление" стала чище и современнее** — убрана иконка Refresh, текст по центру
+
+---
+
+## What's Changed
+
+• **Fixed tab click sounds** — sound no longer plays when tapping the already active tab, and the setting applies instantly to all elements on screen (buttons, switches, etc.)
+• **The "Check for updates" button is now cleaner and more modern** — removed the Refresh icon, centered text
+
+---
+
+**Download:** nelev-app-release-1.9.25.apk  
+**GitHub:** https://github.com/neveruserlos/nelev
