@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 59,
+      "versionName": "1.9.24",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Исправлено отображение прогресса скачивания обновления — лишний знак процента убран\n• Исправлены звуки нажатий на вкладки — теперь настройка применяется мгновенно, без переключения вкладок",
+        "en": "• Fixed the update download progress display — the extra percent sign is gone\n• Fixed tab click sounds — the setting now applies immediately, without switching tabs",
+        "es": "• Corregida la visualización del progreso de descarga — el signo de porcentaje duplicado ha sido eliminado\n• Corregidos los sonidos de clics en las pestañas — ahora la configuración se aplica al instante, sin cambiar de pestaña",
+        "zh": "• 修复了更新下载进度的显示——多余的百分号已移除\n• 修夏了标签页点击声音——设置现在立即生效，无需切换标签页",
+        "ja": "• 更新のダウンロード進捗表示を修正 — 余分なパーセント記号を削除\n• タブクリック音を修正 — 設定がタブ切り替えなしで即座に反映されるように",
+        "ko": "• 업데이트 다운로드 진행률 표시 수정 — 중복된 퍼센트 기호 제거\n• 탭 클릭 사운드 수정 — 이제 탭을 전환하지 않고도 설정이 즉시 적용됩니다",
+        "pt": "• Corrigida a exibição do progresso de download — o sinal de porcentagem duplicado foi removido\n• Corrigidos os sons de clique nas abas — agora a configuração se aplica imediatamente, sem trocar de aba",
+        "uk": "• Виправлено відображення прогресу завантаження оновлення — зайвий знак відсотка прибрано\n• Виправлено звуки натискань на вкладки — тепер налаштування застосовується миттєво, без перемикання вкладок"
+      }
+    },
+    {
       "versionCode": 58,
       "versionName": "1.9.23",
       "releaseDate": "2026-11-06",
