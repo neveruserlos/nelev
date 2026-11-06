@@ -53,6 +53,18 @@ if ($firstBytes[0] -eq 0xEF -and $firstBytes[1] -eq 0xBB -and $firstBytes[2] -eq
 }
 Write-Host "version.json created (UTF-8, no BOM)" -ForegroundColor Green
 
+# Keep an up-to-date copy of the changelog at the repo root. Older app
+# versions fetch this file from raw.githubusercontent.com; the current
+# versions prefer the assets path. Syncing avoids drift between the two.
+Write-Host "Syncing version_history.json to repo root..." -ForegroundColor Yellow
+Copy-Item "app\src\main\assets\version_history.json" "version_history.json" -Force
+git add version_history.json
+git diff --cached --quiet
+if ($LASTEXITCODE -ne 0) {
+    git commit -m "chore: sync root version_history.json for v$versionName" | Out-Null
+    git push origin main
+}
+
 # Create GitHub Release
 Write-Host "Creating GitHub Release..." -ForegroundColor Yellow
 $ghPath = "C:\Program Files\GitHub CLI\gh.exe"

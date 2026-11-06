@@ -189,23 +189,34 @@ object VersionHistoryManager {
         }
     }
     
-    // Загрузить changelog конкретной версии с GitHub
+    // Загрузить changelog конкретной версии с GitHub.
+    // Основной путь — файл в assets (он всегда актуален и лежит в репозитории),
+    // запасной — копия в корне репозитория для старых клиентов.
     suspend fun fetchChangelogFromGitHub(versionName: String, lang: String): String? {
-        return try {
-            val url = "https://raw.githubusercontent.com/neveruserlos/nelev/main/version_history.json"
-            val connection = java.net.URL(url).openConnection() as java.net.HttpURLConnection
-            connection.requestMethod = "GET"
-            connection.connectTimeout = 10000
-            connection.readTimeout = 10000
-            
-            if (connection.responseCode == 200) {
-                val json = connection.inputStream.bufferedReader().use { it.readText() }
-                val versions = parseVersionsJson(json)
-                versions.find { it.versionName == versionName }?.changelog?.get(lang)
-            } else null
-        } catch (_: Exception) {
-            null
+        val urls = listOf(
+            "https://raw.githubusercontent.com/neveruserlos/nelev/main/app/src/main/assets/version_history.json",
+            "https://raw.githubusercontent.com/neveruserlos/nelev/main/version_history.json"
+        )
+        for (url in urls) {
+            val text = try {
+                val connection = java.net.URL(url).openConnection() as java.net.HttpURLConnection
+                connection.requestMethod = "GET"
+                connection.connectTimeout = 10000
+                connection.readTimeout = 10000
+                if (connection.responseCode == 200) {
+                    connection.inputStream.bufferedReader().use { it.readText() }
+                } else null
+            } catch (_: Exception) {
+                null
+            } ?: continue
+            val found = try {
+                parseVersionsJson(text).find { it.versionName == versionName }?.changelog?.get(lang)
+            } catch (_: Exception) {
+                null
+            }
+            if (!found.isNullOrBlank()) return found
         }
+        return null
     }
     
     private fun parseVersionsJson(json: String): List<VersionInfo> {
