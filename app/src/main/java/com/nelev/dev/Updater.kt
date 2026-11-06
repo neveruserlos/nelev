@@ -410,6 +410,9 @@ object Updater {
             val code = conn.responseCode
             if (code !in 200..299) throw IOException("HTTP $code")
             conn.inputStream.bufferedReader().use { it.readText() }
+                // Некоторые прокси/CDN отдают UTF-8 с BOM — org.json на нём падает.
+                .trimStart('\uFEFF', '\u200B')
+                .trim()
         } finally {
             conn.disconnect()
         }
