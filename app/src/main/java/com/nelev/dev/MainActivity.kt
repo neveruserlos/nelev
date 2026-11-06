@@ -80,6 +80,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -7778,6 +7779,7 @@ fun AboutAppOverlay(
     var showContactField by remember { mutableStateOf(false) }
     var showPauseUpdates by remember { mutableStateOf(false) }
     var selectedPauseOption by remember { mutableStateOf<Int?>(null) }
+    var pausePlateSnap by remember { mutableStateOf(true) }
     var customDays by remember { mutableStateOf("") }
 
     BackHandler {
@@ -8441,14 +8443,18 @@ fun AboutAppOverlay(
                                             ) {
                                                 Box {
                                                     // Фоновая плашка которая переплывает
-                                                    val selectedOffset by animateDpAsState(
-                                                        targetValue = if (selectedPauseOption != null) (selectedPauseOption!! * 52).dp else 0.dp,
-                                                        animationSpec = spring(
+                                                    val targetOffset = if (selectedPauseOption != null) (selectedPauseOption!! * 52).dp else 0.dp
+                                                    val animatedOffset by animateDpAsState(
+                                                        targetValue = targetOffset,
+                                                        animationSpec = if (pausePlateSnap) snap() else spring(
                                                             dampingRatio = Spring.DampingRatioNoBouncy,
                                                             stiffness = Spring.StiffnessLow
                                                         ),
                                                         label = "pause_selection_offset"
                                                     )
+                                                    // Первый выбор показываем сразу на месте (без выезда сверху),
+                                                    // дальнейшие — плавно переезжают.
+                                                    val selectedOffset = if (pausePlateSnap) targetOffset else animatedOffset
                                                     
                                                     if (selectedPauseOption != null) {
                                                         Box(
@@ -8474,6 +8480,9 @@ fun AboutAppOverlay(
                                                             .clip(RoundedCornerShape(12.dp))
                                                             .clickable {
                                                                 if (soundClickEnabled) ClickPlayer.play(ctx)
+                                                                // Первый выбор — плашка появляется сразу на нажатой
+                                                                // строке. Последующие — плавно переезжают.
+                                                                pausePlateSnap = selectedPauseOption == null
                                                                 selectedPauseOption = idx
                                                             }
                                                             .padding(horizontal = 14.dp),
@@ -8516,28 +8525,46 @@ fun AboutAppOverlay(
                                                                 },
                                                                 modifier = Modifier.weight(1f),
                                                                 singleLine = true,
-                                                                textStyle = TextStyle(fontSize = 14.sp, color = text),
+                                                                textStyle = TextStyle(
+                                                                    fontSize = 15.sp,
+                                                                    fontWeight = FontWeight.SemiBold,
+                                                                    color = text
+                                                                ),
                                                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                                                 cursorBrush = SolidColor(colors["accent"]!!),
                                                                 decorationBox = { innerTextField ->
-                                                                    Box(
+                                                                    Row(
                                                                         Modifier
                                                                             .fillMaxWidth()
-                                                                            .height(34.dp)
-                                                                            .clip(RoundedCornerShape(10.dp))
-                                                                            .background(if (isDark) Color.White.copy(alpha = 0.06f) else Color.Black.copy(alpha = 0.04f))
-                                                                            .border(1.dp, colors["accent"]!!.copy(alpha = 0.55f), RoundedCornerShape(10.dp))
-                                                                            .padding(horizontal = 10.dp),
-                                                                        contentAlignment = Alignment.CenterStart
+                                                                            .height(38.dp)
+                                                                            .clip(RoundedCornerShape(12.dp))
+                                                                            .background(colors["accent"]!!.copy(alpha = if (isDark) 0.10f else 0.08f))
+                                                                            .border(1.dp, colors["accent"]!!.copy(alpha = 0.45f), RoundedCornerShape(12.dp))
+                                                                            .padding(horizontal = 12.dp),
+                                                                        verticalAlignment = Alignment.CenterVertically
                                                                     ) {
-                                                                        if (customDays.isEmpty()) {
-                                                                            Text(
-                                                                                UpdateText.get("pause_custom_label", lang),
-                                                                                fontSize = 13.sp,
-                                                                                color = muted
-                                                                            )
+                                                                        Box(
+                                                                            Modifier.weight(1f),
+                                                                            contentAlignment = Alignment.CenterStart
+                                                                        ) {
+                                                                            if (customDays.isEmpty()) {
+                                                                                Text(
+                                                                                    UpdateText.get("pause_custom_hint", lang),
+                                                                                    fontSize = 12.sp,
+                                                                                    color = if (isDark) Color.White.copy(alpha = 0.60f) else text.copy(alpha = 0.55f),
+                                                                                    maxLines = 1,
+                                                                                    overflow = TextOverflow.Ellipsis
+                                                                                )
+                                                                            }
+                                                                            innerTextField()
                                                                         }
-                                                                        innerTextField()
+                                                                        Spacer(Modifier.width(8.dp))
+                                                                        Text(
+                                                                            UpdateText.get("pause_custom_label", lang),
+                                                                            fontSize = 11.sp,
+                                                                            fontWeight = FontWeight.Medium,
+                                                                            color = colors["accent"]!!
+                                                                        )
                                                                     }
                                                                 }
                                                             )

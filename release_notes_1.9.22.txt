@@ -1,0 +1,20 @@
+✨ NELEV 1.9.22 — Аккуратный «Свой срок» и плашка выбора
+
+## Что изменилось
+
+• **Поле «Свой срок» стало красивее** — мягкий акцентный фон, аккуратная рамка, подпись «Дней» справа и более крупный текст ввода
+• **Плашка выбора в окне приостановки обновлений** — если вы ещё ничего не выбирали, плашка теперь появляется сразу на нажатом пункте, а не выезжает сверху. При переключении между пунктами — плавно переезжает
+• **Цвет текста в окнах «Доступно обновление» и «Что нового»** теперь такой же читаемый, как в остальных окнах приложения
+
+---
+
+## What's Changed
+
+• **The "Custom period" field looks cleaner** — soft accent background, neat border, "Days" unit label and larger input text
+• **The selection plate in the pause-updates window** — if nothing is selected yet, the plate now appears right on the tapped option instead of sliding in from the top. Switching between options slides it smoothly
+• **Text color in the update and What's New windows** is now as readable as in the rest of the app
+
+---
+
+**Download:** nelev-app-release-1.9.22.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

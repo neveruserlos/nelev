@@ -74,6 +74,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -97,7 +98,8 @@ fun UpdateDialog(
 
     val card = colors["card"] ?: Color(0xFF101010)
     val text = colors["text"] ?: Color.White
-    val muted = colors["muted"] ?: Color.Gray
+    // Приглушённый, но читаемый цвет — как в окнах паузы обновлений и обратной связи
+    val muted = if (isDark) Color.White.copy(alpha = 0.72f) else text.copy(alpha = 0.7f)
     val border = colors["border"] ?: Color.DarkGray
     val accent = colors["accent"] ?: Color(0xFFE79BC0)
     val buttonContent = if (isDark) Color.Black else Color.White
@@ -551,7 +553,8 @@ fun WhatsNewDialog(
 ) {
     val card = colors["card"] ?: Color(0xFF101010)
     val text = colors["text"] ?: Color.White
-    val muted = colors["muted"] ?: Color.Gray
+    // Приглушённый, но читаемый цвет — как в окнах паузы обновлений и обратной связи
+    val muted = if (isDark) Color.White.copy(alpha = 0.72f) else text.copy(alpha = 0.7f)
     val accent = colors["accent"] ?: Color(0xFFE79BC0)
     val buttonContent = if (isDark) Color.Black else Color.White
 
@@ -1072,28 +1075,46 @@ fun UpdatePauseDialog(
                                             },
                                             modifier = Modifier.weight(1f),
                                             singleLine = true,
-                                            textStyle = androidx.compose.ui.text.TextStyle(fontSize = 14.sp, color = text),
+                                            textStyle = androidx.compose.ui.text.TextStyle(
+                                                fontSize = 15.sp,
+                                                fontWeight = FontWeight.SemiBold,
+                                                color = text
+                                            ),
                                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                             cursorBrush = androidx.compose.ui.graphics.SolidColor(accent),
                                             decorationBox = { innerTextField ->
-                                                Box(
+                                                Row(
                                                     Modifier
                                                         .fillMaxWidth()
-                                                        .height(34.dp)
-                                                        .clip(RoundedCornerShape(10.dp))
-                                                        .background(if (isDark) Color.White.copy(alpha = 0.06f) else Color.Black.copy(alpha = 0.04f))
-                                                        .border(1.dp, accent.copy(alpha = 0.55f), RoundedCornerShape(10.dp))
-                                                        .padding(horizontal = 10.dp),
-                                                    contentAlignment = Alignment.CenterStart
+                                                        .height(38.dp)
+                                                        .clip(RoundedCornerShape(12.dp))
+                                                        .background(accent.copy(alpha = if (isDark) 0.10f else 0.08f))
+                                                        .border(1.dp, accent.copy(alpha = 0.45f), RoundedCornerShape(12.dp))
+                                                        .padding(horizontal = 12.dp),
+                                                    verticalAlignment = Alignment.CenterVertically
                                                 ) {
-                                                    if (customDays.isEmpty()) {
-                                                        Text(
-                                                            UpdateText.get("pause_custom_label", lang),
-                                                            fontSize = 13.sp,
-                                                            color = muted
-                                                        )
+                                                    Box(
+                                                        Modifier.weight(1f),
+                                                        contentAlignment = Alignment.CenterStart
+                                                    ) {
+                                                        if (customDays.isEmpty()) {
+                                                            Text(
+                                                                UpdateText.get("pause_custom_hint", lang),
+                                                                fontSize = 12.sp,
+                                                                color = if (isDark) Color.White.copy(alpha = 0.60f) else text.copy(alpha = 0.55f),
+                                                                maxLines = 1,
+                                                                overflow = TextOverflow.Ellipsis
+                                                            )
+                                                        }
+                                                        innerTextField()
                                                     }
-                                                    innerTextField()
+                                                    Spacer(Modifier.width(8.dp))
+                                                    Text(
+                                                        UpdateText.get("pause_custom_label", lang),
+                                                        fontSize = 11.sp,
+                                                        fontWeight = FontWeight.Medium,
+                                                        color = accent
+                                                    )
                                                 }
                                             }
                                         )

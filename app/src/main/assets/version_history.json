@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 57,
+      "versionName": "1.9.22",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Поле ввода «Свой срок» стало аккуратнее: выделенный фон, рамка и подпись единицы\n• Плашка выбора теперь появляется сразу на нажатом пункте и плавно переезжает между пунктами\n• Текст в окнах «Доступно обновление» и «Что нового» стал таким же читаемым, как в других окнах",
+        "en": "• The “Custom period” input looks cleaner: tinted background, border and unit label\n• The selection plate now appears right on the tapped option and then slides smoothly between options\n• Text in the update and What’s New windows is now as readable as in the other windows",
+        "es": "• El campo «Período personalizado» se ve más limpio: fondo, borde y etiqueta de unidad\n• La placa de selección ahora aparece justo en la opción pulsada y luego se desliza suavemente\n• El texto de las ventanas de actualización y Novedades ahora es tan legible como en las demás ventanas",
+        "zh": "• “自定义期限”输入框更美观：带色底、边框和单位标签\n• 选中板现会直接出现在点击的选项上，并在选项间平滑移动\n• 更新窗口和“新功能”窗口的文字现与其他窗口一样清晰",
+        "ja": "• 「カスタム期間」入力欄が整った見た目に（背景、枠、単位ラベル）\n• 選択プレートが押した項目ですぐに表示され、項目間をスムーズに移動\n• 更新ウィンドウと「新機能」のテキストが他のウィンドウと同じくらい読みやすく",
+        "ko": "• “사용자 지정 기간” 입력이 더 깔끔해졌습니다(배경, 테두리, 단위 표시)\n• 선택 플레이트가 누른 항목에 바로 나타나고 항목 사이를 부드럽게 이동합니다\n• 업데이트 창과 “새 기능” 창의 텍스트가 다른 창처럼 읽기 쉽게 바뀌었습니다",
+        "pt": "• O campo «Período personalizado» ficou mais bonito: fundo, borda e rótulo de unidade\n• A placa de seleção agora aparece direto na opção tocada e desliza suavemente entre as opções\n• O texto das janelas de atualização e Novidades agora é tão legível quanto nas outras janelas",
+        "uk": "• Поле введення «Свій термін» стало охайнішим: тонований фон, рамка і підпис одиниці\n• Плашка вибору тепер з'являється одразу на натиснутому пункті й плавно переїздить між пунктами\n• Текст у вікнах «Доступне оновлення» та «Що нового» став таким самим читабельним, як в інших вікнах"
+      }
+    },
+    {
       "versionCode": 56,
       "versionName": "1.9.21",
       "releaseDate": "2026-11-06",
