@@ -1,10 +1,10 @@
-# NELEV Release Script v1.9.19
+# NELEV Release Script v1.9.20
 # Automated GitHub Release Upload
 
 $apkPath = "app\build\outputs\apk\release\app-release.apk"
-$versionName = "1.9.19"
-$versionCode = "54"
-$notesFile = "release_notes_1.9.19.txt"
+$versionName = "1.9.20"
+$versionCode = "55"
+$notesFile = "release_notes_1.9.20.txt"
 
 Write-Host "=== NELEV Release v$versionName ===" -ForegroundColor Cyan
 
@@ -32,7 +32,7 @@ Write-Host "Size: $sizeBytes bytes" -ForegroundColor Green
 # Create version.json
 # NOTE: must be UTF-8 WITHOUT BOM and ASCII-safe bullets, otherwise
 # org.json.JSONObject() in Updater.kt fails and the update is never found.
-$changelog = "- Brighter text for the pause subtitle, matching the feedback hint`n- Resume button uses the same color`n- Cleaner update pause window"
+$changelog = "- Slower, smoother selection plate animation`n- Smoother What's New expansion in the update window`n- Smooth fade-in for the What's New dialog"
 $versionJson = @{
     versionCode = [int]$versionCode
     versionName = $versionName

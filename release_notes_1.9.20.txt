@@ -1,0 +1,20 @@
+✨ NELEV 1.9.20 — Плавные анимации
+
+## Что изменилось
+
+• **Плашка выбранного срока двигается медленнее и плавнее** — без резких прыжков между пунктами
+• **Раскрытие «Что нового» в окне обновления** стало плавнее: вместо «пружины» — мягкое раскрытие сверху вниз с лёгким появлением текста
+• **Окно «Что нового»** (кнопка справа от «Проверить обновление») теперь плавно появляется с лёгким масштабом — больше не выскакивает
+
+---
+
+## What's Changed
+
+• **The selected period plate moves slower and smoother**
+• **Expanding "What's New" in the update window** is smoother — soft top-down reveal with a gentle fade
+• **The "What's New" dialog** (button next to Check update) now fades in with a subtle scale — no more popping
+
+---
+
+**Download:** nelev-app-release-1.9.20.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

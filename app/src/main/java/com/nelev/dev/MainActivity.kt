@@ -8444,8 +8444,8 @@ fun AboutAppOverlay(
                                                     val selectedOffset by animateDpAsState(
                                                         targetValue = if (selectedPauseOption != null) (selectedPauseOption!! * 52).dp else 0.dp,
                                                         animationSpec = spring(
-                                                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                                                            stiffness = Spring.StiffnessMedium
+                                                            dampingRatio = Spring.DampingRatioNoBouncy,
+                                                            stiffness = Spring.StiffnessLow
                                                         ),
                                                         label = "pause_selection_offset"
                                                     )

@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 55,
+      "versionName": "1.9.20",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Плашка выбранного срока двигается медленнее и плавнее\n• Раскрытие «Что нового» в окне обновления стало более плавным, без рывков\n• Окно «Что нового» (кнопка справа от «Проверить обновление») теперь плавно появляется, без телепания",
+        "en": "• The selected period plate moves slower and smoother\n• Expanding \"What's New\" in the update window is smoother, no jerks\n• The \"What's New\" window (button next to Check update) now fades in smoothly",
+        "es": "• La placa del período seleccionado se mueve más lento y suave\n• La expansión de «Novedades» en la ventana de actualización es más suave\n• La ventana «Novedades» ahora aparece con una transición suave",
+        "zh": "• 所选期限的滑动板移动更慢更平滑\n• 更新窗口中“新功能”的展开更平滑，无卡顿\n• “新功能”窗口（检查更新旁的按钮）现在平滑出现",
+        "ja": "• 選択期間のプレートの移動をよりゆっくり滑らかに\n• 更新ウィンドウの「新機能」展開が滑らかに\n• 「新機能」ウィンドウ（更新確認ボタンの隣）が滑らかに表示",
+        "ko": "• 선택한 기간 플레이트가 더 느리고 부드럽게 이동\n• 업데이트 창의 \"새 기능\" 확장이 더 부드러워짐\n• \"새 기능\" 창(업데이트 확인 옆 버튼)이 부드럽게 나타남",
+        "pt": "• A placa do período selecionado se move mais devagar e suave\n• A expansão de «Novidades» na janela de atualização ficou mais suave\n• A janela «Novidades» agora aparece com transição suave",
+        "uk": "• Плашка обраного терміну рухається повільніше та плавніше\n• Розкриття «Що нового» у вікні оновлення стало плавнішим, без ривків\n• Вікно «Що нового» (кнопка праворуч від «Перевірити оновлення») тепер плавно з'являється"
+      }
+    },
+    {
       "versionCode": 54,
       "versionName": "1.9.19",
       "releaseDate": "2026-11-06",

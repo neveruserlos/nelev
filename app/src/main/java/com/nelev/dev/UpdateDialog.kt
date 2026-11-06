@@ -11,6 +11,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
@@ -53,6 +55,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -187,17 +190,32 @@ fun UpdateDialog(
                                 AnimatedVisibility(
                                     visible = showNotes,
                                     enter = expandVertically(
-                                        animationSpec = spring(
-                                            dampingRatio = Spring.DampingRatioNoBouncy,
-                                            stiffness = Spring.StiffnessMediumLow
+                                        animationSpec = tween(
+                                            durationMillis = 320,
+                                            easing = FastOutSlowInEasing
+                                        ),
+                                        expandFrom = Alignment.Top,
+                                        clip = true
+                                    ) + fadeIn(
+                                        animationSpec = tween(
+                                            durationMillis = 220,
+                                            delayMillis = 60,
+                                            easing = FastOutSlowInEasing
                                         )
-                                    ) + fadeIn(),
+                                    ),
                                     exit = shrinkVertically(
-                                        animationSpec = spring(
-                                            dampingRatio = Spring.DampingRatioNoBouncy,
-                                            stiffness = Spring.StiffnessMediumLow
+                                        animationSpec = tween(
+                                            durationMillis = 240,
+                                            easing = FastOutSlowInEasing
+                                        ),
+                                        shrinkTowards = Alignment.Top,
+                                        clip = true
+                                    ) + fadeOut(
+                                        animationSpec = tween(
+                                            durationMillis = 160,
+                                            easing = FastOutSlowInEasing
                                         )
-                                    ) + fadeOut()
+                                    )
                                 ) {
                                     Text(
                                         info.changelog,
@@ -507,6 +525,10 @@ fun WhatsNewDialog(
     val accent = colors["accent"] ?: Color(0xFFE79BC0)
     val buttonContent = if (isDark) Color.Black else Color.White
 
+    // Плавное появление окна, чтобы оно не «выскакивало» и не телепалось
+    var appeared by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { appeared = true }
+
     Dialog(onDismissRequest = onDismiss) {
         Box(
             modifier = Modifier
@@ -514,6 +536,19 @@ fun WhatsNewDialog(
                 .wrapContentHeight(),
             contentAlignment = Alignment.Center
         ) {
+            AnimatedVisibility(
+                visible = appeared,
+                enter = fadeIn(
+                    animationSpec = tween(200, easing = FastOutSlowInEasing)
+                ) + scaleIn(
+                    initialScale = 0.92f,
+                    animationSpec = tween(280, easing = FastOutSlowInEasing)
+                ),
+                exit = fadeOut(animationSpec = tween(120)) + scaleOut(
+                    targetScale = 0.96f,
+                    animationSpec = tween(140)
+                )
+            ) {
             Surface(
                 shape = RoundedCornerShape(28.dp),
                 color = card,
@@ -642,6 +677,7 @@ fun WhatsNewDialog(
                         )
                     }
                 }
+            }
             }
         }
         }
