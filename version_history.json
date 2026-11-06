@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 58,
+      "versionName": "1.9.23",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Список изменений в окне обновления теперь берётся из самого манифеста и работает даже там, где raw.githubusercontent недоступен\n• Исправлены подписи версий, где вместо текста оставался плейсхолдер %s\n• Переводы во всех 8 языках теперь показываются надёжно",
+        "en": "• The changelog in the update window now comes from the update manifest itself and works even where raw.githubusercontent is unavailable\n• Fixed version labels that kept a %s placeholder instead of text\n• Translations now show reliably in all 8 languages",
+        "es": "• El registro de cambios de la ventana de actualización ahora viene del propio manifiesto y funciona incluso donde raw.githubusercontent no está disponible\n• Corregidas las etiquetas de versión que mostraban el marcador %s\n• Las traducciones ahora se muestran de forma fiable en los 8 idiomas",
+        "zh": "• 更新窗口中的更新日志现在直接取自更新清单，即使 raw.githubusercontent 无法访问也能显示\n• 修复了版本标签中残留 %s 占位符的问题\n• 全部 8 种语言的翻译现在都能可靠显示",
+        "ja": "• 更新ウィンドウの更新履歴は更新マニフェストから取得するため、raw.githubusercontent が利用できない場所でも表示されます\n• バージョンラベルに %s が残る問題を修正\n• 8 ゲージの翻訳が確実に表示されるように",
+        "ko": "• 업데이트 창의 변경 내용을 이제 업데이트 매니페스트에서 직접 가져와 raw.githubusercontent이 사용 불가능한 환경에서도 표시됩니다\n• 버전 라벨에 %s 플레이스홀더가 남는 문제 수정\n• 8개 언어 모두의 번역이 이제 안정적으로 표시됩니다",
+        "pt": "• O registro de alterações na janela de atualização agora vem do próprio manifesto e funciona mesmo onde raw.githubusercontent não está disponível\n• Corrigidos os rótulos de versão que mantinham o marcador %s\n• As traduções agora aparecem de forma confiável nos 8 idiomas",
+        "uk": "• Список змін у вікні оновлення тепер береться із самого маніфесту і працює навіть там, де raw.githubusercontent недоступний\n• Виправлено підписи версій, де замість тексту залишався плейсхолдер %s\n• Переклади усіма 8 мовами тепер показуються надійно"
+      }
+    },
+    {
       "versionCode": 57,
       "versionName": "1.9.22",
       "releaseDate": "2026-11-06",
