@@ -1,0 +1,28 @@
+✨ NELEV 1.9.30 — Полировка и удобство
+
+## Что изменилось
+
+• **Исправлен UID** — теперь генерируется новый при сбросе настроек
+• **Убран фон в поле "Свой срок"** при приостановке обновлений
+• **Слово "дней" теперь цветом как текст уведомления**
+• **Окно "Что нового" больше не телепается** при повторном открытии
+• **Анимация перехода между вкладками** при клике
+• **Плавное исчезновение текста "прокрутите..."**
+• **Автоматическое окно обновления при запуске** с блокировкой на 3 секунды
+
+---
+
+## What's Changed
+
+• **Fixed UID** — now generates a new one when resetting settings
+• **Removed background in custom duration field** when pausing updates
+• **The word "days" now matches notification text color**
+• **What's New dialog no longer glitches** when reopened
+• **Tab transition animation** when clicking
+• **Smooth fade-out of "scroll..." text**
+• **Automatic update dialog on launch** with 3-second dismiss lock
+
+---
+
+**Download:** nelev-app-release-1.9.30.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

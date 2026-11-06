@@ -3638,9 +3638,9 @@ fun NelevMainScreen(
             Updater.markChecked(ctx)
             Updater.check(ctx, respectSkip = true).onSuccess { info ->
                 if (info != null) {
-                    // Не открываем полный диалог: только лёгкое уведомление
+                    // Показываем полный диалог вместо уведомления при запуске
                     updateInfo = info
-                    showUpdateNotice = true
+                    showUpdateNotice = false
                 }
             }
         }
@@ -4060,8 +4060,27 @@ fun NelevMainScreen(
                     Box(Modifier.fillMaxSize()
                         .offset { IntOffset(dragOffset.value.toInt(), 0) }
                         .graphicsLayer { alpha = 1f - (abs(dragOffset.value) / screenWidth).coerceIn(0f, 1f) * 0.3f }) {
-                        TabContent(selectedTab.value, appState, appSettings, colors, lang, isDark, sliderDragging,
-                            effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback)
+                        AnimatedContent(
+                            targetState = selectedTab.value,
+                            transitionSpec = {
+                                if (dragOffset.value == 0f) {
+                                    // Анимация при клике на вкладку
+                                    val direction = if (targetState > initialState) 
+                                        AnimatedContentTransitionScope.SlideDirection.Left 
+                                    else 
+                                        AnimatedContentTransitionScope.SlideDirection.Right
+                                    slideIntoContainer(direction, animationSpec = tween(300, easing = FastOutSlowInEasing)) + fadeIn(tween(300)) togetherWith
+                                        slideOutOfContainer(direction, animationSpec = tween(300, easing = FastOutSlowInEasing)) + fadeOut(tween(300))
+                                } else {
+                                    // Без анимации при drag (там своя анимация через offset)
+                                    fadeIn(tween(0)) togetherWith fadeOut(tween(0))
+                                }
+                            },
+                            label = "tab_content"
+                        ) { tab ->
+                            TabContent(tab, appState, appSettings, colors, lang, isDark, sliderDragging,
+                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback)
+                        }
                     }
                 }
 
@@ -7478,14 +7497,16 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                     }
                 } catch (_: Exception) { 0 }
                 val changelog = remember(currentCode, lang) { VersionHistory.changelog(ctx, currentCode, lang) ?: "" }
-                WhatsNewDialog(
-                    versionName = APP_VERSION,
-                    changelog = changelog,
-                    colors = colors,
-                    lang = lang,
-                    isDark = appSettings.value.isDark,
-                    onDismiss = { showWhatsNewLocal = false }
-                )
+                key(showWhatsNewLocal) {
+                    WhatsNewDialog(
+                        versionName = APP_VERSION,
+                        changelog = changelog,
+                        colors = colors,
+                        lang = lang,
+                        isDark = appSettings.value.isDark,
+                        onDismiss = { showWhatsNewLocal = false }
+                    )
+                }
             }
         }
 
@@ -8275,6 +8296,9 @@ fun AboutAppOverlay(
                                                             language = "en"
                                                         )
                                                         save(resetSettings)
+                                                        // Перезагружаем с генерацией нового UID
+                                                        val reloaded = SettingsStore.load(ctx)
+                                                        save(reloaded)
                                                         onDismiss()
                                                     }) {
                                                         Text(Strings.get("reset_confirm", lang).ifEmpty { "Reset" })
@@ -8615,8 +8639,6 @@ fun AboutAppOverlay(
                                                                         Modifier
                                                                             .fillMaxWidth()
                                                                             .height(38.dp)
-                                                                            .clip(RoundedCornerShape(12.dp))
-                                                                            .background(colors["accent"]!!.copy(alpha = if (isDark) 0.10f else 0.08f))
                                                                             .padding(horizontal = 12.dp),
                                                                         verticalAlignment = Alignment.CenterVertically
                                                                     ) {
@@ -8640,7 +8662,7 @@ fun AboutAppOverlay(
                                                                             UpdateText.get("pause_custom_label", lang),
                                                                             fontSize = 11.sp,
                                                                             fontWeight = FontWeight.Medium,
-                                                                            color = colors["accent"]!!
+                                                                            color = if (isDark) Color.White.copy(alpha = 0.72f) else text.copy(alpha = 0.7f)
                                                                         )
                                                                     }
                                                                 }

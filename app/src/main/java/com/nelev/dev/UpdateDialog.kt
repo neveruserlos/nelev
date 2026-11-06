@@ -109,6 +109,13 @@ fun UpdateDialog(
     var error by remember { mutableStateOf<String?>(null) }
     var showPermissionDialog by remember { mutableStateOf(false) }
     var showNotes by remember { mutableStateOf(false) }
+    
+    // Блокировка закрытия на 3 секунды
+    var canDismiss by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(3000)
+        canDismiss = true
+    }
 
     // Приоритет: переводы из манифеста (тот же домен, что и проверка обновлений),
     // затем встроенные assets, затем raw GitHub и в конце английский из манифеста.
@@ -123,7 +130,7 @@ fun UpdateDialog(
     val notesText = localizedNotes?.takeIf { it.isNotBlank() } ?: info.changelog
 
     Dialog(
-        onDismissRequest = { if (!downloading) onDismiss() },
+        onDismissRequest = { if (!downloading && canDismiss) onDismiss() },
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         // Окно фиксированного размера: при раскрытии «Что нового» меняется только
@@ -134,7 +141,7 @@ fun UpdateDialog(
                 .clickable(
                     interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
                     indication = null
-                ) { if (!downloading) onDismiss() },
+                ) { if (!downloading && canDismiss) onDismiss() },
             contentAlignment = Alignment.Center
         ) {
             Box(
@@ -694,7 +701,7 @@ fun WhatsNewDialog(
                 ) {
                     val scroll = rememberScrollState()
                     val canScrollDown by remember {
-                        derivedStateOf { scroll.value < scroll.maxValue - 4 }
+                        derivedStateOf { scroll.value < scroll.maxValue - 20 }
                     }
                     Box(Modifier.fillMaxWidth()) {
                         Text(
@@ -709,35 +716,42 @@ fun WhatsNewDialog(
                                 .verticalScroll(scroll)
                                 .padding(bottom = if (canScrollDown) 18.dp else 0.dp)
                         )
-                        if (canScrollDown) {
-                            Box(
-                                Modifier
-                                    .align(Alignment.BottomCenter)
-                                    .fillMaxWidth()
-                                    .height(50.dp)
-                                    .background(
-                                        Brush.verticalGradient(
-                                            listOf(Color.Transparent, card)
+                        androidx.compose.animation.AnimatedVisibility(
+                            visible = canScrollDown,
+                            enter = fadeIn(tween(300)),
+                            exit = fadeOut(tween(300)),
+                            modifier = Modifier.align(Alignment.BottomCenter)
+                        ) {
+                            Column(Modifier.fillMaxWidth()) {
+                                Box(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .height(50.dp)
+                                        .background(
+                                            Brush.verticalGradient(
+                                                listOf(Color.Transparent, card)
+                                            )
                                         )
+                                )
+                                Row(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = 6.dp),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        Icons.Filled.KeyboardArrowDown, null,
+                                        Modifier.size(16.dp), tint = accent
                                     )
-                            )
-                            Row(
-                                Modifier
-                                    .align(Alignment.BottomCenter)
-                                    .padding(bottom = 6.dp),
-                                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    Icons.Filled.KeyboardArrowDown, null,
-                                    Modifier.size(16.dp), tint = accent
-                                )
-                                Text(
-                                    UpdateText.get("scroll_down", lang),
-                                    fontSize = 11.sp,
-                                    color = accent,
-                                    fontWeight = FontWeight.SemiBold
-                                )
+                                    Spacer(Modifier.width(4.dp))
+                                    Text(
+                                        UpdateText.get("scroll_down", lang),
+                                        fontSize = 11.sp,
+                                        color = accent,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
                             }
                         }
                     }
