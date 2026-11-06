@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 60,
+      "versionName": "1.9.25",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Исправлены звуки нажатий на вкладки — теперь звук не воспроизводится при нажатии на уже активную вкладку, и настройка применяется мгновенно\n• Кнопка «Проверить обновление» стала чище и современнее — убрана иконка Refresh, текст по центру",
+        "en": "• Fixed tab click sounds — sound no longer plays when tapping the already active tab, and the setting applies instantly\n• The “Check for updates” button is now cleaner and more modern — removed the Refresh icon, centered text",
+        "es": "• Corregidos los sonidos de clics en las pestañas — el sonido ya no se reproduce al tocar la pestaña ya activa, y la configuración se aplica al instante\n• El botón «Buscar actualizaciones» ahora es más limpio y moderno — se eliminó el icono de actualizar, texto centrado",
+        "zh": "• 修复了标签页点击声音——点击已激活的标签页时不再播放声音，设置立即生效\n• “检查更新”按钮现在更简洁现代——移除了刷新图标，文字居中",
+        "ja": "• タブクリック音を修正——すでにアクティブなタブをタップしても音が鳴らず、設定が即座に反映されるように\n• 「更新確認」ボタンがよりシンプルでモダンに——更新アイコンを削除、テキストを中央揃え",
+        "ko": "• 탭 클릭 사운드 수정——이미 활성화된 탭을 탭할 때 소리가 재생되지 않으며 설정이 즉시 적용됩니다\n• “업데이트 확인” 버튼이 더 깨끗하고 현대적으로——새로고침 아이콘 제거, 텍스트 가운데 정렬",
+        "pt": "• Corrigidos os sons de clique nas abas — o som não toca mais ao tocar na aba já ativa, e a configuração se aplica instantaneamente\n• O botão «Verificar atualizações» agora é mais limpo e moderno — removido o ícone de atualizar, texto centralizado",
+        "uk": "• Виправлено звуки натискань на вкладки — тепер звук не відтворюється при натисканні на вже активну вкладку, і налаштування застосовується миттєво\n• Кнопка «Перевірити оновлення» стала чистішою і сучаснішою — прибрано іконку оновлення, текст по центру"
+      }
+    },
+    {
       "versionCode": 59,
       "versionName": "1.9.24",
       "releaseDate": "2026-11-06",
