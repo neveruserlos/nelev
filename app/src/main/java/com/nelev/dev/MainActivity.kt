@@ -4211,7 +4211,8 @@ fun NelevMainScreen(
                     soundClickEnabled = appSettings.value.soundClickEnabled && !showAbout.value,
                     indicatorIndex = tabIndicatorIndex.value,
                     effectsEnabled = effectsEnabled,
-                    tabOrder = tabOrder
+                    tabOrder = tabOrder,
+                    appSettings = appSettings
                 )
             }
         }
@@ -4527,7 +4528,8 @@ fun ModernNavBar(
     soundClickEnabled: Boolean,
     indicatorIndex: Float = 0f,
     effectsEnabled: Boolean = true,
-    tabOrder: List<NelevTab> = NelevTab.entries.toList()
+    tabOrder: List<NelevTab> = NelevTab.entries.toList(),
+    appSettings: State<AppSettings>? = null
 ) {
     val border = colors["border"]!!
     val navBg  = colors["navBg"]!!
@@ -4658,7 +4660,8 @@ fun ModernNavBar(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null
                             ) {
-                                if (soundClickEnabled) ClickPlayer.play(ctx)
+                                val soundEnabled = appSettings?.value?.soundClickEnabled ?: soundClickEnabled
+                                if (soundEnabled) ClickPlayer.play(ctx)
                                 pressTokens[tab] = (pressTokens[tab] ?: 0) + 1
                                 onSelectTab(tab)
                             },

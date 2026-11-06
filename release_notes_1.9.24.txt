@@ -1,0 +1,18 @@
+✨ NELEV 1.9.24 — Прогресс загрузки и мгновенные звуки
+
+## Что изменилось
+
+• **Исправлен двойной знак процента при скачивании обновления** — теперь прогресс показывается как «Загрузка… 100%»
+• **Исправлены звуки нажатий на вкладки** — раньше при отключении/включении звуков настройка срабатывала только после переключения на другую вкладку и обратно. Теперь настройка применяется мгновенно
+
+---
+
+## What's Changed
+
+• **Fixed the doubled percent sign in the update download progress** — it now shows "Downloading… 100%"
+• **Fixed tab click sounds** — previously when toggling sounds on/off, the setting would only take effect after switching to another tab and back. Now it applies immediately
+
+---
+
+**Download:** nelev-app-release-1.9.24.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

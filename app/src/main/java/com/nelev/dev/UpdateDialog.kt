@@ -273,7 +273,9 @@ fun UpdateDialog(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    UpdateText.get("downloading", lang).replace("%d", progress.toString()),
+                                    UpdateText.get("downloading", lang)
+                                        .replace("%d", progress.toString())
+                                        .replace("%%", "%"),
                                     fontSize = 12.sp,
                                     color = muted
                                 )
