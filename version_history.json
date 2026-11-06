@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 62,
+      "versionName": "1.9.27",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Убрано дублирование прогресса в окне загрузки обновления — теперь только «Загрузка… 100%», без лишних чисел справа\n• Кнопка «Проверить обновление» теперь с текстом слева и стрелкой справа\n• Новый звук нажатия — более чёткий и приятный\n• Ускорена озвучка приветствия на первом экране настройки",
+        "en": "• Removed progress duplication in the update download window — now only “Downloading… 100%”, without extra numbers on the right\n• The “Check for updates” button now has text on the left and an arrow on the right\n• New click sound — crisper and more pleasant\n• Sped up the greeting voice on the first setup screen",
+        "es": "• Eliminada la duplicación del progreso en la ventana de descarga de actualizaciones — ahora solo «Descargando… 100%», sin números extra a la derecha\n• El botón «Buscar actualizaciones» ahora tiene texto a la izquierda y una flecha a la derecha\n• Nuevo sonido de clic — más nítido y agradable\n• Acelerada la voz de bienvenida en la primera pantalla de configuración",
+        "zh": "• 移除了更新下载窗口中的进度重复——现在只有「下载中… 100%」，右侧没有额外数字\n• 「检查更新」按钮现在左侧有文字，右侧有箭头\n• 新的点击声音——更清脆更愉快\n• 加快了首个设置屏幕上的问候语音",
+        "ja": "• 更新ダウンロードウィンドウの進捗重複を削除——现在は「ダウンロード中… 100%」のみ、右側に余分な数値なし\n• 「更新確認」ボタンは左にテキスト、右に矢印が表示されるように\n• 新しいクリック音——よりクリアで快適\n• 最初の設定画面の挨拶音声を高速化",
+        "ko": "• 업데이트 다운로드 창에서 진행률 중복 제거——이제 “다운로드 중… 100%”만, 오른쪽에 추가 숫자 없음\n• “업데이트 확인” 버튼이 이제 왼쪽에 텍스트, 오른쪽에 화살표 표시\n• 새로운 클릭 소리——더 명확하고 기분 좋음\n• 첫 설정 화면의 인사말 음성을 가속화",
+        "pt": "• Removida a duplicação do progresso na janela de download de atualização — agora apenas «Baixando… 100%», sem números extras à direita\n• O botão «Verificar atualizações» agora tem texto à esquerda e uma seta à direita\n• Novo som de clique — mais nítido e agradável\n• Acelerada a voz de saudação na primeira tela de configuração",
+        "uk": "• Прибрано дублювання прогресу в вікні завантаження оновлення — тепер тільки «Завантаження… 100%», без зайвих чисел справа\n• Кнопка «Перевірити оновлення» тепер з текстом зліва і стрілкою справа\n• Новий звук натискання — більш чіткий і приємний\n• Прискорено озвучення вітання на першому екрані налаштування"
+      }
+    },
+    {
       "versionCode": 61,
       "versionName": "1.9.26",
       "releaseDate": "2026-11-06",
