@@ -3992,13 +3992,14 @@ fun NelevMainScreen(
                                                         }
                                                         dragOffset.animateTo(-dir * screenWidth, tween(120, easing = FastOutSlowInEasing))
                                                         pillJob.join()
+                                                        dragOffset.snapTo(0f)
+                                                        tabIndicatorIndex.snapTo(newIdx.toFloat())
                                                     } else {
                                                         dragOffset.snapTo(-dir * screenWidth)
                                                         tabIndicatorIndex.snapTo(newIdx.toFloat())
+                                                        dragOffset.snapTo(0f)
                                                     }
                                                     selectedTab.value = tabOrder[newIdx]
-                                                    dragOffset.snapTo(0f)
-                                                    tabIndicatorIndex.snapTo(newIdx.toFloat())
                                                     isTransitioning = false
                                                 }
                                             } else {
