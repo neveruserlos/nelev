@@ -2597,8 +2597,9 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
 
     LaunchedEffect(Unit) {
         var waited = 0
-        while (!ttsHolder.ready && waited < 4000) { delay(30); waited += 30 }
+        while (!ttsHolder.ready && waited < 1500) { delay(50); waited += 50 }
         if (ttsHolder.ready) {
+            delay(100)
             speakGreeting(if (pendingSpeak >= 0) pendingSpeak else langIndex)
             pendingSpeak = -1
         }
@@ -7392,36 +7393,41 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            AnimatedOutlinedButton(
-                onClick = {
-                    if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
-                    onCheckUpdates()
-                },
-                modifier = Modifier.weight(1f).height(54.dp),
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = card,
-                    contentColor = text
-                ),
-                border = androidx.compose.foundation.BorderStroke(1.dp, border),
-                effectsEnabled = effectsEnabled
+            Box(
+                Modifier
+                    .weight(1f)
+                    .height(54.dp)
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(card)
+                    .border(1.dp, border, RoundedCornerShape(14.dp))
+                    .clickable {
+                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
+                        onCheckUpdates()
+                    }
+                    .padding(horizontal = 12.dp, vertical = 12.dp)
             ) {
-                Column(
-                    Modifier.fillMaxWidth().padding(horizontal = 12.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Row(
+                    Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        Strings.get("check_update", lang),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = text
-                    )
-                    Text(
-                        "v$APP_VERSION",
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = muted
+                    Column {
+                        Text(
+                            Strings.get("check_update", lang),
+                            color = text,
+                            fontSize = 14.sp
+                        )
+                        Text(
+                            "v$APP_VERSION",
+                            fontSize = 11.sp,
+                            color = muted
+                        )
+                    }
+                    Icon(
+                        Icons.Filled.KeyboardArrowRight,
+                        null,
+                        Modifier.size(20.dp),
+                        tint = muted
                     )
                 }
             }

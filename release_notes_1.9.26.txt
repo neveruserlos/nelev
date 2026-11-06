@@ -1,0 +1,22 @@
+✨ NELEV 1.9.26 — Полировка интерфейса и звуков
+
+## Что изменилось
+
+• **Убрано дублирование прогресса в окне загрузки обновления** — справа теперь только число, без «%»
+• **Кнопка "Проверить обновление" теперь с текстом слева и стрелкой справа**, как "Приостановить" — единый стиль
+• **Новый звук нажатия** — более чёткий и приятный
+• **Ускорена озвучка приветствия на первом экране настройки** — без задержек
+
+---
+
+## What's Changed
+
+• **Removed progress duplication in the update download window** — the right side now shows only the number, without «%»
+• **The "Check for updates" button now has text on the left and an arrow on the right**, like "Pause updates" — unified style
+• **New click sound** — crisper and more pleasant
+• **Sped up the greeting voice on the first setup screen** — no more delays
+
+---
+
+**Download:** nelev-app-release-1.9.26.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

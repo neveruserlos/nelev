@@ -279,7 +279,7 @@ fun UpdateDialog(
                                     fontSize = 12.sp,
                                     color = muted
                                 )
-                                Text("$progress%", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = text)
+                                Text("$progress", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = text)
                             }
                         }
 
