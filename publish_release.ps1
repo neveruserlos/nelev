@@ -1,10 +1,10 @@
-# NELEV Release Script v1.9.16
+# NELEV Release Script v1.9.17
 # Automated GitHub Release Upload
 
 $apkPath = "app\build\outputs\apk\release\app-release.apk"
-$versionName = "1.9.16"
-$versionCode = "51"
-$notesFile = "release_notes_1.9.16.txt"
+$versionName = "1.9.17"
+$versionCode = "52"
+$notesFile = "release_notes_1.9.17.txt"
 
 Write-Host "=== NELEV Release v$versionName ===" -ForegroundColor Cyan
 
