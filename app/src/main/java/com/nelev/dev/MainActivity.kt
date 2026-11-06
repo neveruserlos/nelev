@@ -2596,10 +2596,7 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
     }
 
     LaunchedEffect(Unit) {
-        var waited = 0
-        while (!ttsHolder.ready && waited < 1500) { delay(50); waited += 50 }
         if (ttsHolder.ready) {
-            delay(100)
             speakGreeting(if (pendingSpeak >= 0) pendingSpeak else langIndex)
             pendingSpeak = -1
         }

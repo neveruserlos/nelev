@@ -1,10 +1,10 @@
-# NELEV Release Script v1.9.27
+# NELEV Release Script v1.9.28
 # Automated GitHub Release Upload
 
 $apkPath = "app\build\outputs\apk\release\app-release.apk"
-$versionName = "1.9.27"
-$versionCode = "62"
-$notesFile = "release_notes_1.9.27.txt"
+$versionName = "1.9.28"
+$versionCode = "63"
+$notesFile = "release_notes_1.9.28.txt"
 
 Write-Host "=== NELEV Release v$versionName ===" -ForegroundColor Cyan
 
@@ -32,7 +32,7 @@ Write-Host "Size: $sizeBytes bytes" -ForegroundColor Green
 # Create version.json
 # NOTE: must be UTF-8 WITHOUT BOM and ASCII-safe bullets, otherwise
 # org.json.JSONObject() in Updater.kt fails and the update is never found.
-$changelog = "- Removed progress duplication: now only 'Downloading... 100%' without extra numbers`n- Redesigned Check for updates button with arrow`n- New crisper click sound`n- Faster greeting voice on setup"
+$changelog = "- New pleasant pop click sound`n- Removed greeting voice delay for instant start"
 # Localized changelogs for all languages, so the update window does not depend
 # on raw.githubusercontent.com (which can be blocked). Old clients ignore this
 # field and keep using the plain "changelog" above.

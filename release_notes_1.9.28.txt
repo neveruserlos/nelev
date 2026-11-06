@@ -1,0 +1,18 @@
+✨ NELEV 1.9.28 — Новый звук и мгновенный старт
+
+## Что изменилось
+
+• **Новый звук нажатия** — приятный поп-эффект
+• **Убрана задержка озвучки приветствия на первом экране** — мгновенный старт
+
+---
+
+## What's Changed
+
+• **New click sound** — pleasant pop effect
+• **Removed greeting voice delay on the first screen** — instant start
+
+---
+
+**Download:** nelev-app-release-1.9.28.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

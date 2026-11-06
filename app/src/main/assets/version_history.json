@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 63,
+      "versionName": "1.9.28",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Новый звук нажатия — приятный поп-эффект\n• Убрана задержка озвучки приветствия на первом экране — мгновенный старт",
+        "en": "• New click sound — pleasant pop effect\n• Removed greeting voice delay on the first screen — instant start",
+        "es": "• Nuevo sonido de clic — efecto pop agradable\n• Eliminado el retraso de la voz de bienvenida en la primera pantalla — inicio instantáneo",
+        "zh": "• 新的点击声音——愉快的泡泡效果\n• 移除了首个屏幕上问候语音的延迟——立即开始",
+        "ja": "• 新しいクリック音——心地よいポップ効果\n• 最初の画面の挨拶音声の遅延を削除——即座に開始",
+        "ko": "• 새로운 클릭 소리——기분 좋은 팝 효과\n• 첫 화면의 인사말 음성 지연 제거——즉시 시작",
+        "pt": "• Novo som de clique — efeito pop agradável\n• Removido o atraso da voz de saudação na primeira tela — início instantâneo",
+        "uk": "• Новий звук натискання — приємний поп-ефект\n• Прибрано затримку озвучення вітання на першому екрані — миттєвий старт"
+      }
+    },
+    {
       "versionCode": 62,
       "versionName": "1.9.27",
       "releaseDate": "2026-11-06",
