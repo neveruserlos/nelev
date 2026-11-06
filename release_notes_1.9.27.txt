@@ -1,0 +1,22 @@
+✨ NELEV 1.9.27 — Чистый прогресс загрузки
+
+## Что изменилось
+
+• **Убрано дублирование прогресса в окне загрузки обновления** — теперь только «Загрузка… 100%», без лишних чисел справа
+• **Кнопка "Проверить обновление" теперь с текстом слева и стрелкой справа** — единый стиль с другими кнопками
+• **Новый звук нажатия** — более чёткий и приятный
+• **Ускорена озвучка приветствия на первом экране настройки** — без задержек
+
+---
+
+## What's Changed
+
+• **Removed progress duplication in the update download window** — now only "Downloading… 100%", without extra numbers on the right
+• **The "Check for updates" button now has text on the left and an arrow on the right** — unified style with other buttons
+• **New click sound** — crisper and more pleasant
+• **Sped up the greeting voice on the first setup screen** — no more delays
+
+---
+
+**Download:** nelev-app-release-1.9.27.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

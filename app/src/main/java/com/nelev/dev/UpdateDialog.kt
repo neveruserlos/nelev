@@ -270,7 +270,7 @@ fun UpdateDialog(
                             )
                             Row(
                                 Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                                horizontalArrangement = Arrangement.Start
                             ) {
                                 Text(
                                     UpdateText.get("downloading", lang)
@@ -279,7 +279,6 @@ fun UpdateDialog(
                                     fontSize = 12.sp,
                                     color = muted
                                 )
-                                Text("$progress", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = text)
                             }
                         }
 
