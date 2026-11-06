@@ -940,7 +940,7 @@ fun UpdatePauseDialog(
                             UpdateText.get("pause_subtitle", lang),
                             fontSize = 13.sp,
                             lineHeight = 18.sp,
-                            color = muted
+                            color = if (isDark) Color.White.copy(alpha = 0.72f) else text.copy(alpha = 0.7f)
                         )
 
                         Column(
@@ -1050,7 +1050,10 @@ fun UpdatePauseDialog(
                                     onResume()
                                     onDismiss()
                                 }) {
-                                    Text(UpdateText.get("pause_resume", lang), color = muted)
+                                    Text(
+                                        UpdateText.get("pause_resume", lang),
+                                        color = if (isDark) Color.White.copy(alpha = 0.72f) else text.copy(alpha = 0.7f)
+                                    )
                                 }
                                 Spacer(Modifier.width(8.dp))
                             }

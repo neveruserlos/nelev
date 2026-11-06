@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 54,
+      "versionName": "1.9.19",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Текст «Вы не будете видеть уведомления…» стал ярче, как подсказка в «Обратной связи»\n• Кнопка «Возобновить» теперь такого же цвета\n• Окно паузы обновлений выглядит аккуратнее",
+        "en": "• The \"You won't see notifications…\" text is now brighter, like the feedback hint\n• The \"Resume\" button now uses the same color\n• The update pause window looks cleaner",
+        "es": "• El texto «No verás notificaciones…» ahora es más claro, como la pista en Comentarios\n• El botón «Reanudar» usa el mismo color\n• La ventana de pausa se ve más limpia",
+        "zh": "• “您将看不到通知…”文字更亮，与反馈提示一致\n• “恢复”按钮使用相同颜色\n• 更新暂停窗口更整洁",
+        "ja": "• 「通知は表示されません…」のテキストをフィードバックのヒントと同じ明るさに\n• 「再開」ボタンも同じ色に\n• 更新一時停止ウィンドウがより整った見た目に",
+        "ko": "• \"알림이 표시되지 않습니다…\" 텍스트를 피드백 힌트처럼 더 밝게\n• \"재개\" 버튼도 같은 색상 사용\n• 업데이트 일시 중지 창이 더 깔끔해짐",
+        "pt": "• O texto «Você não verá notificações…» ficou mais claro, como a dica em Comentários\n• O botão «Retomar» usa a mesma cor\n• A janela de pausa ficou mais limpa",
+        "uk": "• Текст «Ви не бачитимете сповіщень…» став яскравішим, як підказка у «Зворотному зв'язку»\n• Кнопка «Відновити» тепер такого ж кольору\n• Вікно паузи оновлень виглядає охайніше"
+      }
+    },
+    {
       "versionCode": 53,
       "versionName": "1.9.18",
       "releaseDate": "2026-11-06",

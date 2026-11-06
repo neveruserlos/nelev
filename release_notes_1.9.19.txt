@@ -1,0 +1,20 @@
+🎨 NELEV 1.9.19 — Цвет текста в окне паузы
+
+## Что изменилось
+
+• **Текст «Вы не будете видеть уведомления…» стал ярче** — такой же, как подсказка «Опиши, что добавить или исправить» в «Обратной связи»
+• **Кнопка «Возобновить» теперь такого же цвета**
+• Окно приостановки обновлений выглядит аккуратнее и читабельнее
+
+---
+
+## What's Changed
+
+• **The "You won't see update notifications…" text is brighter** — same as the feedback hint
+• **The "Resume" button now uses the same color**
+• The update pause window looks cleaner and easier to read
+
+---
+
+**Download:** nelev-app-release-1.9.19.apk  
+**GitHub:** https://github.com/neveruserlos/nelev
