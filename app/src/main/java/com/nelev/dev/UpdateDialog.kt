@@ -607,8 +607,12 @@ fun WhatsNewDialog(
     val buttonContent = if (isDark) Color.Black else Color.White
 
     // Плавное появление окна, чтобы оно не «выскакивало» и не телепалось
-    var appeared by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { appeared = true }
+    var appeared by remember(versionName) { mutableStateOf(false) }
+    LaunchedEffect(versionName) { 
+        appeared = false
+        kotlinx.coroutines.delay(50)
+        appeared = true 
+    }
 
     Dialog(
         onDismissRequest = onDismiss,

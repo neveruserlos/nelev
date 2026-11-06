@@ -1,0 +1,20 @@
+✨ NELEV 1.9.31 — Исправление анимаций
+
+## Что изменилось
+
+• **Исправлен двойной свайп** при переходе между вкладками
+• **Убрано ускорение анимации** при быстром переключении вкладок
+• **Окно "Что нового" больше не телепается** при повторном открытии
+
+---
+
+## What's Changed
+
+• **Fixed double swipe** when transitioning between tabs
+• **Removed animation acceleration** when rapidly switching tabs
+• **What's New dialog no longer glitches** when reopened
+
+---
+
+**Download:** nelev-app-release-1.9.31.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

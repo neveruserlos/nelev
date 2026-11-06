@@ -4063,14 +4063,22 @@ fun NelevMainScreen(
                         AnimatedContent(
                             targetState = selectedTab.value,
                             transitionSpec = {
-                                if (dragOffset.value == 0f) {
+                                if (!isTransitioning && abs(dragOffset.value) < 10f) {
                                     // Анимация при клике на вкладку
                                     val direction = if (targetState > initialState) 
                                         AnimatedContentTransitionScope.SlideDirection.Left 
                                     else 
                                         AnimatedContentTransitionScope.SlideDirection.Right
-                                    slideIntoContainer(direction, animationSpec = tween(300, easing = FastOutSlowInEasing)) + fadeIn(tween(300)) togetherWith
-                                        slideOutOfContainer(direction, animationSpec = tween(300, easing = FastOutSlowInEasing)) + fadeOut(tween(300))
+                                    slideIntoContainer(
+                                        direction, 
+                                        animationSpec = tween(300, easing = FastOutSlowInEasing),
+                                        initialOffset = { it / 3 }
+                                    ) + fadeIn(tween(300)) togetherWith
+                                        slideOutOfContainer(
+                                            direction, 
+                                            animationSpec = tween(300, easing = FastOutSlowInEasing),
+                                            targetOffset = { -it / 3 }
+                                        ) + fadeOut(tween(300))
                                 } else {
                                     // Без анимации при drag (там своя анимация через offset)
                                     fadeIn(tween(0)) togetherWith fadeOut(tween(0))
@@ -7497,16 +7505,14 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                     }
                 } catch (_: Exception) { 0 }
                 val changelog = remember(currentCode, lang) { VersionHistory.changelog(ctx, currentCode, lang) ?: "" }
-                key(showWhatsNewLocal) {
-                    WhatsNewDialog(
-                        versionName = APP_VERSION,
-                        changelog = changelog,
-                        colors = colors,
-                        lang = lang,
-                        isDark = appSettings.value.isDark,
-                        onDismiss = { showWhatsNewLocal = false }
-                    )
-                }
+                WhatsNewDialog(
+                    versionName = APP_VERSION,
+                    changelog = changelog,
+                    colors = colors,
+                    lang = lang,
+                    isDark = appSettings.value.isDark,
+                    onDismiss = { showWhatsNewLocal = false }
+                )
             }
         }
 
