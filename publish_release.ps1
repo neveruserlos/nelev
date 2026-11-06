@@ -1,10 +1,10 @@
-# NELEV Release Script v1.9.14
+# NELEV Release Script v1.9.15
 # Automated GitHub Release Upload
 
 $apkPath = "app\build\outputs\apk\release\app-release.apk"
-$versionName = "1.9.14"
-$versionCode = "49"
-$notesFile = "release_notes_1.9.14.txt"
+$versionName = "1.9.15"
+$versionCode = "50"
+$notesFile = "release_notes_1.9.15.txt"
 
 Write-Host "=== NELEV Release v$versionName ===" -ForegroundColor Cyan
 
@@ -30,7 +30,7 @@ $sizeBytes = (Get-Item $newApkPath).Length
 Write-Host "Size: $sizeBytes bytes" -ForegroundColor Green
 
 # Create version.json
-$changelog = "• Fixed selection plate position`n• Removed What's New expansion jerking`n• Fixed What's New window jumping down`n• All animations work smoothly"
+$changelog = "• Fixed element positioning in update pause window`n• Selection plate now aligns perfectly with menu items`n• Improved UI element nesting structure"
 $versionJson = @{
     versionCode = [int]$versionCode
     versionName = $versionName

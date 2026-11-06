@@ -1,0 +1,28 @@
+🎨 NELEV 1.9.15 — UI Fix
+
+## Что исправлено
+
+• **Исправлено позиционирование элементов** в окне паузы обновлений
+• **Плашка выбора теперь точно совпадает** с пунктами меню
+• **Улучшена структура вложенности** UI элементов
+
+---
+
+## What's Fixed
+
+• **Fixed element positioning** in update pause window
+• **Selection plate now aligns perfectly** with menu items
+• **Improved UI element nesting** structure
+
+---
+
+## Lo que se corrigió
+
+• **Posicionamiento de elementos corregido** en ventana de pausa de actualización
+• **La placa de selección ahora se alinea perfectamente** con los elementos del menú
+• **Estructura de anidamiento de elementos UI mejorada**
+
+---
+
+**Download:** nelev-app-release-1.9.15.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

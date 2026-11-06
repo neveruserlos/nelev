@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 50,
+      "versionName": "1.9.15",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Исправлено позиционирование элементов в окне паузы обновлений\n• Плашка выбора теперь точно совпадает с пунктами меню\n• Улучшена структура вложенности UI элементов",
+        "en": "• Fixed element positioning in update pause window\n• Selection plate now aligns perfectly with menu items\n• Improved UI element nesting structure",
+        "es": "• Posicionamiento de elementos corregido en ventana de pausa de actualización\n• La placa de selección ahora se alinea perfectamente con los elementos del menú\n• Estructura de anidamiento de elementos UI mejorada",
+        "zh": "• 修复了更新暂停窗口中的元素定位\n• 选择板现在与菜单项完美对齐\n• 改进了UI元素嵌套结构",
+        "ja": "• 更新一時停止ウィンドウでの要素配置を修正\n• 選択プレートがメニュー項目と完全に整列するようになりました\n• UI要素のネスト構造を改善",
+        "ko": "• 업데이트 일시 중지 창의 요소 위치 수정\n• 선택 플레이트가 이제 메뉴 항목과 완벽하게 정렬됨\n• UI 요소 중첩 구조 개선",
+        "pt": "• Posicionamento de elementos corrigido na janela de pausa de atualização\n• A placa de seleção agora se alinha perfeitamente com os itens do menu\n• Estrutura de aninhamento de elementos UI melhorada",
+        "uk": "• Виправлено позиціонування елементів у вікні паузи оновлень\n• Плашка вибору тепер точно збігається з пунктами меню\n• Покращено структуру вкладеності UI елементів"
+      }
+    },
+    {
       "versionCode": 49,
       "versionName": "1.9.14",
       "releaseDate": "2026-11-04",

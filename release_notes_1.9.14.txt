@@ -1,0 +1,31 @@
+NELEV 1.9.14 - Animation Fixes
+
+🎨 Animation Fixes:
+• Fixed selection plate position in update pause dialog
+• Removed jerking when expanding "What's New" in notification
+• Fixed "What's New" window jumping down after appearance
+• All animations now work smoothly and naturally
+
+🔧 Technical Details:
+• Selection plate offset: (index * 52).dp to account for spacing
+• Removed extra +10.dp offset that shifted plate down
+• Replaced animateContentSize with AnimatedVisibility for changelog
+• Wrapped WhatsNewDialog Surface in Box with wrapContentHeight()
+
+---
+
+Русская версия:
+
+NELEV 1.9.14 - Исправление анимаций
+
+🎨 Исправления анимаций:
+• Исправлено расположение плашки выбора в окне паузы обновлений
+• Убрано дёрганье при раскрытии "Что нового" в уведомлении
+• Исправлено телепание окна "Что нового" вниз после появления
+• Все анимации теперь работают плавно и естественно
+
+🔧 Технические детали:
+• Offset плашки выбора: (index * 52).dp с учётом spacing
+• Убран лишний offset +10.dp который смещал плашку вниз
+• Заменён animateContentSize на AnimatedVisibility для changelog
+• Surface в WhatsNewDialog обёрнут в Box с wrapContentHeight()

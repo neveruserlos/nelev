@@ -1,0 +1,39 @@
+NELEV 1.9.13 - Animation Polish & Localization Fix
+
+🎨 Animation Improvements:
+• Removed window jerking when resizing (update pause dialog)
+• Selection plate now smoothly "floats" between items with spring animation
+• Fixed What's New window jerking on expansion
+• All animations now use spring physics for natural movement
+
+🌍 Localization:
+• Fixed changelog translation loading for all languages
+• All languages now properly load their respective translations from version_history.json
+
+🔧 Technical:
+• Replaced AnimatedVisibility with animateContentSize for smoother resize
+• Added animated background plate that follows selection with spring physics
+• Spring parameters: DampingRatioMediumBouncy for selection, DampingRatioNoBouncy for resize
+• Offset calculation: (selectedIndex * 44).dp for precise positioning
+
+---
+
+Русская версия:
+
+NELEV 1.9.13 - Доработка анимаций и исправление локализации
+
+🎨 Улучшения анимации:
+• Убрано дёрганье окна при изменении размера (окно паузы обновлений)
+• Плашка выбора теперь плавно "переплывает" между пунктами с spring анимацией
+• Исправлено дёрганье окна "Что нового" при раскрытии
+• Все анимации теперь используют spring физику для естественного движения
+
+🌍 Локализация:
+• Исправлена загрузка переводов changelog для всех языков
+• Все языки теперь правильно загружают свои переводы из version_history.json
+
+🔧 Технические изменения:
+• Заменён AnimatedVisibility на animateContentSize для более плавного изменения размера
+• Добавлена анимированная фоновая плашка, которая следует за выбором с spring физикой
+• Параметры spring: DampingRatioMediumBouncy для выбора, DampingRatioNoBouncy для изменения размера
+• Расчёт offset: (selectedIndex * 44).dp для точного позиционирования

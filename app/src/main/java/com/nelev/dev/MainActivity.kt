@@ -8431,29 +8431,6 @@ fun AboutAppOverlay(
                                         )
                                         
                                         Box {
-                                            // Фоновая плашка которая переплывает
-                                            val selectedOffset by animateDpAsState(
-                                                targetValue = if (selectedPauseOption != null) (selectedPauseOption!! * 52).dp else 0.dp,
-                                                animationSpec = spring(
-                                                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                                                    stiffness = Spring.StiffnessMedium
-                                                ),
-                                                label = "pause_selection_offset"
-                                            )
-                                            
-                                            if (selectedPauseOption != null) {
-                                                Box(
-                                                    Modifier
-                                                        .offset(y = selectedOffset)
-                                                        .fillMaxWidth()
-                                                        .height(44.dp)
-                                                        .padding(horizontal = 10.dp)
-                                                        .clip(RoundedCornerShape(12.dp))
-                                                        .background(colors["accent"]!!.copy(alpha = 0.12f))
-                                                        .border(1.dp, colors["accent"]!!.copy(alpha = 0.35f), RoundedCornerShape(12.dp))
-                                                )
-                                            }
-                                            
                                             Column(
                                                 Modifier
                                                     .fillMaxWidth()
@@ -8463,6 +8440,32 @@ fun AboutAppOverlay(
                                                     .padding(10.dp),
                                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                                             ) {
+                                                Box {
+                                                    // Фоновая плашка которая переплывает
+                                                    val selectedOffset by animateDpAsState(
+                                                        targetValue = if (selectedPauseOption != null) (selectedPauseOption!! * 52).dp else 0.dp,
+                                                        animationSpec = spring(
+                                                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                                                            stiffness = Spring.StiffnessMedium
+                                                        ),
+                                                        label = "pause_selection_offset"
+                                                    )
+                                                    
+                                                    if (selectedPauseOption != null) {
+                                                        Box(
+                                                            Modifier
+                                                                .offset(y = selectedOffset)
+                                                                .fillMaxWidth()
+                                                                .height(44.dp)
+                                                                .clip(RoundedCornerShape(12.dp))
+                                                                .background(colors["accent"]!!.copy(alpha = 0.12f))
+                                                                .border(1.dp, colors["accent"]!!.copy(alpha = 0.35f), RoundedCornerShape(12.dp))
+                                                        )
+                                                    }
+                                                    
+                                                    Column(
+                                                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                                                    ) {
                                                 presets.forEachIndexed { idx, (label, days) ->
                                                     val isSelected = selectedPauseOption == idx
                                                     Row(
@@ -8509,6 +8512,8 @@ fun AboutAppOverlay(
                                                         )
                                                     }
                                                 }
+                                            }
+                                        }
                                             }
                                         }
                                         
