@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 66,
+      "versionName": "1.9.31",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Исправлен двойной свайп при переходе между вкладками\n• Убрано ускорение анимации при быстром переключении вкладок\n• Окно «Что нового» больше не телепается при повторном открытии",
+        "en": "• Fixed double swipe when transitioning between tabs\n• Removed animation acceleration when rapidly switching tabs\n• What's New dialog no longer glitches when reopened",
+        "es": "• Corregido el doble deslizamiento al cambiar entre pestañas\n• Eliminada la aceleración de animación al cambiar rápidamente de pestaña\n• El diálogo Novedades ya no parpadea al reabrirse",
+        "zh": "• 修复了标签页切换时的双重滑动\n• 移除了快速切换标签页时的动画加速\n• 新功能对话框重新打开时不再闪烁",
+        "ja": "• タブ切り替え時のダブルスワイプを修正\n• タブの高速切り替え時のアニメーション加速を削除\n• 新機能ダイアログが再度開いたときに点滅しなくなりました",
+        "ko": "• 탭 전환 시 이중 스와이프 수정\n• 탭 빠른 전환 시 애니메이션 가속 제거\n• 새 기능 대화상자를 다시 열 때 깜박임 없음",
+        "pt": "• Corrigido o duplo deslizar ao alternar entre abas\n• Removida a aceleração da animação ao alternar rapidamente entre abas\n• O diálogo Novidades não pisca mais ao reabrir",
+        "uk": "• Виправлено подвійний свайп при переході між вкладками\n• Прибрано прискорення анімації при швидкому перемиканні вкладок\n• Вікно «Що нового» більше не телепортується при повторному відкритті"
+      }
+    },
+    {
       "versionCode": 65,
       "versionName": "1.9.30",
       "releaseDate": "2026-11-07",
