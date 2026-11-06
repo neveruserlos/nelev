@@ -30,7 +30,9 @@ $sizeBytes = (Get-Item $newApkPath).Length
 Write-Host "Size: $sizeBytes bytes" -ForegroundColor Green
 
 # Create version.json
-$changelog = "• Improved text centering in update pause list items`n• Added selected period description in muted text`n• You won't see update notifications text shown for each option"
+# NOTE: must be UTF-8 WITHOUT BOM and ASCII-safe bullets, otherwise
+# org.json.JSONObject() in Updater.kt fails and the update is never found.
+$changelog = "- Improved text centering in update pause list items`n- Added selected period description in muted text`n- You won't see update notifications text shown for each option"
 $versionJson = @{
     versionCode = [int]$versionCode
     versionName = $versionName
@@ -38,11 +40,18 @@ $versionJson = @{
     sha256 = $hash
     sizeBytes = $sizeBytes
     changelog = $changelog
+    minSdk = 26
 } | ConvertTo-Json
 
 $versionJsonPath = "app\build\outputs\apk\release\version.json"
-$versionJson | Out-File -FilePath $versionJsonPath -Encoding UTF8
-Write-Host "version.json created" -ForegroundColor Green
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+[System.IO.File]::WriteAllText((Join-Path (Get-Location).Path $versionJsonPath), $versionJson, $utf8NoBom)
+$firstBytes = [System.IO.File]::ReadAllBytes((Join-Path (Get-Location).Path $versionJsonPath))[0..2]
+if ($firstBytes[0] -eq 0xEF -and $firstBytes[1] -eq 0xBB -and $firstBytes[2] -eq 0xBF) {
+    Write-Host "ERROR: version.json has BOM, update check will fail" -ForegroundColor Red
+    exit 1
+}
+Write-Host "version.json created (UTF-8, no BOM)" -ForegroundColor Green
 
 # Create GitHub Release
 Write-Host "Creating GitHub Release..." -ForegroundColor Yellow
