@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 67,
+      "versionName": "1.9.32",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Полностью исправлен двойной свайп при переходе между вкладками\n• Автоматическое окно обновления теперь показывается даже если обновление было пропущено ранее",
+        "en": "• Completely fixed double swipe when transitioning between tabs\n• Automatic update dialog now shows even if update was previously skipped",
+        "es": "• Corregido completamente el doble deslizamiento al cambiar entre pestañas\n• El diálogo de actualización automático ahora se muestra incluso si la actualización fue omitida anteriormente",
+        "zh": "• 完全修复了标签页切换时的双重滑动\n• 即使之前跳过更新，自动更新对话框现在也会显示",
+        "ja": "• タブ切り替え時のダブルスワイプを完全に修正\n• 以前に更新をスキップした場合でも、自動更新ダイアログが表示されるようになりました",
+        "ko": "• 탭 전환 시 이중 스와이프 완전히 수정\n• 이전에 업데이트를 건너뛴 경우에도 자동 업데이트 대화상자가 표시됩니다",
+        "pt": "• Corrigido completamente o duplo deslizar ao alternar entre abas\n• O diálogo de atualização automático agora é exibido mesmo se a atualização foi ignorada anteriormente",
+        "uk": "• Повністю виправлено подвійний свайп при переході між вкладками\n• Автоматичне вікно оновлення тепер показується навіть якщо оновлення було пропущено раніше"
+      }
+    },
+    {
       "versionCode": 66,
       "versionName": "1.9.31",
       "releaseDate": "2026-11-06",
