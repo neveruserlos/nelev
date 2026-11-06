@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 65,
+      "versionName": "1.9.30",
+      "releaseDate": "2026-11-07",
+      "changelog": {
+        "ru": "• Исправлен UID — теперь генерируется новый при сбросе настроек\n• Убран фон в поле «Свой срок» при приостановке обновлений\n• Слово «дней» теперь цветом как текст уведомления\n• Окно «Что нового» больше не телепается при повторном открытии\n• Анимация перехода между вкладками при клике\n• Плавное исчезновение текста «прокрутите...»\n• Автоматическое окно обновления при запуске с блокировкой на 3 секунды",
+        "en": "• Fixed UID — now generates a new one when resetting settings\n• Removed background in custom duration field when pausing updates\n• The word “days” now matches notification text color\n• What’s New dialog no longer glitches when reopened\n• Tab transition animation when clicking\n• Smooth fade-out of “scroll...” text\n• Automatic update dialog on launch with 3-second dismiss lock",
+        "es": "• UID corregido — ahora genera uno nuevo al restablecer configuración\n• Eliminado el fondo en el campo de duración personalizada al pausar actualizaciones\n• La palabra «días» ahora coincide con el color del texto de notificación\n• El diálogo Novedades ya no parpadea al reabrirse\n• Animación de transición entre pestañas al hacer clic\n• Desvanecimiento suave del texto «desplazar...»\n• Diálogo de actualización automático al iniciar con bloqueo de 3 segundos",
+        "zh": "• 修复UID——重置设置时现在会生成新的\n• 移除了暂停更新时自定义时长字段的背景\n• 「天」字现在与通知文本颜色匹配\n• 新功能对话框重新打开时不再闪烁\n• 点击时的标签页过渡动画\n• 「滚动...」文本的平滑淡出\n• 启动时自动显示更新对话框，带6秒锁定关闭",
+        "ja": "• UIDを修正——設定リセット時に新しいものを生成\n• 更新一時停止時のカスタム期間フィールドの背景を削除\n• 「日」の文字が通知テキストの色と一致\n• 新機能ダイアログが再度開いたときに点滅しなくなりました\n• クリック時のタブ遷移アニメーション\n• 「スクロール...」テキストのスムーズなフェードアウト\n• 起動時に自動更新ダイアログ、3秒間の閉じるロック付き",
+        "ko": "• UID 수정——설정 초기화 시 새로 생성\n• 업데이트 일시 중지 시 사용자 지정 기간 필드의 배경 제거\n• “일” 단어가 이제 알림 텍스트 색상과 일치\n• 새 기능 대화상자를 다시 열 때 깜박임 없음\n• 클릭 시 탭 전환 애니메이션\n• “스크롬...” 텍스트의 부드러운 페이드아웃\n• 실행 시 자동 업데이트 대화상자, 3초 닫기 잠금 포함",
+        "pt": "• UID corrigido — agora gera um novo ao redefinir configurações\n• Removido o fundo no campo de duração personalizada ao pausar atualizações\n• A palavra «dias» agora corresponde à cor do texto de notificação\n• O diálogo Novidades não pisca mais ao reabrir\n• Animação de transição entre abas ao clicar\n• Desvanecimento suave do texto «rolar...»\n• Diálogo de atualização automático na inicialização com bloqueio de 3 segundos",
+        "uk": "• Виправлено UID — тепер генерується новий при скиданні налаштувань\n• Прибрано фон у полі «Свій строк» при призупиненні оновлень\n• Слово «днів» тепер кольором як текст сповіщення\n• Вікно «Що нового» більше не телепортується при повторному відкритті\n• Анімація переходу між вкладками при кліку\n• Плавне зникнення тексту «прокрутіть...»\n• Автоматичне вікно оновлення при запуску з блокуванням на 3 секунди"
+      }
+    },
+    {
       "versionCode": 64,
       "versionName": "1.9.29",
       "releaseDate": "2026-11-06",
