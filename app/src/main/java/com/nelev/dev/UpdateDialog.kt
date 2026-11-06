@@ -261,24 +261,55 @@ fun UpdateDialog(
                             }
                         }
 
-                        if (downloading) {
-                            LinearProgressIndicator(
-                                progress = { progress / 100f },
-                                modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
-                                color = accent,
-                                trackColor = border
-                            )
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Start
-                            ) {
-                                Text(
-                                    UpdateText.get("downloading", lang)
-                                        .replace("%d", progress.toString())
-                                        .replace("%%", "%"),
-                                    fontSize = 12.sp,
-                                    color = muted
+                        AnimatedVisibility(
+                            visible = downloading,
+                            enter = expandVertically(
+                                animationSpec = tween(
+                                    durationMillis = 350,
+                                    easing = FastOutSlowInEasing
+                                ),
+                                expandFrom = Alignment.Top,
+                                clip = true
+                            ) + fadeIn(
+                                animationSpec = tween(
+                                    durationMillis = 250,
+                                    delayMillis = 50,
+                                    easing = FastOutSlowInEasing
                                 )
+                            ),
+                            exit = shrinkVertically(
+                                animationSpec = tween(
+                                    durationMillis = 300,
+                                    easing = FastOutSlowInEasing
+                                ),
+                                shrinkTowards = Alignment.Top,
+                                clip = true
+                            ) + fadeOut(
+                                animationSpec = tween(
+                                    durationMillis = 200,
+                                    easing = FastOutSlowInEasing
+                                )
+                            )
+                        ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                LinearProgressIndicator(
+                                    progress = { progress / 100f },
+                                    modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
+                                    color = accent,
+                                    trackColor = border
+                                )
+                                Row(
+                                    Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Start
+                                ) {
+                                    Text(
+                                        UpdateText.get("downloading", lang)
+                                            .replace("%d", progress.toString())
+                                            .replace("%%", "%"),
+                                        fontSize = 12.sp,
+                                        color = muted
+                                    )
+                                }
                             }
                         }
 
@@ -586,14 +617,16 @@ fun WhatsNewDialog(
             AnimatedVisibility(
                 visible = appeared,
                 enter = fadeIn(
-                    animationSpec = tween(200, easing = FastOutSlowInEasing)
+                    animationSpec = tween(300, easing = FastOutSlowInEasing)
                 ) + scaleIn(
-                    initialScale = 0.92f,
-                    animationSpec = tween(280, easing = FastOutSlowInEasing)
+                    initialScale = 0.88f,
+                    animationSpec = tween(350, easing = FastOutSlowInEasing)
                 ),
-                exit = fadeOut(animationSpec = tween(120)) + scaleOut(
-                    targetScale = 0.96f,
-                    animationSpec = tween(140)
+                exit = fadeOut(
+                    animationSpec = tween(250, easing = FastOutSlowInEasing)
+                ) + scaleOut(
+                    targetScale = 0.88f,
+                    animationSpec = tween(300, easing = FastOutSlowInEasing)
                 )
             ) {
             Surface(

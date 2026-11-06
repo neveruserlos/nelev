@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 64,
+      "versionName": "1.9.29",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Убрана внутренняя рамка в поле «Свой срок» при приостановке обновлений\n• Плавная анимация возврата при нажатии «Возобновить»\n• Плавное расширение окна обновления при появлении прогресс-бара\n• Улучшены анимации открытия/закрытия всех диалогов\n• Скачанный APK удаляется автоматически после установки\n• Кнопка «Сбросить настройки» в скрытом меню (нажмите 3 раза на версию)",
+        "en": "• Removed inner border in the custom duration field when pausing updates\n• Smooth animation when pressing Resume\n• Smooth expansion of update window when progress bar appears\n• Improved open/close animations for all dialogs\n• Downloaded APK is automatically deleted after installation\n• Reset settings button in hidden menu (tap version 3 times)",
+        "es": "• Eliminado el borde interior en el campo de duración personalizada al pausar actualizaciones\n• Animación suave al presionar Reanudar\n• Expansión suave de la ventana de actualización cuando aparece la barra de progreso\n• Mejores animaciones de abrir/cerrar para todos los diálogos\n• El APK descargado se elimina automáticamente después de la instalación\n• Botón para restablecer configuración en menú oculto (toca versión 3 veces)",
+        "zh": "• 移除了暂停更新时自定义时长字段的内边框\n• 按下恢复时的平滑动画\n• 进度条出现时更新窗口的平滑扩展\n• 改进了所有对话框的打开/关闭动画\n• 下载的APK在安装后自动删除\n• 隐藏菜单中的重置设置按钮（点击版本3次）",
+        "ja": "• 更新一時停止時のカスタム期間フィールドの内側枠線を削除\n• 再開を押したときのスムーズなアニメーション\n• 進捗バーが表示されるときの更新ウィンドウのスムーズな拡大\n• すべてのダイアログの開閉アニメーションを改善\n• ダウンロードしたAPKはインストール後に自動削除\n• 非表示メニューに設定リセットボタン（バージョンを3回タップ）",
+        "ko": "• 업데이트 일시 중지 시 사용자 지정 기간 필드의 내부 테두리 제거\n• 재개를 누를 때 부드러운 애니메이션\n• 진행률 표시줄이 나타날 때 업데이트 창의 부드러운 확장\n• 모든 대화상자의 열기/닫기 애니메이션 개선\n• 다운로드한 APK는 설치 후 자동으로 삭제\n• 숨겨진 메뉴의 설정 초기화 버튼(버전을 3번 탭)",
+        "pt": "• Removida a borda interna no campo de duração personalizada ao pausar atualizações\n• Animação suave ao pressionar Retomar\n• Expansão suave da janela de atualização quando a barra de progresso aparece\n• Melhores animações de abrir/fechar para todos os diálogos\n• O APK baixado é automaticamente excluído após a instalação\n• Botão para redefinir configurações no menu oculto (toque na versão 3 vezes)",
+        "uk": "• Прибрано внутрішню рамку в полі «Свій строк» при призупиненні оновлень\n• Плавна анімація при натисканні «Відновити»\n• Плавне розширення вікна оновлення при появі прогрес-бару\n• Поліпшено анімації відкриття/закриття всіх діалогів\n• Завантажений APK видаляється автоматично після встановлення\n• Кнопка «Скинути налаштування» у прихованому меню (натисніть на версію 3 рази)"
+      }
+    },
+    {
       "versionCode": 63,
       "versionName": "1.9.28",
       "releaseDate": "2026-11-06",

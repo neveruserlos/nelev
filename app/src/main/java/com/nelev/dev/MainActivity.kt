@@ -1544,6 +1544,12 @@ object Strings {
         "record_no_data" to "Нет записи",
         "record_hint" to "Идёт запись... эффекты применяются как при стриме",
         "raw_hint" to "OFF = 1-в-1 с микрофона",
+        "fps_log_send" to "Отправить лог FPS",
+        "fps_log_sent" to "Лог отправлен",
+        "system_stats" to "Системная статистика",
+        "reset_settings" to "Сбросить настройки",
+        "reset_confirm" to "Сбросить",
+        "reset_warning" to "Все настройки будут сброшены, и вы вернётесь на экран первоначальной настройки."
     
     )
     private val ES = mapOf(
@@ -1671,7 +1677,13 @@ object Strings {
         "record_play" to "播放",
         "record_no_data" to "无录制",
         "record_hint" to "录制中... 效果与推流时一致",
-        "raw_hint" to "关闭 = 1:1 来自麦克风",
+                "raw_hint" to "OFF = 1:1 来自麦克风",
+        "fps_log_send" to "发送FPS日志",
+        "fps_log_sent" to "日志已发送",
+        "system_stats" to "系统统计",
+        "reset_settings" to "重置设置",
+        "reset_confirm" to "重置",
+        "reset_warning" to "这将重置所有设置并返回设置屏幕。"
     
     )
     private val JA = mapOf(
@@ -1735,7 +1747,13 @@ object Strings {
         "record_play" to "再生",
         "record_no_data" to "録音なし",
         "record_hint" to "録音中... エフェクトは配信時と同じ",
-        "raw_hint" to "OFF = マイクから1:1",
+                "raw_hint" to "OFF = マイクから1:1",
+        "fps_log_send" to "FPSログを送信",
+        "fps_log_sent" to "ログ送信済み",
+        "system_stats" to "システム統計",
+        "reset_settings" to "設定をリセット",
+        "reset_confirm" to "リセット",
+        "reset_warning" to "すべての設定がリセットされ、セットアップ画面に戻ります。"
     
     )
     private val KO = mapOf(
@@ -7791,8 +7809,10 @@ fun AboutAppOverlay(
 
     AnimatedVisibility(
         visible = showAbout,
-        enter = fadeIn(tween(if (effectsEnabled) 300 else 0, easing = FastOutSlowInEasing)),
-        exit = fadeOut(tween(if (effectsEnabled) 250 else 0, easing = FastOutSlowInEasing))
+        enter = fadeIn(tween(if (effectsEnabled) 350 else 0, easing = FastOutSlowInEasing)) + 
+                scaleIn(initialScale = 0.88f, animationSpec = tween(if (effectsEnabled) 380 else 0, easing = FastOutSlowInEasing)),
+        exit = fadeOut(tween(if (effectsEnabled) 300 else 0, easing = FastOutSlowInEasing)) +
+               scaleOut(targetScale = 0.88f, animationSpec = tween(if (effectsEnabled) 320 else 0, easing = FastOutSlowInEasing))
     ) {
         Box(
             modifier = Modifier
@@ -7919,19 +7939,19 @@ fun AboutAppOverlay(
                                 targetState = if (showPauseUpdates) 2 else if (showFeedback) 1 else 0,
                                 transitionSpec = {
                                     val enterSpec = tween<Float>(
-                                        if (effectsEnabled) 280 else 0,
+                                        if (effectsEnabled) 350 else 0,
                                         easing = FastOutSlowInEasing
                                     )
                                     val exitSpec = tween<Float>(
-                                        if (effectsEnabled) 180 else 0,
+                                        if (effectsEnabled) 300 else 0,
                                         easing = FastOutSlowInEasing
                                     )
                                     val sizeSpec = tween<IntSize>(
-                                        if (effectsEnabled) 340 else 0,
+                                        if (effectsEnabled) 400 else 0,
                                         easing = FastOutSlowInEasing
                                     )
-                                    (fadeIn(enterSpec) + scaleIn(initialScale = 0.985f, animationSpec = enterSpec))
-                                        .togetherWith(fadeOut(exitSpec))
+                                    (fadeIn(enterSpec) + scaleIn(initialScale = 0.92f, animationSpec = enterSpec))
+                                        .togetherWith(fadeOut(exitSpec) + scaleOut(targetScale = 0.92f, animationSpec = exitSpec))
                                         .using(SizeTransform(clip = true) { _, _ -> sizeSpec })
                                 },
                                 label = "about_content_swap"
@@ -8208,6 +8228,69 @@ fun AboutAppOverlay(
                                                     fontWeight = FontWeight.SemiBold
                                                 )
                                             }
+                                        }
+                                    }
+
+                                    // Кнопка "Сбросить настройки"
+                                    if (showStatsToggle.value) {
+                                        var showResetConfirm by remember { mutableStateOf(false) }
+                                        Button(
+                                            onClick = {
+                                                if (soundClickEnabled) ClickPlayer.play(ctx)
+                                                showResetConfirm = true
+                                            },
+                                            modifier = Modifier.fillMaxWidth().height(48.dp),
+                                            shape = RoundedCornerShape(14.dp),
+                                            colors = ButtonDefaults.buttonColors(
+                                                containerColor = Color(0xFFE5484D).copy(alpha = 0.15f),
+                                                contentColor = Color(0xFFE5484D)
+                                            )
+                                        ) {
+                                            Row(
+                                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Icon(Icons.Filled.Refresh, null, Modifier.size(18.dp))
+                                                Text(
+                                                    Strings.get("reset_settings", lang).ifEmpty { "Reset settings" },
+                                                    fontWeight = FontWeight.SemiBold
+                                                )
+                                            }
+                                        }
+                                        
+                                        if (showResetConfirm) {
+                                            androidx.compose.material3.AlertDialog(
+                                                onDismissRequest = { showResetConfirm = false },
+                                                confirmButton = {
+                                                    androidx.compose.material3.TextButton(onClick = {
+                                                        if (soundClickEnabled) ClickPlayer.play(ctx)
+                                                        showResetConfirm = false
+                                                        // Сброс настроек и переход на экран онбординга
+                                                        val resetSettings = AppSettings(
+                                                            isFirstLaunch = true,
+                                                            isDark = true,
+                                                            soundNotifEnabled = true,
+                                                            soundClickEnabled = true,
+                                                            visualEffectsEnabled = true,
+                                                            language = "en"
+                                                        )
+                                                        save(resetSettings)
+                                                        onDismiss()
+                                                    }) {
+                                                        Text(Strings.get("reset_confirm", lang).ifEmpty { "Reset" })
+                                                    }
+                                                },
+                                                dismissButton = {
+                                                    androidx.compose.material3.TextButton(onClick = {
+                                                        if (soundClickEnabled) ClickPlayer.play(ctx)
+                                                        showResetConfirm = false
+                                                    }) {
+                                                        Text(Strings.get("cancel", lang).ifEmpty { "Cancel" })
+                                                    }
+                                                },
+                                                title = { Text(Strings.get("reset_settings", lang).ifEmpty { "Reset settings" }) },
+                                                text = { Text(Strings.get("reset_warning", lang).ifEmpty { "This will reset all settings and return to the setup screen." }) }
+                                            )
                                         }
                                     }
 
@@ -8534,7 +8617,6 @@ fun AboutAppOverlay(
                                                                             .height(38.dp)
                                                                             .clip(RoundedCornerShape(12.dp))
                                                                             .background(colors["accent"]!!.copy(alpha = if (isDark) 0.10f else 0.08f))
-                                                                            .border(1.dp, colors["accent"]!!.copy(alpha = 0.45f), RoundedCornerShape(12.dp))
                                                                             .padding(horizontal = 12.dp),
                                                                         verticalAlignment = Alignment.CenterVertically
                                                                     ) {

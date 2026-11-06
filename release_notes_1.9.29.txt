@@ -1,0 +1,26 @@
+✨ NELEV 1.9.29 — Плавность и удобство
+
+## Что изменилось
+
+• **Убрана внутренняя рамка в поле "Свой срок"** при приостановке обновлений
+• **Плавная анимация возврата** при нажатии "Возобновить"
+• **Плавное расширение окна обновления** при появлении прогресс-бара
+• **Улучшены анимации открытия/закрытия всех диалогов** — более красивые и плавные
+• **Скачанный APK удаляется автоматически** после установки
+• **Кнопка "Сбросить настройки"** в скрытом меню (нажмите 3 раза на версию)
+
+---
+
+## What's Changed
+
+• **Removed inner border in the custom duration field** when pausing updates
+• **Smooth animation when pressing Resume**
+• **Smooth expansion of update window** when progress bar appears
+• **Improved open/close animations for all dialogs** — more beautiful and smooth
+• **Downloaded APK is automatically deleted** after installation
+• **Reset settings button** in hidden menu (tap version 3 times)
+
+---
+
+**Download:** nelev-app-release-1.9.29.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

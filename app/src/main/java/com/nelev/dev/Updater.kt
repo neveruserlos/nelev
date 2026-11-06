@@ -6,7 +6,10 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.core.content.FileProvider
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.File
@@ -425,6 +428,15 @@ object Updater {
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         ctx.startActivity(intent)
+        
+        // Удаляем APK через 10 секунд после запуска установки
+        // (пользователь уже увидел экран установки)
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(10_000)
+            try {
+                if (file.exists()) file.delete()
+            } catch (_: Exception) {}
+        }
     }
 
     private fun fetchText(url: String): String {
