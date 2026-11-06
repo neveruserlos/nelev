@@ -1,0 +1,24 @@
+✨ NELEV 1.9.21 — Правильный язык и плавное «Что нового»
+
+## Что изменилось
+
+• **Список изменений теперь всегда на языке приложения** — и в окне «Доступно обновление», и в «Что нового». Раньше при скачивании обновления английский текст из манифеста перекрывал перевод
+• **Окно «Что нового» теперь такой же ширины, как «Доступно обновление»** — больше не узкое
+• **Раскрытие списка «Что нового» в окне обновления стало плавным** — окно больше не меняет высоту каждый кадр, поэтому нет рывков и «30 fps»
+
+Проверены все 8 языков: русский, английский, испанский, китайский, японский, корейский, португальский, украинский.
+
+---
+
+## What's Changed
+
+• **The changelog is now always shown in the app language** — in both the update window and "What's New". Previously the English manifest text overrode the translation after download
+• **The "What's New" dialog now matches the update window width**
+• **Expanding the changelog in the update window is now smooth** — the window no longer resizes every frame, so no stutter
+
+All 8 languages verified: Russian, English, Spanish, Chinese, Japanese, Korean, Portuguese, Ukrainian.
+
+---
+
+**Download:** nelev-app-release-1.9.21.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

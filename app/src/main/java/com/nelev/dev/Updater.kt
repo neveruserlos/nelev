@@ -92,13 +92,16 @@ object VersionHistory {
     }
 
     fun changelog(ctx: Context, versionCode: Int, lang: String = "ru"): String? {
+        // Сначала берём локализованный текст из встроенного version_history.json —
+        // он всегда на нужном языке. Файл из манифеста (обычно английский)
+        // используем только как запасной вариант.
+        loadChangelogFromAssets(ctx, versionCode, lang)?.let { return it }
         return try {
             val file = File(ctx.filesDir, "${CHANGELOG_PREFIX}${versionCode}_${lang}.txt")
             if (file.exists()) {
                 file.readText().trim().ifBlank { null }
             } else {
-                // Попробовать загрузить из встроенного JSON
-                loadChangelogFromAssets(ctx, versionCode, lang)
+                null
             }
         } catch (_: Exception) {
             null
@@ -367,8 +370,10 @@ object Updater {
             throw IOException("checksum mismatch")
         }
         // Сохраняем список изменений: после установки покажем его на первом запуске.
+        // Манифест на английском, поэтому кладём как "en", чтобы не перекрывать
+        // локализованные переводы из version_history.json.
         if (info.changelog.isNotBlank()) {
-            VersionHistory.saveChangelog(ctx, info.versionCode, info.changelog)
+            VersionHistory.saveChangelog(ctx, info.versionCode, info.changelog, "en")
         }
         onProgress(100)
         file

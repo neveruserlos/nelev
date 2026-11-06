@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 56,
+      "versionName": "1.9.21",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Список изменений теперь всегда на языке приложения — в окне «Доступно обновление» и в «Что нового»\n• Окно «Что нового» теперь такой же ширины, как «Доступно обновление»\n• Раскрытие списка «Что нового» в окне обновления стало плавным, без рывков",
+        "en": "• The changelog is now always shown in the app language — in both the update window and \"What's New\"\n• The \"What's New\" dialog now matches the update window width\n• Expanding the changelog in the update window is now smooth, without stutter",
+        "es": "• El registro de cambios ahora siempre aparece en el idioma de la app — en la ventana de actualización y en «Novedades»\n• La ventana «Novedades» ahora tiene el mismo ancho que la de actualización\n• La expansión del registro de cambios en la ventana de actualización ahora es fluida, sin tirones",
+        "zh": "• 更新日志现在始终以应用语言显示 — 更新窗口和“新功能”窗口都是\n• “新功能”窗口宽度现与更新窗口一致\n• 更新窗口中更新日志的展开现已平滑，无卡顿",
+        "ja": "• 更新履歴が常にアプリの言語で表示されるように — 更新ウィンドウと「新機能」の両方で\n• 「新機能」ウィンドウの幅が更新ウィンドウと同じに\n• 更新ウィンドウでの更新履歴の展開がスムーズに",
+        "ko": "• 변경 내용이 이제 항상 앱 언어로 표시됩니다 — 업데이트 창과 “새 기능” 모두\n• “새 기능” 창 폭이 업데이트 창과 같아졌습니다\n• 업데이트 창에서 변경 내용 펼치기가 부드럽게 동작합니다",
+        "pt": "• O registro de alterações agora sempre aparece no idioma do app — na janela de atualização e em «Novidades»\n• A janela «Novidades» agora tem a mesma largura da janela de atualização\n• A expansão do registro de alterações na janela de atualização agora é suave, sem engasgos",
+        "uk": "• Список змін тепер завжди мовою додатку — у вікні «Доступне оновлення» та «Що нового»\n• Вікно «Що нового» тепер такої ж ширини, як «Доступне оновлення»\n• Розгортання списку «Що нового» у вікні оновлення стало плавним, без ривків"
+      }
+    },
+    {
       "versionCode": 55,
       "versionName": "1.9.20",
       "releaseDate": "2026-11-06",

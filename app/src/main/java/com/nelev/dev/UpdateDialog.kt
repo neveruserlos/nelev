@@ -108,20 +108,49 @@ fun UpdateDialog(
     var showPermissionDialog by remember { mutableStateOf(false) }
     var showNotes by remember { mutableStateOf(false) }
 
+    // Манифест version.json содержит только английский changelog.
+    // Сначала пробуем локализованный текст из встроенного version_history.json,
+    // затем — с GitHub (raw main), и только потом английский из манифеста.
+    var localizedNotes by remember(info.versionCode, lang) { mutableStateOf<String?>(null) }
+    LaunchedEffect(info.versionCode, lang) {
+        if (lang != "en") {
+            localizedNotes = VersionHistory.changelog(ctx, info.versionCode, lang)
+                ?: VersionHistoryManager.fetchChangelogFromGitHub(info.versionName, lang)
+        }
+    }
+    val notesText = localizedNotes?.takeIf { it.isNotBlank() } ?: info.changelog
+
     Dialog(
         onDismissRequest = { if (!downloading) onDismiss() },
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
+        // Окно фиксированного размера: при раскрытии «Что нового» меняется только
+        // контент внутри, а не размер окна — так анимация не дёргается.
         Box(
-            Modifier.fillMaxWidth().padding(horizontal = 18.dp),
+            Modifier
+                .fillMaxSize()
+                .clickable(
+                    interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+                    indication = null
+                ) { if (!downloading) onDismiss() },
             contentAlignment = Alignment.Center
         ) {
+            Box(
+                Modifier.fillMaxWidth().padding(horizontal = 18.dp),
+                contentAlignment = Alignment.Center
+            ) {
             Surface(
                 shape = RoundedCornerShape(28.dp),
                 color = card,
                 tonalElevation = 0.dp,
                 shadowElevation = 20.dp,
-                modifier = Modifier.fillMaxWidth().widthIn(max = 430.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .widthIn(max = 430.dp)
+                    .clickable(
+                        interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+                        indication = null
+                    ) { }
             ) {
                 Column(Modifier.verticalScroll(rememberScrollState())) {
                     UpdateHero(
@@ -156,7 +185,7 @@ fun UpdateDialog(
                             )
                         }
 
-                        if (info.changelog.isNotBlank()) {
+                        if (notesText.isNotBlank()) {
                             val arrow by animateFloatAsState(
                                 if (showNotes) 180f else 0f,
                                 tween(220),
@@ -218,7 +247,7 @@ fun UpdateDialog(
                                     )
                                 ) {
                                     Text(
-                                        info.changelog,
+                                        notesText,
                                         fontSize = 13.sp,
                                         lineHeight = 19.sp,
                                         color = muted,
@@ -317,6 +346,7 @@ fun UpdateDialog(
                         }
                     }
                 }
+            }
             }
         }
     }
@@ -529,10 +559,14 @@ fun WhatsNewDialog(
     var appeared by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { appeared = true }
 
-    Dialog(onDismissRequest = onDismiss) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(horizontal = 18.dp)
                 .wrapContentHeight(),
             contentAlignment = Alignment.Center
         ) {
@@ -554,7 +588,7 @@ fun WhatsNewDialog(
                 color = card,
                 tonalElevation = 0.dp,
                 shadowElevation = 20.dp,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().widthIn(max = 430.dp)
             ) {
                 Column {
                 Box(
