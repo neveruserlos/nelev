@@ -1,0 +1,18 @@
+✨ NELEV 1.9.32 — Окончательные исправления
+
+## Что изменилось
+
+• **Полностью исправлен двойной свайп** при переходе между вкладками
+• **Автоматическое окно обновления теперь показывается** даже если обновление было пропущено ранее
+
+---
+
+## What's Changed
+
+• **Completely fixed double swipe** when transitioning between tabs
+• **Automatic update dialog now shows** even if update was previously skipped
+
+---
+
+**Download:** nelev-app-release-1.9.32.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

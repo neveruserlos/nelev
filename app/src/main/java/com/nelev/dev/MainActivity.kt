@@ -3636,7 +3636,7 @@ fun NelevMainScreen(
         }
         if (Updater.shouldAutoCheck(ctx)) {
             Updater.markChecked(ctx)
-            Updater.check(ctx, respectSkip = true).onSuccess { info ->
+            Updater.check(ctx, respectSkip = false).onSuccess { info ->
                 if (info != null) {
                     // Показываем полный диалог вместо уведомления при запуске
                     updateInfo = info
@@ -4063,7 +4063,7 @@ fun NelevMainScreen(
                         AnimatedContent(
                             targetState = selectedTab.value,
                             transitionSpec = {
-                                if (!isTransitioning && abs(dragOffset.value) < 10f) {
+                                if (!isTransitioning) {
                                     // Анимация при клике на вкладку
                                     val direction = if (targetState > initialState) 
                                         AnimatedContentTransitionScope.SlideDirection.Left 
@@ -4081,7 +4081,7 @@ fun NelevMainScreen(
                                         ) + fadeOut(tween(300))
                                 } else {
                                     // Без анимации при drag (там своя анимация через offset)
-                                    fadeIn(tween(0)) togetherWith fadeOut(tween(0))
+                                    EnterTransition.None togetherWith ExitTransition.None
                                 }
                             },
                             label = "tab_content"
