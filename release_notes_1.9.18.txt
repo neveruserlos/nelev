@@ -1,0 +1,22 @@
+🎨 NELEV 1.9.18 — Компактное окно паузы
+
+## Что изменилось
+
+• **Убран вариант «2 недели»** из окна приостановки обновлений
+• **Поле «Свой срок» теперь появляется прямо в строке** — нажимаете на пункт и сразу пишете число там же
+• **Окно больше не растягивается** из-за отдельного поля ввода
+• **Убрано лишнее описание** под списком («Вы не будете видеть уведомления…»)
+
+---
+
+## What's Changed
+
+• **Removed the "2 weeks" option** from the update pause window
+• **The custom period field now appears inline** — tap the item and type the number right there
+• **The window no longer stretches** because of a separate input field
+• **Removed the extra description** under the list
+
+---
+
+**Download:** nelev-app-release-1.9.18.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

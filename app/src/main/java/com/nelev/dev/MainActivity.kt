@@ -8395,7 +8395,6 @@ fun AboutAppOverlay(
                                     
                                     val presets = listOf(
                                         UpdateText.get("pause_1week", lang) to 7L,
-                                        UpdateText.get("pause_2weeks", lang) to 14L,
                                         UpdateText.get("pause_1month", lang) to 30L,
                                         UpdateText.get("pause_forever", lang) to -1L,
                                         UpdateText.get("pause_custom", lang) to 0L
@@ -8503,74 +8502,58 @@ fun AboutAppOverlay(
                                                             }
                                                         }
                                                         Spacer(Modifier.width(12.dp))
-                                                        Text(
-                                                            label,
-                                                            fontSize = 14.sp,
-                                                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                                                            color = text,
-                                                            modifier = Modifier.weight(1f)
-                                                        )
+                                                        if (days == 0L && isSelected) {
+                                                            // Поле ввода прямо в строке «Свой срок» — экономит место
+                                                            androidx.compose.foundation.text.BasicTextField(
+                                                                value = customDays,
+                                                                onValueChange = { v ->
+                                                                    val filtered = v.filter { c -> c.isDigit() }
+                                                                    customDays = if (filtered.isNotEmpty() && filtered.toIntOrNull()?.let { n -> n > 9999 } == true) {
+                                                                        "9999"
+                                                                    } else {
+                                                                        filtered.take(4)
+                                                                    }
+                                                                },
+                                                                modifier = Modifier.weight(1f),
+                                                                singleLine = true,
+                                                                textStyle = TextStyle(fontSize = 14.sp, color = text),
+                                                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                                                cursorBrush = SolidColor(colors["accent"]!!),
+                                                                decorationBox = { innerTextField ->
+                                                                    Box(
+                                                                        Modifier
+                                                                            .fillMaxWidth()
+                                                                            .height(34.dp)
+                                                                            .clip(RoundedCornerShape(10.dp))
+                                                                            .background(if (isDark) Color.White.copy(alpha = 0.06f) else Color.Black.copy(alpha = 0.04f))
+                                                                            .border(1.dp, colors["accent"]!!.copy(alpha = 0.55f), RoundedCornerShape(10.dp))
+                                                                            .padding(horizontal = 10.dp),
+                                                                        contentAlignment = Alignment.CenterStart
+                                                                    ) {
+                                                                        if (customDays.isEmpty()) {
+                                                                            Text(
+                                                                                UpdateText.get("pause_custom_label", lang),
+                                                                                fontSize = 13.sp,
+                                                                                color = muted
+                                                                            )
+                                                                        }
+                                                                        innerTextField()
+                                                                    }
+                                                                }
+                                                            )
+                                                        } else {
+                                                            Text(
+                                                                label,
+                                                                fontSize = 14.sp,
+                                                                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                                                color = text,
+                                                                modifier = Modifier.weight(1f)
+                                                            )
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
-                                            }
-                                        }
-                                        
-                                        // Описание выбранного периода
-                                        if (selectedPauseOption != null) {
-                                            val description = when (selectedPauseOption) {
-                                                0 -> UpdateText.get("pause_desc_1day", lang)
-                                                1 -> UpdateText.get("pause_desc_3days", lang)
-                                                2 -> UpdateText.get("pause_desc_7days", lang)
-                                                3 -> UpdateText.get("pause_desc_forever", lang)
-                                                4 -> UpdateText.get("pause_desc_custom", lang)
-                                                else -> ""
-                                            }
-                                            if (description.isNotEmpty()) {
-                                                Text(
-                                                    description,
-                                                    fontSize = 12.sp,
-                                                    lineHeight = 16.sp,
-                                                    color = muted
-                                                )
-                                            }
-                                        }
-                                        
-                                        if (selectedPauseOption == 4) {
-                                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                                Text(
-                                                    UpdateText.get("pause_custom_hint", lang),
-                                                    fontSize = 12.sp,
-                                                    color = muted
-                                                )
-                                                OutlinedTextField(
-                                                    value = customDays,
-                                                    onValueChange = { 
-                                                        val filtered = it.filter { c -> c.isDigit() }
-                                                        customDays = if (filtered.isNotEmpty() && filtered.toIntOrNull()?.let { n -> n > 9999 } == true) {
-                                                            "9999"
-                                                        } else {
-                                                            filtered.take(4)
-                                                        }
-                                                    },
-                                                    modifier = Modifier.fillMaxWidth(),
-                                                    label = { Text(UpdateText.get("pause_custom_label", lang), fontSize = 12.sp) },
-                                                    singleLine = true,
-                                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                                    colors = OutlinedTextFieldDefaults.colors(
-                                                        focusedContainerColor = Color.Transparent,
-                                                        unfocusedContainerColor = Color.Transparent,
-                                                        focusedBorderColor = colors["accent"]!!,
-                                                        unfocusedBorderColor = border,
-                                                        focusedTextColor = text,
-                                                        unfocusedTextColor = text,
-                                                        cursorColor = colors["accent"]!!,
-                                                        focusedLabelColor = colors["accent"]!!,
-                                                        unfocusedLabelColor = muted
-                                                    ),
-                                                    shape = RoundedCornerShape(12.dp)
-                                                )
                                             }
                                         }
                                         
@@ -8625,7 +8608,7 @@ fun AboutAppOverlay(
                                                         }
                                                     }
                                                 },
-                                                enabled = selectedPauseOption != null && (selectedPauseOption != 4 || customDays.isNotBlank()),
+                                                enabled = selectedPauseOption != null && (selectedPauseOption != 3 || customDays.isNotBlank()),
                                                 shape = RoundedCornerShape(13.dp),
                                                 colors = ButtonDefaults.buttonColors(
                                                     containerColor = colors["accent"]!!,

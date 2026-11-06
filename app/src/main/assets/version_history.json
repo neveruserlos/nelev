@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 53,
+      "versionName": "1.9.18",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Убран вариант «2 недели» из окна паузы обновлений\n• Поле «Свой срок» теперь появляется прямо в строке, окно не растягивается\n• Убрано лишнее описание под списком",
+        "en": "• Removed the \"2 weeks\" option from the update pause window\n• The custom period field now appears inline, no extra window space\n• Removed the extra description text under the list",
+        "es": "• Eliminada la opción «2 semanas» de la ventana de pausa de actualización\n• El campo de período personalizado ahora aparece en la misma línea\n• Eliminado el texto descriptivo adicional bajo la lista",
+        "zh": "• 从更新暂停窗口中移除了“2周”选项\n• 自定义期限输入框现在直接显示在该行内，窗口不再变大\n• 移除了列表下方的多余描述文字",
+        "ja": "• 更新一時停止ウィンドウから「2週間」オプションを削除\n• カスタム期間の入力欄が同じ行に表示され、ウィンドウが広がりません\n• リスト下の余分な説明テキストを削除",
+        "ko": "• 업데이트 일시 중지 창에서 \"2주\" 옵션 제거\n• 사용자 지정 기간 입력란이 같은 줄에 표시되어 창이 커지지 않습니다\n• 목록 아래의 불필요한 설명 텍스트 제거",
+        "pt": "• Removida a opção \"2 semanas\" da janela de pausa de atualização\n• O campo de período personalizado agora aparece na mesma linha\n• Removido o texto descritivo extra abaixo da lista",
+        "uk": "• Прибрано варіант «2 тижні» з вікна паузи оновлень\n• Поле «Свій термін» тепер з'являється прямо в рядку, вікно не розтягується\n• Прибрано зайвий опис під списком"
+      }
+    },
+    {
       "versionCode": 52,
       "versionName": "1.9.17",
       "releaseDate": "2026-11-06",
@@ -8,7 +23,7 @@
         "ru": "• Улучшено центрирование текста в элементах списка паузы обновлений\n• Добавлено описание выбранного периода серым текстом\n• Текст \"Вы не будете видеть уведомления об обновлениях\" показывается для каждого варианта",
         "en": "• Improved text centering in update pause list items\n• Added selected period description in muted text\n• \"You won't see update notifications\" text shown for each option",
         "es": "• Centrado de texto mejorado en elementos de lista de pausa de actualización\n• Descripción del período seleccionado agregada en texto atenuado\n• Texto \"No verás notificaciones de actualización\" mostrado para cada opción",
-        "zh": "• 改进了更新暂停列表项中的文本居中\n• 添加了灰色文本的选定期间描述\n• 为每个选项显示"您将看不到更新通知"文本",
+        "zh": "• 改进了更新暂停列表项中的文本居中\n• 添加了灰色文本的选定期间描述\n• 为每个选项显示\"您将看不到更新通知\"文本",
         "ja": "• 更新一時停止リスト項目のテキスト中央揃えを改善\n• ミュートテキストで選択期間の説明を追加\n• 各オプションに「更新通知は表示されません」テキストを表示",
         "ko": "• 업데이트 일시 중지 목록 항목의 텍스트 중앙 정렬 개선\n• 음소거된 텍스트로 선택한 기간 설명 추가\n• 각 옵션에 대해 \"업데이트 알림이 표시되지 않습니다\" 텍스트 표시",
         "pt": "• Centralização de texto melhorada em itens da lista de pausa de atualização\n• Descrição do período selecionado adicionada em texto silenciado\n• Texto \"Você não verá notificações de atualização\" mostrado para cada opção",
@@ -23,7 +38,7 @@
         "ru": "• Улучшено центрирование текста в элементах списка паузы обновлений\n• Добавлено описание выбранного периода серым текстом\n• Текст \"Вы не будете видеть уведомления об обновлениях\" показывается для каждого варианта",
         "en": "• Improved text centering in update pause list items\n• Added selected period description in muted text\n• \"You won't see update notifications\" text shown for each option",
         "es": "• Centrado de texto mejorado en elementos de lista de pausa de actualización\n• Descripción del período seleccionado agregada en texto atenuado\n• Texto \"No verás notificaciones de actualización\" mostrado para cada opción",
-        "zh": "• 改进了更新暂停列表项中的文本居中\n• 添加了灰色文本的选定期间描述\n• 为每个选项显示"您将看不到更新通知"文本",
+        "zh": "• 改进了更新暂停列表项中的文本居中\n• 添加了灰色文本的选定期间描述\n• 为每个选项显示\"您将看不到更新通知\"文本",
         "ja": "• 更新一時停止リスト項目のテキスト中央揃えを改善\n• ミュートテキストで選択期間の説明を追加\n• 各オプションに「更新通知は表示されません」テキストを表示",
         "ko": "• 업데이트 일시 중지 목록 항목의 텍스트 중앙 정렬 개선\n• 음소거된 텍스트로 선택한 기간 설명 추가\n• 각 옵션에 대해 \"업데이트 알림이 표시되지 않습니다\" 텍스트 표시",
         "pt": "• Centralização de texto melhorada em itens da lista de pausa de atualização\n• Descrição do período selecionado adicionada em texto silenciado\n• Texto \"Você não verá notificações de atualização\" mostrado para cada opção",
@@ -113,7 +128,7 @@
         "ru": "• Исправлена анимация раскрытия «Что нового»\n• Плавное раскрытие списка изменений без рывков\n• Оптимизация времени анимации для естественного движения",
         "en": "• Fixed What's New expansion animation\n• Smooth changelog list expansion without jerks\n• Optimized animation timing for natural movement",
         "es": "• Animación de expansión de Novedades corregida\n• Expansión suave de lista de cambios sin tirones\n• Tiempo de animación optimizado para movimiento natural",
-        "zh": "• 修复了"新功能"展开动画\n• 平滑的更新日志列表展开，无卡顿\n• 优化动画时间以实现自然运动",
+        "zh": "• 修复了\"新功能\"展开动画\n• 平滑的更新日志列表展开，无卡顿\n• 优化动画时间以实现自然运动",
         "ja": "• 新機能の展開アニメーションを修正\n• スムーズな変更履歴リストの展開（ぎこちなさなし）\n• 自然な動きのためのアニメーションタイミングの最適化",
         "ko": "• 새 기능 확장 애니메이션 수정\n• 끊김 없는 부드러운 변경 로그 목록 확장\n• 자연스러운 움직임을 위한 애니메이션 타이밍 최적화",
         "pt": "• Animação de expansão de Novidades corrigida\n• Expansão suave da lista de mudanças sem travamentos\n• Tempo de animação otimizado para movimento natural",

@@ -1,10 +1,10 @@
-# NELEV Release Script v1.9.17
+# NELEV Release Script v1.9.18
 # Automated GitHub Release Upload
 
 $apkPath = "app\build\outputs\apk\release\app-release.apk"
-$versionName = "1.9.17"
-$versionCode = "52"
-$notesFile = "release_notes_1.9.17.txt"
+$versionName = "1.9.18"
+$versionCode = "53"
+$notesFile = "release_notes_1.9.18.txt"
 
 Write-Host "=== NELEV Release v$versionName ===" -ForegroundColor Cyan
 
@@ -32,7 +32,7 @@ Write-Host "Size: $sizeBytes bytes" -ForegroundColor Green
 # Create version.json
 # NOTE: must be UTF-8 WITHOUT BOM and ASCII-safe bullets, otherwise
 # org.json.JSONObject() in Updater.kt fails and the update is never found.
-$changelog = "- Improved text centering in update pause list items`n- Added selected period description in muted text`n- You won't see update notifications text shown for each option"
+$changelog = "- Removed the 2 weeks option from the update pause window`n- Custom period field now appears inline in the same row`n- Removed the extra description text under the list"
 $versionJson = @{
     versionCode = [int]$versionCode
     versionName = $versionName

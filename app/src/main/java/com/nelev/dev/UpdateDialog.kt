@@ -848,7 +848,6 @@ fun UpdatePauseDialog(
 
     val presets = listOf(
         UpdateText.get("pause_1week", lang) to 7L,
-        UpdateText.get("pause_2weeks", lang) to 14L,
         UpdateText.get("pause_1month", lang) to 30L,
         UpdateText.get("pause_forever", lang) to -1L,
         UpdateText.get("pause_custom", lang) to 0L
@@ -968,7 +967,7 @@ fun UpdatePauseDialog(
                                         .clickable {
                                             selectedOption = idx
                                         }
-                                        .padding(horizontal = 14.dp, vertical = 12.dp),
+                                        .padding(horizontal = 14.dp, vertical = if (days == 0L && isSelected) 6.dp else 12.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Box(
@@ -989,49 +988,55 @@ fun UpdatePauseDialog(
                                         }
                                     }
                                     Spacer(Modifier.width(12.dp))
-                                    Text(
-                                        label,
-                                        fontSize = 14.sp,
-                                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                                        color = text,
-                                        modifier = Modifier.weight(1f)
-                                    )
+                                    if (days == 0L && isSelected) {
+                                        // Поле ввода прямо в строке «Свой срок»
+                                        androidx.compose.foundation.text.BasicTextField(
+                                            value = customDays,
+                                            onValueChange = { v ->
+                                                val filtered = v.filter { c -> c.isDigit() }
+                                                customDays = if (filtered.isNotEmpty() && filtered.toIntOrNull()?.let { n -> n > 9999 } == true) {
+                                                    "9999"
+                                                } else {
+                                                    filtered.take(4)
+                                                }
+                                            },
+                                            modifier = Modifier.weight(1f),
+                                            singleLine = true,
+                                            textStyle = androidx.compose.ui.text.TextStyle(fontSize = 14.sp, color = text),
+                                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                            cursorBrush = androidx.compose.ui.graphics.SolidColor(accent),
+                                            decorationBox = { innerTextField ->
+                                                Box(
+                                                    Modifier
+                                                        .fillMaxWidth()
+                                                        .height(34.dp)
+                                                        .clip(RoundedCornerShape(10.dp))
+                                                        .background(if (isDark) Color.White.copy(alpha = 0.06f) else Color.Black.copy(alpha = 0.04f))
+                                                        .border(1.dp, accent.copy(alpha = 0.55f), RoundedCornerShape(10.dp))
+                                                        .padding(horizontal = 10.dp),
+                                                    contentAlignment = Alignment.CenterStart
+                                                ) {
+                                                    if (customDays.isEmpty()) {
+                                                        Text(
+                                                            UpdateText.get("pause_custom_label", lang),
+                                                            fontSize = 13.sp,
+                                                            color = muted
+                                                        )
+                                                    }
+                                                    innerTextField()
+                                                }
+                                            }
+                                        )
+                                    } else {
+                                        Text(
+                                            label,
+                                            fontSize = 14.sp,
+                                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                            color = text,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
                                 }
-                            }
-                        }
-
-                        if (currentOption == 4) {
-                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Text(
-                                    UpdateText.get("pause_custom_hint", lang),
-                                    fontSize = 12.sp,
-                                    color = muted
-                                )
-                                androidx.compose.material3.OutlinedTextField(
-                                    value = customDays,
-                                    onValueChange = { 
-                                        val filtered = it.filter { c -> c.isDigit() }
-                                        customDays = if (filtered.isNotEmpty() && filtered.toIntOrNull()?.let { n -> n > 9999 } == true) {
-                                            "9999"
-                                        } else {
-                                            filtered.take(4)
-                                        }
-                                    },
-                                    modifier = Modifier.fillMaxWidth(),
-                                    label = { Text(UpdateText.get("pause_custom_label", lang), fontSize = 12.sp) },
-                                    singleLine = true,
-                                    colors = androidx.compose.material3.TextFieldDefaults.colors(
-                                        focusedContainerColor = Color.Transparent,
-                                        unfocusedContainerColor = Color.Transparent,
-                                        focusedIndicatorColor = accent,
-                                        unfocusedIndicatorColor = border,
-                                        focusedTextColor = text,
-                                        unfocusedTextColor = text,
-                                        cursorColor = accent,
-                                        focusedLabelColor = accent,
-                                        unfocusedLabelColor = muted
-                                    )
-                                )
                             }
                         }
 
@@ -1072,7 +1077,7 @@ fun UpdatePauseDialog(
                                         }
                                     }
                                 },
-                                enabled = selectedOption != null && (selectedOption != 4 || customDays.isNotBlank()),
+                                enabled = selectedOption != null && (selectedOption != 3 || customDays.isNotBlank()),
                                 shape = RoundedCornerShape(13.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = accent,
