@@ -4059,32 +4059,33 @@ fun NelevMainScreen(
                         }
                     }
 
-                    Box(Modifier.fillMaxSize()
-                        .offset { IntOffset(dragOffset.value.toInt(), 0) }
-                        .graphicsLayer { alpha = 1f - (abs(dragOffset.value) / screenWidth).coerceIn(0f, 1f) * 0.3f }) {
+                    if (isTransitioning) {
+                        // При drag используем простой Box без AnimatedContent
+                        Box(Modifier.fillMaxSize()
+                            .offset { IntOffset(dragOffset.value.toInt(), 0) }
+                            .graphicsLayer { alpha = 1f - (abs(dragOffset.value) / screenWidth).coerceIn(0f, 1f) * 0.3f }) {
+                            TabContent(selectedTab.value, appState, appSettings, colors, lang, isDark, sliderDragging,
+                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback)
+                        }
+                    } else {
+                        // При клике используем AnimatedContent для плавного перехода
                         AnimatedContent(
                             targetState = selectedTab.value,
                             transitionSpec = {
-                                if (!isTransitioning) {
-                                    // Анимация при клике на вкладку
-                                    val direction = if (targetState > initialState) 
-                                        AnimatedContentTransitionScope.SlideDirection.Left 
-                                    else 
-                                        AnimatedContentTransitionScope.SlideDirection.Right
-                                    slideIntoContainer(
+                                val direction = if (targetState > initialState) 
+                                    AnimatedContentTransitionScope.SlideDirection.Left 
+                                else 
+                                    AnimatedContentTransitionScope.SlideDirection.Right
+                                slideIntoContainer(
+                                    direction, 
+                                    animationSpec = tween(300, easing = FastOutSlowInEasing),
+                                    initialOffset = { it / 3 }
+                                ) + fadeIn(tween(300)) togetherWith
+                                    slideOutOfContainer(
                                         direction, 
                                         animationSpec = tween(300, easing = FastOutSlowInEasing),
-                                        initialOffset = { it / 3 }
-                                    ) + fadeIn(tween(300)) togetherWith
-                                        slideOutOfContainer(
-                                            direction, 
-                                            animationSpec = tween(300, easing = FastOutSlowInEasing),
-                                            targetOffset = { -it / 3 }
-                                        ) + fadeOut(tween(300))
-                                } else {
-                                    // Без анимации при drag (там своя анимация через offset)
-                                    EnterTransition.None togetherWith ExitTransition.None
-                                }
+                                        targetOffset = { -it / 3 }
+                                    ) + fadeOut(tween(300))
                             },
                             label = "tab_content"
                         ) { tab ->

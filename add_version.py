@@ -3,18 +3,18 @@ p = 'app/src/main/assets/version_history.json'
 with io.open(p, encoding='utf-8') as f:
     d = json.load(f)
 entry = {
-    "versionCode": 69,
-    "versionName": "1.9.34",
+    "versionCode": 70,
+    "versionName": "1.9.35",
     "releaseDate": "2026-11-06",
     "changelog": {
-        "ru": "• Исправлена автопроверка обновлений при запуске\n• Добавлена фоновая проверка обновлений каждые 5 секунд\n• Проверка не работает если обновления приостановлены",
-        "en": "• Fixed automatic update check on launch\n• Added background update check every 5 seconds\n• Check doesn't run if updates are paused",
-        "es": "• Corregida la verificación automática de actualizaciones al iniciar\n• Agregada verificación de actualizaciones en segundo plano cada 5 segundos\n• La verificación no se ejecuta si las actualizaciones están pausadas",
-        "zh": "• 修复了启动时的自动更新检查\n• 添加了每5秒后台更新检查\n• 如果更新暂停，则不运行检查",
-        "ja": "• 起動時の自動更新チェックを修正\n• 5秒ごとのバックグラウンド更新チェックを追加\n• 更新が一時停止されている場合、チェックは実行されません",
-        "ko": "• 시작 시 자동 업데이트 확인 수정\n• 5초마다 백그라운드 업데이트 확인 추가\n• 업데이트가 일시 중지되면 확인이 실행되지 않음",
-        "pt": "• Corrigida a verificação automática de atualizações na inicialização\n• Adicionada verificação de atualizações em segundo plano a cada 5 segundos\n• A verificação não é executada se as atualizações estiverem pausadas",
-        "uk": "• Виправлено автоперевірку оновлень при запуску\n• Додано фонову перевірку оновлень кожні 5 секунд\n• Перевірка не працює якщо оновлення призупинені"
+        "ru": "• Полностью исправлена двойная анимация свайпа — теперь используется отдельная логика для drag и click",
+        "en": "• Completely fixed double swipe animation — now uses separate logic for drag and click",
+        "es": "• Corregida completamente la animación de doble deslizamiento — ahora usa lógica separada para arrastrar y hacer clic",
+        "zh": "• 完全修复了双重滑动动画——现在对拖动和点击使用单独的逻辑",
+        "ja": "• ダブルスワイプアニメーションを完全に修正 — ドラッグとクリックに別々のロジックを使用するようになりました",
+        "ko": "• 이중 스와이프 애니메이션 완전히 수정 — 이제 드래그 및 클릭에 대해 별도의 논리 사용",
+        "pt": "• Corrigida completamente a animação de deslizar duplo — agora usa lógica separada para arrastar e clicar",
+        "uk": "• Повністю виправлено подвійну анімацію свайпу — тепер використовується окрема логіка для drag і click"
     }
 }
 d['versions'].insert(0, entry)

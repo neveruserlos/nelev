@@ -1,0 +1,16 @@
+✨ NELEV 1.9.35 — Идеальный свайп
+
+## Что изменилось
+
+• **Полностью исправлена двойная анимация свайпа** — теперь используется отдельная логика для drag и click
+
+---
+
+## What's Changed
+
+• **Completely fixed double swipe animation** — now uses separate logic for drag and click
+
+---
+
+**Download:** nelev-app-release-1.9.35.apk  
+**GitHub:** https://github.com/neveruserlos/nelev
