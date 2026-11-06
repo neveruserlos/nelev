@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 61,
+      "versionName": "1.9.26",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Убрано дублирование прогресса в окне загрузки обновления (справа теперь только число, без «%»)\n• Кнопка «Проверить обновление» теперь с текстом слева и стрелкой справа, как «Приостановить»\n• Новый звук нажатия — более чёткий и приятный\n• Ускорена озвучка приветствия на первом экране настройки — без задержек",
+        "en": "• Removed progress duplication in the update download window (the right side now shows only the number, without «%»)\n• The “Check for updates” button now has text on the left and an arrow on the right, like “Pause updates”\n• New click sound — crisper and more pleasant\n• Sped up the greeting voice on the first setup screen — no more delays",
+        "es": "• Eliminada la duplicación del progreso en la ventana de descarga de actualizaciones (el lado derecho ahora muestra solo el número, sin «%»)\n• El botón «Buscar actualizaciones» ahora tiene texto a la izquierda y una flecha a la derecha, como «Pausar actualizaciones»\n• Nuevo sonido de clic — más nítido y agradable\n• Acelerada la voz de bienvenida en la primera pantalla de configuración — sin retrasos",
+        "zh": "• 移除了更新下载窗口中的进度重复（右侧现在只显示数字，没有「%」）\n• 「检查更新」按钮现在左侧有文字，右侧有箭头，像「暂停更新」\n• 新的点击声音——更清脆更愉快\n• 加快了首个设置屏幕上的问候语音——没有延迟",
+        "ja": "• 更新ダウンロードウィンドウの進捗重複を削除（右側には数値のみ表示、「%」なし）\n• 「更新確認」ボタンは左にテキスト、右に矢印が表示されるように、「更新を一時停止」と同じデザイン\n• 新しいクリック音——よりクリアで快適\n• 最初の設定画面の挨拶音声を高速化——遅延なし",
+        "ko": "• 업데이트 다운로드 창에서 진행률 중복 제거 (오른쪽에는 이제 숫자만 표시, «%» 없음)\n• “업데이트 확인” 버튼이 이제 왼쪽에 텍스트, 오른쪽에 화살표가 표시되며 “업데이트 일시 중지”와 같은 디자인\n• 새로운 클릭 소리——더 명확하고 기분 좋음\n• 첫 설정 화면의 인사말 음성을 가속화——지연 없음",
+        "pt": "• Removida a duplicação do progresso na janela de download de atualização (o lado direito agora mostra apenas o número, sem «%»)\n• O botão «Verificar atualizações» agora tem texto à esquerda e uma seta à direita, como «Pausar atualizações»\n• Novo som de clique — mais nítido e agradável\n• Acelerada a voz de saudação na primeira tela de configuração — sem atrasos",
+        "uk": "• Прибрано дублювання прогресу в вікні завантаження оновлення (справа тепер тільки число, без «%»)\n• Кнопка «Перевірити оновлення» тепер з текстом зліва і стрілкою справа, як «Призупинити»\n• Новий звук натискання — більш чіткий і приємний\n• Прискорено озвучення вітання на першому екрані налаштування — без затримок"
+      }
+    },
+    {
       "versionCode": 60,
       "versionName": "1.9.25",
       "releaseDate": "2026-11-06",
