@@ -3627,22 +3627,23 @@ fun NelevMainScreen(
     }
 
     // OTA: тихая проверка обновлений при запуске (не чаще раза в 3 часа)
-    // Если обновления не приостановлены — показываем лёгкое уведомление.
+    // Автопроверка обновлений при запуске и каждые 5 секунд в фоне
     LaunchedEffect(Unit) {
-        kotlinx.coroutines.delay(3000)
-        if (appSettings.value.updatesPaused()) {
-            // Пауза активна: автопроверка отключена
-            return@LaunchedEffect
-        }
-        if (Updater.shouldAutoCheck(ctx)) {
-            Updater.markChecked(ctx)
-            Updater.check(ctx, respectSkip = false).onSuccess { info ->
-                if (info != null) {
-                    // Показываем полный диалог вместо уведомления при запуске
-                    updateInfo = info
-                    showUpdateNotice = false
+        kotlinx.coroutines.delay(1000) // небольшая задержка перед первой проверкой
+        
+        while (true) {
+            // Проверяем только если обновления не приостановлены
+            if (!appSettings.value.updatesPaused() && updateInfo == null) {
+                Updater.check(ctx, respectSkip = false).onSuccess { info ->
+                    if (info != null) {
+                        // Показываем полный диалог
+                        updateInfo = info
+                        showUpdateNotice = false
+                        Updater.markChecked(ctx)
+                    }
                 }
             }
+            kotlinx.coroutines.delay(5000) // проверка каждые 5 секунд
         }
     }
 

@@ -1,0 +1,20 @@
+✨ NELEV 1.9.34 — Умная проверка обновлений
+
+## Что изменилось
+
+• **Исправлена автопроверка обновлений при запуске**
+• **Добавлена фоновая проверка обновлений каждые 5 секунд**
+• **Проверка не работает если обновления приостановлены**
+
+---
+
+## What's Changed
+
+• **Fixed automatic update check on launch**
+• **Added background update check every 5 seconds**
+• **Check doesn't run if updates are paused**
+
+---
+
+**Download:** nelev-app-release-1.9.34.apk  
+**GitHub:** https://github.com/neveruserlos/nelev
