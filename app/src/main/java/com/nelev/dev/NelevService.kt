@@ -227,6 +227,7 @@ class NelevService : Service() {
             .setOngoing(true)
             .setContentIntent(openIntent)
             .setSilent(true)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
             .addAction(0, stopText, stopPendingIntent)
             .build()
     }

@@ -3,18 +3,18 @@ p = 'app/src/main/assets/version_history.json'
 with io.open(p, encoding='utf-8') as f:
     d = json.load(f)
 entry = {
-    "versionCode": 70,
-    "versionName": "1.9.35",
-    "releaseDate": "2026-11-06",
+    "versionCode": 71,
+    "versionName": "1.9.36",
+    "releaseDate": "2026-11-07",
     "changelog": {
-        "ru": "• Полностью исправлена двойная анимация свайпа — теперь используется отдельная логика для drag и click",
-        "en": "• Completely fixed double swipe animation — now uses separate logic for drag and click",
-        "es": "• Corregida completamente la animación de doble deslizamiento — ahora usa lógica separada para arrastrar y hacer clic",
-        "zh": "• 完全修复了双重滑动动画——现在对拖动和点击使用单独的逻辑",
-        "ja": "• ダブルスワイプアニメーションを完全に修正 — ドラッグとクリックに別々のロジックを使用するようになりました",
-        "ko": "• 이중 스와이프 애니메이션 완전히 수정 — 이제 드래그 및 클릭에 대해 별도의 논리 사용",
-        "pt": "• Corrigida completamente a animação de deslizar duplo — agora usa lógica separada para arrastar e clicar",
-        "uk": "• Повністю виправлено подвійну анімацію свайпу — тепер використовується окрема логіка для drag і click"
+        "ru": "• Умная логика обновлений: кнопка \"Позже\" откладывает проверку до перезапуска\n• Кнопка меняется на \"Доступно обновление\" когда обновление найдено\n• Фоновая проверка каждые 5 секунд только для обновления статуса кнопки\n• Уведомление сервиса теперь нельзя скрыть из панели уведомлений",
+        "en": "• Smart update logic: \"Later\" button postpones checking until restart\n• Button changes to \"Update available\" when update is found\n• Background check every 5 seconds only updates button status\n• Service notification can no longer be hidden from notification panel",
+        "es": "• Lógica de actualización inteligente: el botón \"Más tarde\" pospone la verificación hasta el reinicio\n• El botón cambia a \"Actualización disponible\" cuando se encuentra una actualización\n• La verificación en segundo plano cada 5 segundos solo actualiza el estado del botón\n• La notificación del servicio ya no se puede ocultar del panel de notificaciones",
+        "zh": "• 智能更新逻辑：\"稍后\" 按钮将检查推迟到重启\n• 找到更新时按钮变为 \"有可用更新\"\n• 每5秒后台检查仅更新按钮状态\n• 服务通知现在无法从通知面板隐藏",
+        "ja": "• スマート更新ロジック：\"後で\" ボタンで再起動までチェックを延期\n• 更新が見つかるとボタンが \"アップデート利用可能\" に変更\n• 5秒ごとのバックグラウンドチェックはボタンの状態のみを更新\n• サービス通知は通知パネルから非表示にできなくなりました",
+        "ko": "• 스마트 업데이트 로직: \"나중에\" 버튼으로 재시작까지 확인 연기\n• 업데이트를 찾으면 버튼이 \"업데이트 사용 가능\"으로 변경\n• 5초마다 백그라운드 확인은 버튼 상태만 업데이트\n• 서비스 알림을 알림 패널에서 숨길 수 없게 됨",
+        "pt": "• Lógica de atualização inteligente: o botão \"Mais tarde\" adia a verificação até a reinicialização\n• O botão muda para \"Atualização disponível\" quando a atualização é encontrada\n• A verificação em segundo plano a cada 5 segundos apenas atualiza o status do botão\n• A notificação do serviço não pode mais ser ocultada do painel de notificações",
+        "uk": "• Розумна логіка оновлень: кнопка \"Пізніше\" відкладає перевірку до перезапуску\n• Кнопка змінюється на \"Доступне оновлення\" коли оновлення знайдено\n• Фонова перевірка кожні 5 секунд тільки оновлює статус кнопки\n• Сповіщення сервісу тепер не можна приховати з панелі сповіщень"
     }
 }
 d['versions'].insert(0, entry)

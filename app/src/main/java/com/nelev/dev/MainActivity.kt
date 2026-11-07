@@ -3617,6 +3617,10 @@ fun NelevMainScreen(
     val showStatsToggle = remember { mutableStateOf(false) }
     var stats by remember { mutableStateOf(AppStats()) }
     val frameTimes = remember { mutableStateListOf<Float>() }
+    
+    // Состояние кнопки обновления: true если обновление доступно
+    var updateAvailable by remember { mutableStateOf(false) }
+    var cachedUpdateInfo by remember { mutableStateOf<UpdateInfo?>(null) }
 
     LaunchedEffect(Unit) {
         kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { FpsLogger.init(ctx) }
@@ -3624,22 +3628,30 @@ fun NelevMainScreen(
         if (!NelevService.streaming) {
             try { SessionStore.recoverCrashedSession(ctx) } catch (_: Exception) {}
         }
+        // Сбрасываем флаг "Позже" при запуске приложения
+        Updater.clearPostponed(ctx)
     }
 
-    // OTA: тихая проверка обновлений при запуске (не чаще раза в 3 часа)
     // Автопроверка обновлений при запуске и каждые 5 секунд в фоне
     LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(1000) // небольшая задержка перед первой проверкой
         
         while (true) {
-            // Проверяем только если обновления не приостановлены
-            if (!appSettings.value.updatesPaused() && updateInfo == null) {
+            // Проверяем только если обновления не приостановлены и не отложены до перезапуска
+            if (!appSettings.value.updatesPaused() && !Updater.isPostponedUntilRestart(ctx)) {
                 Updater.check(ctx, respectSkip = false).onSuccess { info ->
                     if (info != null) {
-                        // Показываем полный диалог
-                        updateInfo = info
-                        showUpdateNotice = false
-                        Updater.markChecked(ctx)
+                        cachedUpdateInfo = info
+                        updateAvailable = true
+                        // Показываем диалог только если он ещё не был показан
+                        if (updateInfo == null) {
+                            updateInfo = info
+                            showUpdateNotice = false
+                            Updater.markChecked(ctx)
+                        }
+                    } else {
+                        updateAvailable = false
+                        cachedUpdateInfo = null
                     }
                 }
             }
@@ -3651,20 +3663,31 @@ fun NelevMainScreen(
         if (!updateChecking) {
             updateChecking = true
             val currentLang = appSettings.value.language
-            Toast.makeText(ctx, UpdateText.get("checking", currentLang), Toast.LENGTH_SHORT).show()
-            updateScope.launch {
-                Updater.check(ctx, respectSkip = false)
-                    .onSuccess { info ->
-                        if (info != null) {
-                            updateInfo = info
-                        } else {
-                            Toast.makeText(ctx, UpdateText.get("up_to_date", currentLang), Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                    .onFailure {
-                        showUpdateError = true
-                    }
+            if (updateAvailable && cachedUpdateInfo != null) {
+                // Если обновление уже известно, просто показываем диалог
+                updateInfo = cachedUpdateInfo
                 updateChecking = false
+            } else {
+                // Иначе проверяем
+                Toast.makeText(ctx, UpdateText.get("checking", currentLang), Toast.LENGTH_SHORT).show()
+                updateScope.launch {
+                    Updater.check(ctx, respectSkip = false)
+                        .onSuccess { info ->
+                            if (info != null) {
+                                cachedUpdateInfo = info
+                                updateAvailable = true
+                                updateInfo = info
+                            } else {
+                                updateAvailable = false
+                                cachedUpdateInfo = null
+                                Toast.makeText(ctx, UpdateText.get("up_to_date", currentLang), Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        .onFailure {
+                            showUpdateError = true
+                        }
+                    updateChecking = false
+                }
             }
         }
     }
@@ -4065,7 +4088,7 @@ fun NelevMainScreen(
                             .offset { IntOffset(dragOffset.value.toInt(), 0) }
                             .graphicsLayer { alpha = 1f - (abs(dragOffset.value) / screenWidth).coerceIn(0f, 1f) * 0.3f }) {
                             TabContent(selectedTab.value, appState, appSettings, colors, lang, isDark, sliderDragging,
-                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback)
+                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback, onShowPauseDialog = { showPauseDialog = true }, updateAvailable = updateAvailable)
                         }
                     } else {
                         // При клике используем AnimatedContent для плавного перехода
@@ -4090,7 +4113,7 @@ fun NelevMainScreen(
                             label = "tab_content"
                         ) { tab ->
                             TabContent(tab, appState, appSettings, colors, lang, isDark, sliderDragging,
-                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback)
+                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback, onShowPauseDialog = { showPauseDialog = true }, updateAvailable = updateAvailable)
                         }
                     }
                 }
@@ -4184,7 +4207,7 @@ fun NelevMainScreen(
                         lang = lang,
                         isDark = isDark,
                         onDismiss = {
-                            Updater.markSkipped(ctx, info.versionCode)
+                            Updater.markPostponedUntilRestart(ctx)
                             updateInfo = null
                         }
                     )
@@ -4551,7 +4574,8 @@ private fun TabContent(
     showAbout: MutableState<Boolean>,
     onCheckUpdates: () -> Unit = {},
     onScanQr: () -> Unit = {},
-    onShowPauseDialog: () -> Unit = {}
+    onShowPauseDialog: () -> Unit = {},
+    updateAvailable: Boolean = false
 ) {
     val ctx = LocalContext.current
     when (tab) {
@@ -4560,7 +4584,7 @@ private fun TabContent(
             menuCentered = appSettings.value.menuCentered, onScanQr = onScanQr)
         NelevTab.FILTERS  -> FiltersScreen(appState, colors, lang, sliderDragging, appSettings.value.soundClickEnabled, effectsEnabled, isDark, menuCentered = appSettings.value.menuCentered)
         NelevTab.INFO     -> InfoScreen(colors, lang, effectsEnabled)
-        NelevTab.SETTINGS -> SettingsScreen(appSettings, colors, lang, ctx, showHistory, selectedTab, showAbout, onCheckUpdates, onShowPauseDialog)
+        NelevTab.SETTINGS -> SettingsScreen(appSettings, colors, lang, ctx, showHistory, selectedTab, showAbout, onCheckUpdates, onShowPauseDialog, updateAvailable)
     }
 }
 
@@ -7241,7 +7265,8 @@ fun SettingsScreen(
     selectedTab: MutableState<NelevTab>,
     showAbout: MutableState<Boolean>,
     onCheckUpdates: () -> Unit = {},
-    onShowPauseDialog: () -> Unit = {}
+    onShowPauseDialog: () -> Unit = {},
+    updateAvailable: Boolean = false
 ) {
     val bg = colors["bg"]!!
     val text = colors["text"]!!
@@ -7458,9 +7483,10 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                 ) {
                     Column {
                         Text(
-                            Strings.get("check_update", lang),
-                            color = text,
-                            fontSize = 14.sp
+                            if (updateAvailable) Strings.get("update_available", lang) else Strings.get("check_update", lang),
+                            color = if (updateAvailable) accent else text,
+                            fontSize = 14.sp,
+                            fontWeight = if (updateAvailable) FontWeight.SemiBold else FontWeight.Normal
                         )
                         Text(
                             "v$APP_VERSION",

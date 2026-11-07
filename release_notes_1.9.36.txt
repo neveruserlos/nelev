@@ -1,0 +1,22 @@
+✨ NELEV 1.9.36 — Умные обновления
+
+## Что изменилось
+
+• **Умная логика обновлений:** кнопка "Позже" откладывает проверку до перезапуска
+• **Кнопка меняется на "Доступно обновление"** когда обновление найдено
+• **Фоновая проверка каждые 5 секунд** только для обновления статуса кнопки
+• **Уведомление сервиса теперь нельзя скрыть** из панели уведомлений
+
+---
+
+## What's Changed
+
+• **Smart update logic:** "Later" button postpones checking until restart
+• **Button changes to "Update available"** when update is found
+• **Background check every 5 seconds** only updates button status
+• **Service notification can no longer be hidden** from notification panel
+
+---
+
+**Download:** nelev-app-release-1.9.36.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

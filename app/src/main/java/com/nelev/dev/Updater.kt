@@ -282,6 +282,7 @@ object Updater {
     private const val PREFS = "nelev_updater"
     private const val KEY_LAST_CHECK = "last_check_ms"
     private const val KEY_SKIPPED = "skipped_code"
+    private const val KEY_POSTPONED_UNTIL_RESTART = "postponed_until_restart"
     private const val CHECK_INTERVAL_MS = 3 * 60 * 60 * 1000L
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
@@ -290,6 +291,11 @@ object Updater {
     fun markChecked(ctx: Context) = prefs(ctx).edit().putLong(KEY_LAST_CHECK, System.currentTimeMillis()).apply()
     fun skippedCode(ctx: Context): Int = prefs(ctx).getInt(KEY_SKIPPED, 0)
     fun markSkipped(ctx: Context, code: Int) = prefs(ctx).edit().putInt(KEY_SKIPPED, code).apply()
+    
+    // Логика "Позже": откладывает проверку до перезапуска
+    fun isPostponedUntilRestart(ctx: Context): Boolean = prefs(ctx).getBoolean(KEY_POSTPONED_UNTIL_RESTART, false)
+    fun markPostponedUntilRestart(ctx: Context) = prefs(ctx).edit().putBoolean(KEY_POSTPONED_UNTIL_RESTART, true).apply()
+    fun clearPostponed(ctx: Context) = prefs(ctx).edit().putBoolean(KEY_POSTPONED_UNTIL_RESTART, false).apply()
 
     fun shouldAutoCheck(ctx: Context): Boolean =
         System.currentTimeMillis() - lastCheckMs(ctx) > CHECK_INTERVAL_MS
