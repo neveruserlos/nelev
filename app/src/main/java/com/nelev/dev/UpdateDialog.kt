@@ -606,14 +606,6 @@ fun WhatsNewDialog(
     val accent = colors["accent"] ?: Color(0xFFE79BC0)
     val buttonContent = if (isDark) Color.Black else Color.White
 
-    // Плавное появление окна, чтобы оно не «выскакивало» и не телепалось
-    var appeared by remember(versionName) { mutableStateOf(false) }
-    LaunchedEffect(versionName) { 
-        appeared = false
-        kotlinx.coroutines.delay(50)
-        appeared = true 
-    }
-
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -625,21 +617,6 @@ fun WhatsNewDialog(
                 .wrapContentHeight(),
             contentAlignment = Alignment.Center
         ) {
-            AnimatedVisibility(
-                visible = appeared,
-                enter = fadeIn(
-                    animationSpec = tween(300, easing = FastOutSlowInEasing)
-                ) + scaleIn(
-                    initialScale = 0.88f,
-                    animationSpec = tween(350, easing = FastOutSlowInEasing)
-                ),
-                exit = fadeOut(
-                    animationSpec = tween(250, easing = FastOutSlowInEasing)
-                ) + scaleOut(
-                    targetScale = 0.88f,
-                    animationSpec = tween(300, easing = FastOutSlowInEasing)
-                )
-            ) {
             Surface(
                 shape = RoundedCornerShape(28.dp),
                 color = card,
@@ -700,14 +677,13 @@ fun WhatsNewDialog(
                 }
 
                 Column(
-                    Modifier.padding(horizontal = 20.dp, vertical = 18.dp),
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                    Modifier.padding(horizontal = 20.dp, vertical = 18.dp)
                 ) {
                     val scroll = rememberScrollState()
                     val canScrollDown by remember {
                         derivedStateOf { scroll.value < scroll.maxValue - 20 }
                     }
-                    Box(Modifier.fillMaxWidth()) {
+                    Box(Modifier.fillMaxWidth().weight(1f, fill = false)) {
                         Text(
                             changelog?.takeIf { it.isNotBlank() }
                                 ?: UpdateText.get("no_changelog", lang),
@@ -759,6 +735,7 @@ fun WhatsNewDialog(
                             }
                         }
                     }
+                    Spacer(Modifier.height(14.dp))
                     Button(
                         onClick = onDismiss,
                         modifier = Modifier.fillMaxWidth().height(48.dp),
@@ -775,7 +752,6 @@ fun WhatsNewDialog(
                         )
                     }
                 }
-            }
             }
         }
         }

@@ -7493,11 +7493,6 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                                 fontSize = 14.sp,
                                 fontWeight = if (updateAvailable) FontWeight.SemiBold else FontWeight.Normal
                             )
-                            Text(
-                                "v$APP_VERSION",
-                                fontSize = 11.sp,
-                                color = muted
-                            )
                         }
                         if (updateAvailable) {
                             val infiniteTransition = rememberInfiniteTransition(label = "heart_pulse")

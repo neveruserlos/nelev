@@ -1,0 +1,18 @@
+✨ NELEV 1.9.40 — Чистота UI
+
+## Что изменилось
+
+• **Убрана версия из кнопки обновления**
+• **Исправлена анимация кнопки "Отлично"** в диалоге "Что нового" — больше не дёргается и не сужается
+
+---
+
+## What's Changed
+
+• **Removed version from update button**
+• **Fixed "OK" button animation** in What's New dialog — no longer jerky or shrinking
+
+---
+
+**Download:** nelev-app-release-1.9.40.apk  
+**GitHub:** https://github.com/neveruserlos/nelev
