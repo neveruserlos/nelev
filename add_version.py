@@ -3,18 +3,18 @@ p = 'app/src/main/assets/version_history.json'
 with io.open(p, encoding='utf-8') as f:
     d = json.load(f)
 entry = {
-    "versionCode": 75,
-    "versionName": "1.9.40",
+    "versionCode": 76,
+    "versionName": "1.9.41",
     "releaseDate": "2026-11-07",
     "changelog": {
-        "ru": "• Убрана версия из кнопки обновления\n• Исправлена анимация кнопки \"Отлично\" в диалоге \"Что нового\" — больше не дёргается и не сужается",
-        "en": "• Removed version from update button\n• Fixed \"OK\" button animation in What's New dialog — no longer jerky or shrinking",
-        "es": "• Eliminada la versión del botón de actualización\n• Corregida la animación del botón \"Aceptar\" en el diálogo Novedades — ya no se sacude ni se encoge",
-        "zh": "• 从更新按钮中删除了版本\n• 修复了新功能对话框中的\"确定\"按钮动画——不再抖动或收缩",
-        "ja": "• 更新ボタンからバージョンを削除\n• 新機能ダイアログの\"OK\"ボタンのアニメーションを修正 — 引っかかったり縮んだりしなくなりました",
-        "ko": "• 업데이트 버튼에서 버전 제거\n• 새 기능 대화상자의 \"확인\" 버튼 애니메이션 수정 — 더 이상 튀거나 줄어들지 않음",
-        "pt": "• Removida a versão do botão de atualização\n• Corrigida a animação do botão \"OK\" no diálogo Novidades — não treme ou encolhe mais",
-        "uk": "• Прибрано версію з кнопки оновлення\n• Виправлено анімацію кнопки \"Гаразд\" у діалозі \"Що нового\" — більше не смикається і не звужується"
+        "ru": "• Исправлено отображение текста «Доступно обновление» на всех языках — раньше показывался технический ключ",
+        "en": "• Fixed \"Update available\" text display on all languages — previously showed the technical key",
+        "es": "• Corregida la visualización del texto \"Actualización disponible\" en todos los idiomas — antes mostraba la clave técnica",
+        "zh": "• 修复了所有语言下\"有可用更新\"文本的显示——之前显示技术键名",
+        "ja": "• 全言語で「アップデート利用可能」のテキスト表示を修正 — 以前は技術的なキーが表示されていました",
+        "ko": "• 모든 언어에서 \"업데이트 사용 가능\" 텍스트 표시 수정 — 이전에는 기술 키가 표시됨",
+        "pt": "• Corrigida a exibição do texto \"Atualização disponível\" em todos os idiomas — antes mostrava a chave técnica",
+        "uk": "• Виправлено відображення тексту «Доступне оновлення» на всіх мовах — раніше показувався технічний ключ"
     }
 }
 d['versions'].insert(0, entry)
