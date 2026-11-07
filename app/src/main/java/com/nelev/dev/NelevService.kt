@@ -167,9 +167,11 @@ class NelevService : Service() {
     }
 
     private fun ensureChannel() {
-        val ch = NotificationChannel(CHANNEL_ID, "nelev Mic Service", NotificationManager.IMPORTANCE_LOW).apply {
+        val ch = NotificationChannel(CHANNEL_ID, "nelev Mic Service", NotificationManager.IMPORTANCE_DEFAULT).apply {
             description = "Фоновый стриминг микрофона nelev"
-            setShowBadge(false); setSound(null, null)
+            setShowBadge(false)
+            setSound(null, null)
+            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         }
         (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(ch)
     }
@@ -223,11 +225,12 @@ class NelevService : Service() {
             .setContentTitle(contentText)
             .setContentText("")
             .setSmallIcon(android.R.drawable.ic_btn_speak_now)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setOngoing(true)
             .setContentIntent(openIntent)
             .setSilent(true)
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .addAction(0, stopText, stopPendingIntent)
             .build()
     }

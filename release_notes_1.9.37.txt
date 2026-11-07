@@ -1,0 +1,16 @@
+✨ NELEV 1.9.37 — Постоянное уведомление
+
+## Что изменилось
+
+• **Уведомление сервиса теперь действительно нельзя скрыть** — повышен приоритет канала и уведомления
+
+---
+
+## What's Changed
+
+• **Service notification now truly cannot be hidden** — channel and notification priority increased
+
+---
+
+**Download:** nelev-app-release-1.9.37.apk  
+**GitHub:** https://github.com/neveruserlos/nelev
