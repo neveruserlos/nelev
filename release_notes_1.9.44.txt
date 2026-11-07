@@ -1,0 +1,24 @@
+✨ NELEV 1.9.44 — Полный сброс настроек
+
+## Что изменилось
+
+• **«Сбросить настройки» теперь действительно сбрасывает всё**: язык, тему, все параметры пользователя, IP, настройки звука, историю сессий, кэш обновлений и данные апдейтера
+• **После сброса приложение сразу переходит на экран первоначальной настройки** — как после чистой установки
+• Сброс защищён отдельным флагом: фоновые записи (статистика, автосохранение) больше не могут вернуть старые настройки или «съесть» онбординг
+• После сброса не всплывает окно «Что нового»
+• Передача и уведомление при сбросе корректно останавливаются, активная сессия не восстанавливается в историю
+
+---
+
+## What's Changed
+
+• **"Reset settings" now truly resets everything**: language, theme, all user preferences, IP, audio settings, session history, update cache and updater data
+• **After reset the app immediately returns to the initial setup screen** — just like after a clean install
+• Reset is guarded by a separate flag: background writes (statistics, autosave) can no longer restore old settings or skip onboarding
+• The What's New dialog no longer appears after reset
+• Streaming and its notification are properly stopped on reset, and the active session is not restored into history
+
+---
+
+**Download:** nelev-app-release-1.9.44.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

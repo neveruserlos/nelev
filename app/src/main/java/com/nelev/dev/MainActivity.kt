@@ -143,6 +143,27 @@ data class AppSettings(
 object SettingsStore {
     private const val FILE = "nelev_app.txt"
 
+    // Отдельный флаг «приложение полностью сброшено». Нужен, чтобы онбординг
+    // не потерялся, даже если какой-то фоновый код успеет перезаписать файл
+    // настроек сразу после сброса (например, отправка статистики).
+    private const val RESET_PREFS = "nelev_reset"
+    private const val KEY_RESET_PENDING = "reset_pending"
+
+    private fun resetPrefs(ctx: Context) =
+        ctx.getSharedPreferences(RESET_PREFS, Context.MODE_PRIVATE)
+
+    fun beginFullReset(ctx: Context) {
+        try { resetPrefs(ctx).edit().putBoolean(KEY_RESET_PENDING, true).commit() } catch (_: Exception) {}
+    }
+
+    fun isResetPending(ctx: Context): Boolean = try {
+        resetPrefs(ctx).getBoolean(KEY_RESET_PENDING, false)
+    } catch (_: Exception) { false }
+
+    fun completeOnboarding(ctx: Context) {
+        try { resetPrefs(ctx).edit().putBoolean(KEY_RESET_PENDING, false).commit() } catch (_: Exception) {}
+    }
+
     private fun generateUID(ctx: Context): String {
         val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         // ANDROID_ID стабилен для пары «устройство + подпись приложения» и
@@ -168,7 +189,13 @@ object SettingsStore {
         return (1..10).map { chars.random() }.joinToString("")
     }
 
-    fun load(ctx: Context): AppSettings = try {
+    fun load(ctx: Context): AppSettings {
+        if (isResetPending(ctx)) {
+            // После полного сброса всегда отдаём чистые настройки первого
+            // запуска, даже если файл настроек успел появиться снова.
+            return AppSettings(isFirstLaunch = true, userUID = generateUID(ctx))
+        }
+        return try {
         val file = File(ctx.filesDir, FILE)
         val isFirstLaunch = !file.exists()
         val m = if (isFirstLaunch) emptyMap() else file.readLines()
@@ -199,7 +226,8 @@ object SettingsStore {
             updatesPausedUntilMs = m["updatesPausedUntilMs"]?.toLongOrNull() ?: 0L,
             updatesPausedForever = m["updatesPausedForever"] == "true"
         )
-    } catch (_: Exception) { AppSettings() }
+        } catch (_: Exception) { AppSettings() }
+    }
 
     fun save(ctx: Context, s: AppSettings) = try {
         File(ctx.filesDir, FILE).writeText(
@@ -220,6 +248,80 @@ object SettingsStore {
                     "updatesPausedUntilMs=${s.updatesPausedUntilMs}\n" +
                     "updatesPausedForever=${s.updatesPausedForever}\n"
         )
+    } catch (_: Exception) {}
+}
+
+/**
+ * Полный сброс приложения к состоянию «как после установки»:
+ * язык, тема, все настройки, IP, аудио-параметры, история сессий,
+ * кэш обновлений и флаги апдейтера. После вызова приложение обязано
+ * показать экран первоначальной настройки (isFirstLaunch = true).
+ */
+fun fullResetApp(ctx: Context) {
+    // 1. Останавливаем передачу (если шла) — сервис и уведомление убираются.
+    try {
+        NelevService.streaming = false
+        NelevService.targetIp = ""
+        ctx.stopService(Intent(ctx, NelevService::class.java))
+        (ctx.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager)
+            .cancel(NelevService.NOTIF_ID)
+    } catch (_: Exception) {}
+
+    // 2. Флаг «показывать онбординг». Переживает случайные перезаписи файла.
+    SettingsStore.beginFullReset(ctx)
+
+    // 3. Удаляем все пользовательские файлы приложения.
+    listOf(
+        "nelev_app.txt",             // язык, тема и все настройки
+        "nelev_settings.txt",        // IP, громкость, эффекты
+        "nelev_sessions.txt",        // история сессий
+        "nelev_active_session.txt",  // незавершённая активная сессия
+        "installed_versions.json"    // история установленных версий
+    ).forEach { name ->
+        try { File(ctx.filesDir, name).delete() } catch (_: Exception) {}
+    }
+
+    // Кэшированные changelog'и
+    try {
+        ctx.filesDir.listFiles { f -> f.name.startsWith("changelog_") }?.forEach { it.delete() }
+    } catch (_: Exception) {}
+
+    // 4. Отмечаем текущую версию как «уже виденную», чтобы после сброса
+    //    не всплывало окно «Что нового».
+    try {
+        File(ctx.filesDir, "last_run_version.txt").writeText(BuildConfig.VERSION_CODE.toString())
+    } catch (_: Exception) {}
+    // В этом же процессе окно «Что нового» уже могло быть разрешено к показу
+    // (launchInfo посчитан при старте) — гасим его до перезапуска.
+    try { MainActivity.suppressWhatsNewAfterReset = true } catch (_: Exception) {}
+
+    // Страховка от гонки: сервис мог записать heartbeat активной сессии
+    // уже после удаления файлов. Через полторы секунды убираем остатки ещё раз,
+    // чтобы после онбординга история сессий осталась пустой.
+    try {
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            try { File(ctx.filesDir, "nelev_sessions.txt").delete() } catch (_: Exception) {}
+            try { File(ctx.filesDir, "nelev_active_session.txt").delete() } catch (_: Exception) {}
+        }, 1500L)
+    } catch (_: Exception) {}
+
+    // 5. Кэш скачанных обновлений и превью-файлы.
+    try { File(ctx.cacheDir, "updates").deleteRecursively() } catch (_: Exception) {}
+    try {
+        ctx.cacheDir.listFiles { f -> f.name.startsWith("nelev_preview_") }?.forEach { it.delete() }
+    } catch (_: Exception) {}
+
+    // 6. SharedPreferences апдейтера: last_check, skipped_code, postponed.
+    try {
+        ctx.getSharedPreferences("nelev_updater", Context.MODE_PRIVATE)
+            .edit().clear().commit()
+    } catch (_: Exception) {}
+
+    // 7. Сбрасываем данные автозапуска, прилетевшие от ПК.
+    try {
+        MainActivity.autoStartPcIp = ""
+        MainActivity.pendingPcSettings = null
+        MainActivity.suppressNextMuteSend = false
     } catch (_: Exception) {}
 }
 
@@ -2129,6 +2231,7 @@ class MainActivity : ComponentActivity() {
         private var autoStartListener: Thread? = null
         @Volatile var pendingPcSettings: Map<String, Any>? = null
         @Volatile var suppressNextMuteSend: Boolean = false
+        @Volatile var suppressWhatsNewAfterReset: Boolean = false
         private var pcSyncListener: Thread? = null
 
         fun startAutoStartListener() {
@@ -2318,7 +2421,8 @@ class MainActivity : ComponentActivity() {
 
                 // После заставки: если версия изменилась с прошлого запуска — «Что нового»
                 LaunchedEffect(splashDone, uiAlpha, appSettings.value.isFirstLaunch) {
-                    if (whatsNewChecked || !splashDone || uiAlpha < 1f || appSettings.value.isFirstLaunch) {
+                    if (whatsNewChecked || !splashDone || uiAlpha < 1f || appSettings.value.isFirstLaunch ||
+                        MainActivity.suppressWhatsNewAfterReset) {
                         return@LaunchedEffect
                     }
                     whatsNewChecked = true
@@ -2681,6 +2785,8 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
             isFirstLaunch = false
         )
         try { SettingsStore.save(ctx, updated) } catch (_: Exception) {}
+        // Онбординг пройден — снимаем флаг полного сброса.
+        SettingsStore.completeOnboarding(ctx)
         appSettings.value = updated
         onFinish()
     }
@@ -8355,19 +8461,12 @@ fun AboutAppOverlay(
                                                     androidx.compose.material3.TextButton(onClick = {
                                                         if (soundClickEnabled) ClickPlayer.play(ctx)
                                                         showResetConfirm = false
-                                                        // Сброс настроек и переход на экран онбординга
-                                                        val resetSettings = AppSettings(
-                                                            isFirstLaunch = true,
-                                                            isDark = true,
-                                                            soundNotifEnabled = true,
-                                                            soundClickEnabled = true,
-                                                            visualEffectsEnabled = true,
-                                                            language = "en"
-                                                        )
-                                                        save(resetSettings)
-                                                        // Перезагружаем с генерацией нового UID
-                                                        val reloaded = SettingsStore.load(ctx)
-                                                        save(reloaded)
+                                                        // Полный сброс: язык, тема, все настройки, IP,
+                                                        // аудио-параметры, история сессий, кэш обновлений.
+                                                        // После этого load() вернёт isFirstLaunch=true
+                                                        // и приложение покажет экран первоначальной настройки.
+                                                        fullResetApp(ctx)
+                                                        appSettings.value = SettingsStore.load(ctx)
                                                         onDismiss()
                                                     }) {
                                                         Text(Strings.get("reset_confirm", lang).ifEmpty { "Reset" })
