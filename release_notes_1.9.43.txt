@@ -1,0 +1,22 @@
+✨ NELEV 1.9.43 — Уведомление только при передаче
+
+## Что изменилось
+
+• **Уведомление сервиса появляется только тогда, когда реально идёт передача** — после нажатия «Начать». При открытии приложения без стриминга уведомления нет
+• **При остановке уведомление исчезает** (и кнопкой в приложении, и кнопкой «Остановить» в самом уведомлении)
+• **Проверка каждые 5 секунд**: если уведомление скрыли из шторки, оно возвращается. Используется один и тот же ID уведомления — никаких дублей и спама
+• Убраны «зомби»-запуски сервиса: смена языка или системный перезапуск больше не создают уведомление без активной передачи
+
+---
+
+## What's Changed
+
+• **The service notification now appears only while streaming is actually active** — after pressing "Start". No notification when opening the app without streaming
+• **The notification disappears on stop** (both in-app and via the "Stop" action in the notification itself)
+• **Checked every 5 seconds**: if the notification is dismissed, it is restored. The same notification ID is used — no duplicates, no spam
+• Removed "zombie" service starts: changing the language or a system restart no longer creates a notification without an active stream
+
+---
+
+**Download:** nelev-app-release-1.9.43.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

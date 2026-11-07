@@ -97,17 +97,24 @@ class NelevService : Service() {
     override fun onCreate() {
         super.onCreate()
         ensureChannel()
-        startForeground(NOTIF_ID, buildNotification())
+        // Важно: уведомление НЕ создаётся здесь. Сервис может быть создан
+        // системой или служебным вызовом — уведомление должно появляться
+        // строго тогда, когда реально запущен стриминг (кнопка «Начать»).
         registerDismissReceiver()
-        startNotificationWatchdog()
-        acquireWakeLock()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             "ACTION_REFRESH" -> {
-                updateNotification()
-                return START_STICKY
+                // Обновляем уведомление только если сервис реально стримит.
+                // Иначе гасим сервис, чтобы не висело уведомление без передачи.
+                if (streaming) {
+                    updateNotification()
+                    return START_STICKY
+                }
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                stopSelf()
+                return START_NOT_STICKY
             }
             "ACTION_STOP" -> {
                 // Финализируем активную сессию так же, как кнопка Stop в приложении
@@ -121,6 +128,7 @@ class NelevService : Service() {
                 streaming = false
                 Companion.streaming = false
                 job.cancel()
+                try { stopForeground(STOP_FOREGROUND_REMOVE) } catch (_: Exception) {}
                 // Сообщаем открытому UI, что передача остановлена из уведомления
                 try {
                     sendBroadcast(Intent("com.nelev.dev.ACTION_STOPPED").setPackage(packageName))
@@ -133,6 +141,11 @@ class NelevService : Service() {
         if (!streaming) {
             streaming = true
             Companion.streaming = true
+            acquireWakeLock()
+            // Уведомление создаётся только вместе с реальным стартом передачи.
+            // Для startForegroundService() это нужно сделать сразу (5 секунд).
+            startForeground(NOTIF_ID, buildNotification())
+            startNotificationWatchdog()
             scope.launch {
                 try {
                     var retryDelay = 1000L
@@ -158,6 +171,7 @@ class NelevService : Service() {
         notificationWatchdog?.cancel()
         notificationWatchdog = null
         try { unregisterReceiver(dismissReceiver) } catch (_: Exception) {}
+        try { stopForeground(STOP_FOREGROUND_REMOVE) } catch (_: Exception) {}
         job.cancel()
         streaming = false
         Companion.streaming = false
@@ -168,9 +182,22 @@ class NelevService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onTaskRemoved(rootIntent: Intent?) {
-        val restart = Intent(applicationContext, NelevService::class.java).apply { setPackage(packageName) }
-        val pi = PendingIntent.getService(applicationContext, 1, restart, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)
-        (getSystemService(Context.ALARM_SERVICE) as AlarmManager).set(AlarmManager.ELAPSED_REALTIME, 1500, pi)
+        // Перезапускаем сервис только если реально идёт передача.
+        // Иначе не оставляем «зомби»-сервис с уведомлением без стриминга.
+        if (streaming) {
+            try {
+                val restart = Intent(applicationContext, NelevService::class.java).apply { setPackage(packageName) }
+                val pi = PendingIntent.getService(
+                    applicationContext, 1, restart,
+                    PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+                )
+                val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val triggerAt = android.os.SystemClock.elapsedRealtime() + 1500L
+                try {
+                    am.set(AlarmManager.ELAPSED_REALTIME, triggerAt, pi)
+                } catch (_: Exception) {}
+            } catch (_: Exception) {}
+        }
         super.onTaskRemoved(rootIntent)
     }
 
@@ -275,16 +302,18 @@ class NelevService : Service() {
     }
 
     // Страховка: если система не доставила deleteIntent (OEM-прошивки,
-    // Android 14+), раз в пару секунд проверяем, что наше уведомление
+    // Android 14+), каждые 5 секунд проверяем, что наше уведомление
     // действительно висит в шторке, и возвращаем его.
+    // Проверка activeNotifications доступна с API 23, а minSdk приложения 26,
+    // поэтому уведомление не переотправляется вслепую — только когда его нет.
     private fun startNotificationWatchdog() {
         if (notificationWatchdog?.isActive == true) return
         notificationWatchdog = scope.launch {
             val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             while (isActive) {
-                delay(2500)
+                delay(5000)
                 try {
-                    if (Build.VERSION.SDK_INT >= 23 && streaming) {
+                    if (streaming) {
                         val alive = nm.activeNotifications.any { it.id == NOTIF_ID }
                         if (!alive) repostNotification()
                     }
@@ -304,8 +333,9 @@ class NelevService : Service() {
     }
     
     private fun updateNotification() {
-        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.notify(NOTIF_ID, buildNotification())
+        // Уведомление всегда с одним и тем же ID → Android обновляет его,
+        // а не создаёт дубликаты (никакого спама из десятков уведомлений).
+        repostNotification()
     }
 
     // ─── QUALITY без задержки: DC-blocker + Low-cut 80 Hz ─────────────────────

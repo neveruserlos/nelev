@@ -3635,6 +3635,12 @@ fun NelevMainScreen(
         // Восстановление сессии, если приложение завершилось аварийно
         if (!NelevService.streaming) {
             try { SessionStore.recoverCrashedSession(ctx) } catch (_: Exception) {}
+            // Страховка: если передача не идёт, в шторке не должно быть
+            // служебного уведомления (например, после сбоя или обновления).
+            try {
+                val nm = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                nm.cancel(NelevService.NOTIF_ID)
+            } catch (_: Exception) {}
         }
         // Сбрасываем флаг "Позже" при запуске приложения
         Updater.clearPostponed(ctx)
@@ -7369,10 +7375,12 @@ fun SettingsScreen(
                                                 if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                                                 save(appSettings.value.copy(language = code)); langExpanded = false
                                                 try {
-                                                    val intent = Intent(ctx, NelevService::class.java).apply {
-                                                        action = "ACTION_REFRESH"
+                                                    if (NelevService.streaming) {
+                                                        val intent = Intent(ctx, NelevService::class.java).apply {
+                                                            action = "ACTION_REFRESH"
+                                                        }
+                                                        ctx.startService(intent)
                                                     }
-                                                    ctx.startService(intent)
                                                 } catch (_: Exception) {}
                                             }
                                             .padding(horizontal = 14.dp, vertical = 12.dp),
