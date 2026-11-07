@@ -1,0 +1,18 @@
+✨ NELEV 1.9.38 — Полировка UI
+
+## Что изменилось
+
+• **Исправлена анимация кнопки "Что нового"** — больше не дёргается
+• **Добавлено мигающее сердечко** рядом с "Доступно обновление"
+
+---
+
+## What's Changed
+
+• **Fixed What's New button animation** — no longer jerky
+• **Added pulsing heart icon** next to Update available
+
+---
+
+**Download:** nelev-app-release-1.9.38.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

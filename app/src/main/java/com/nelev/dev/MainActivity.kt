@@ -7459,6 +7459,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
         }
 
         // Кнопка "Проверить обновление" + иконка "Что нового"
+        var showWhatsNewLocal by remember { mutableStateOf(false) }
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -7481,18 +7482,41 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column {
-                        Text(
-                            if (updateAvailable) Strings.get("update_available", lang) else Strings.get("check_update", lang),
-                            color = if (updateAvailable) accent else text,
-                            fontSize = 14.sp,
-                            fontWeight = if (updateAvailable) FontWeight.SemiBold else FontWeight.Normal
-                        )
-                        Text(
-                            "v$APP_VERSION",
-                            fontSize = 11.sp,
-                            color = muted
-                        )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Column {
+                            Text(
+                                if (updateAvailable) Strings.get("update_available", lang) else Strings.get("check_update", lang),
+                                color = if (updateAvailable) accent else text,
+                                fontSize = 14.sp,
+                                fontWeight = if (updateAvailable) FontWeight.SemiBold else FontWeight.Normal
+                            )
+                            Text(
+                                "v$APP_VERSION",
+                                fontSize = 11.sp,
+                                color = muted
+                            )
+                        }
+                        if (updateAvailable) {
+                            val infiniteTransition = rememberInfiniteTransition(label = "heart_pulse")
+                            val heartAlpha by infiniteTransition.animateFloat(
+                                initialValue = 0.3f,
+                                targetValue = 1f,
+                                animationSpec = infiniteRepeatable(
+                                    animation = tween(1000, easing = FastOutSlowInEasing),
+                                    repeatMode = RepeatMode.Reverse
+                                ),
+                                label = "heart_alpha"
+                            )
+                            Icon(
+                                Icons.Filled.Favorite,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp).alpha(heartAlpha),
+                                tint = accent
+                            )
+                        }
                     }
                     Icon(
                         Icons.Filled.KeyboardArrowRight,
@@ -7503,7 +7527,6 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                 }
             }
             
-            var showWhatsNewLocal by remember { mutableStateOf(false) }
             Box(
                 Modifier
                     .size(54.dp)
@@ -7521,28 +7544,28 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                     Modifier.size(20.dp), tint = muted
                 )
             }
+        }
             
-            if (showWhatsNewLocal) {
-                val currentCode = try {
-                    ctx.packageManager.getPackageInfo(ctx.packageName, 0).let {
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                            it.longVersionCode.toInt()
-                        } else {
-                            @Suppress("DEPRECATION")
-                            it.versionCode
-                        }
+        if (showWhatsNewLocal) {
+            val currentCode = try {
+                ctx.packageManager.getPackageInfo(ctx.packageName, 0).let {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                        it.longVersionCode.toInt()
+                    } else {
+                        @Suppress("DEPRECATION")
+                        it.versionCode
                     }
-                } catch (_: Exception) { 0 }
-                val changelog = remember(currentCode, lang) { VersionHistory.changelog(ctx, currentCode, lang) ?: "" }
-                WhatsNewDialog(
-                    versionName = APP_VERSION,
-                    changelog = changelog,
-                    colors = colors,
-                    lang = lang,
-                    isDark = appSettings.value.isDark,
-                    onDismiss = { showWhatsNewLocal = false }
-                )
-            }
+                }
+            } catch (_: Exception) { 0 }
+            val changelog = remember(currentCode, lang) { VersionHistory.changelog(ctx, currentCode, lang) ?: "" }
+            WhatsNewDialog(
+                versionName = APP_VERSION,
+                changelog = changelog,
+                colors = colors,
+                lang = lang,
+                isDark = appSettings.value.isDark,
+                onDismiss = { showWhatsNewLocal = false }
+            )
         }
 
 
