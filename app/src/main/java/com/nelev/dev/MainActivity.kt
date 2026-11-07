@@ -7467,7 +7467,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
             Box(
                 Modifier
                     .weight(1f)
-                    .height(54.dp)
+                    .wrapContentHeight()
                     .clip(RoundedCornerShape(14.dp))
                     .background(card)
                     .border(1.dp, border, RoundedCornerShape(14.dp))
@@ -7478,7 +7478,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                     .padding(horizontal = 12.dp, vertical = 12.dp)
             ) {
                 Row(
-                    Modifier.fillMaxSize(),
+                    Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {

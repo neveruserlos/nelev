@@ -1,0 +1,16 @@
+✨ NELEV 1.9.39 — Адаптивная кнопка
+
+## Что изменилось
+
+• **Кнопка обновления теперь автоматически подстраивается под размер текста** без анимации
+
+---
+
+## What's Changed
+
+• **Update button now automatically adjusts to text size** without animation
+
+---
+
+**Download:** nelev-app-release-1.9.39.apk  
+**GitHub:** https://github.com/neveruserlos/nelev

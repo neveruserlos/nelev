@@ -3,18 +3,18 @@ p = 'app/src/main/assets/version_history.json'
 with io.open(p, encoding='utf-8') as f:
     d = json.load(f)
 entry = {
-    "versionCode": 73,
-    "versionName": "1.9.38",
+    "versionCode": 74,
+    "versionName": "1.9.39",
     "releaseDate": "2026-11-07",
     "changelog": {
-        "ru": "• Исправлена анимация кнопки «Что нового» — больше не дёргается\n• Добавлено мигающее сердечко рядом с «Доступно обновление»",
-        "en": "• Fixed What's New button animation — no longer jerky\n• Added pulsing heart icon next to Update available",
-        "es": "• Corregida la animación del botón Novedades — ya no se sacude\n• Añadido icono de corazón pulsante junto a Actualización disponible",
-        "zh": "• 修复了新功能按钮动画——不再抖动\n• 在有可用更新旁边添加了跳动的心形图标",
-        "ja": "• 新機能ボタンのアニメーションを修正 — 引っかからなくなりました\n• アップデート利用可能の横に脈打つハートアイコンを追加",
-        "ko": "• 새 기능 버튼 애니메이션 수정 — 더 이상 튀지 않음\n• 업데이트 사용 가능 옆에 맥동하는 하트 아이콘 추가",
-        "pt": "• Corrigida a animação do botão Novidades — não treme mais\n• Adicionado ícone de coração pulsante ao lado de Atualização disponível",
-        "uk": "• Виправлено анімацію кнопки «Що нового» — більше не смикається\n• Додано пульсуюче серце поруч з «Доступне оновлення»"
+        "ru": "• Кнопка обновления теперь автоматически подстраивается под размер текста без анимации",
+        "en": "• Update button now automatically adjusts to text size without animation",
+        "es": "• El botón de actualización ahora se ajusta automáticamente al tamaño del texto sin animación",
+        "zh": "• 更新按钮现在自动调整到文本大小，无动画",
+        "ja": "• 更新ボタンがアニメーションなしでテキストサイズに自動調整されるようになりました",
+        "ko": "• 업데이트 버튼이 이제 애니메이션 없이 텍스트 크기에 자동으로 조정됩니다",
+        "pt": "• O botão de atualização agora se ajusta automaticamente ao tamanho do texto sem animação",
+        "uk": "• Кнопка оновлення тепер автоматично підлаштовується під розмір тексту без анімації"
     }
 }
 d['versions'].insert(0, entry)
