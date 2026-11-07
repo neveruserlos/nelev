@@ -3,18 +3,18 @@ p = 'app/src/main/assets/version_history.json'
 with io.open(p, encoding='utf-8') as f:
     d = json.load(f)
 entry = {
-    "versionCode": 76,
-    "versionName": "1.9.41",
+    "versionCode": 77,
+    "versionName": "1.9.42",
     "releaseDate": "2026-11-07",
     "changelog": {
-        "ru": "• Исправлено отображение текста «Доступно обновление» на всех языках — раньше показывался технический ключ",
-        "en": "• Fixed \"Update available\" text display on all languages — previously showed the technical key",
-        "es": "• Corregida la visualización del texto \"Actualización disponible\" en todos los idiomas — antes mostraba la clave técnica",
-        "zh": "• 修复了所有语言下\"有可用更新\"文本的显示——之前显示技术键名",
-        "ja": "• 全言語で「アップデート利用可能」のテキスト表示を修正 — 以前は技術的なキーが表示されていました",
-        "ko": "• 모든 언어에서 \"업데이트 사용 가능\" 텍스트 표시 수정 — 이전에는 기술 키가 표시됨",
-        "pt": "• Corrigida a exibição do texto \"Atualização disponível\" em todos os idiomas — antes mostrava a chave técnica",
-        "uk": "• Виправлено відображення тексту «Доступне оновлення» на всіх мовах — раніше показувався технічний ключ"
+        "ru": "• Диалог «Что нового» теперь сразу открывается финального размера — кнопка «Отлично» больше не прыгает и окно не сужается\n• Уведомление сервиса автоматически возвращается в шторку, если его скрыть",
+        "en": "• The What's New dialog now opens at its final size right away — the OK button no longer jumps and the window no longer shrinks\n• The service notification is automatically restored to the shade if dismissed",
+        "es": "• El diálogo Novedades ahora se abre directamente con su tamaño final — el botón Aceptar ya no salta y la ventana no se encoge\n• La notificación del servicio se restaura automáticamente en la cortina si se descarta",
+        "zh": "• “新功能”对话框现在直接以最终尺寸打开——确定按钮不再跳动，窗口不再收缩\n• 服务通知被关闭后会自动恢复到通知栏",
+        "ja": "• 「新機能」ダイアログが最初から最終サイズで開くようになりました — OKボタンが跳ねたり、ウィンドウが縮んだりしません\n• サービスの通知を閉じても通知シェードに自動的に復元されます",
+        "ko": "• \"새 기능\" 대화상자가 이제 처음부터 최종 크기로 열립니다 — 확인 버튼이 튀거나 창이 줄어들지 않습니다\n• 서비스 알림을 닫아도 알림 창에 자동으로 복원됩니다",
+        "pt": "• O diálogo Novidades agora abre direto no tamanho final — o botão OK não pula mais e a janela não encolhe\n• A notificação do serviço é restaurada automaticamente na gaveta se for dispensada",
+        "uk": "• Діалог «Що нового» тепер одразу відкривається фінального розміру — кнопка «Гаразд» більше не стрибає і вікно не звужується\n• Сповіщення сервісу автоматично повертається в шторку, якщо його приховати"
     }
 }
 d['versions'].insert(0, entry)

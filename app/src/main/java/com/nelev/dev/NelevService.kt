@@ -7,8 +7,10 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioManager
@@ -18,6 +20,7 @@ import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.*
 import java.net.DatagramPacket
@@ -33,6 +36,7 @@ class NelevService : Service() {
         const val CHANNEL_ID = "nelev_service"
         const val NOTIF_ID   = 1
         const val PORT       = 55000
+        const val ACTION_RESTORE_NOTIFICATION = "com.nelev.dev.ACTION_RESTORE_NOTIFICATION"
 
         @Volatile var targetIp    : String  = ""
         @Volatile var volume      : Float   = 1f
@@ -57,6 +61,17 @@ class NelevService : Service() {
     private val job   = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
     private var wakeLock: PowerManager.WakeLock? = null
+    private var notificationWatchdog: Job? = null
+
+    // Пользователь может скрыть уведомление из шторки (на Android 14+ это
+    // разрешено даже для ongoing). Ловим удаление и сразу возвращаем его.
+    private val dismissReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == ACTION_RESTORE_NOTIFICATION) {
+                repostNotification()
+            }
+        }
+    }
 
     @Volatile private var streaming = false
 
@@ -83,6 +98,8 @@ class NelevService : Service() {
         super.onCreate()
         ensureChannel()
         startForeground(NOTIF_ID, buildNotification())
+        registerDismissReceiver()
+        startNotificationWatchdog()
         acquireWakeLock()
     }
 
@@ -138,6 +155,9 @@ class NelevService : Service() {
     }
 
     override fun onDestroy() {
+        notificationWatchdog?.cancel()
+        notificationWatchdog = null
+        try { unregisterReceiver(dismissReceiver) } catch (_: Exception) {}
         job.cancel()
         streaming = false
         Companion.streaming = false
@@ -228,11 +248,59 @@ class NelevService : Service() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setOngoing(true)
             .setContentIntent(openIntent)
+            .setDeleteIntent(
+                PendingIntent.getBroadcast(
+                    this, 3,
+                    Intent(ACTION_RESTORE_NOTIFICATION).setPackage(packageName),
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+            )
             .setSilent(true)
+            .setOnlyAlertOnce(true)
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .addAction(0, stopText, stopPendingIntent)
             .build()
+    }
+
+    private fun registerDismissReceiver() {
+        try {
+            val filter = IntentFilter(ACTION_RESTORE_NOTIFICATION)
+            if (Build.VERSION.SDK_INT >= 33) {
+                registerReceiver(dismissReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            } else {
+                registerReceiver(dismissReceiver, filter)
+            }
+        } catch (_: Exception) {}
+    }
+
+    // Страховка: если система не доставила deleteIntent (OEM-прошивки,
+    // Android 14+), раз в пару секунд проверяем, что наше уведомление
+    // действительно висит в шторке, и возвращаем его.
+    private fun startNotificationWatchdog() {
+        if (notificationWatchdog?.isActive == true) return
+        notificationWatchdog = scope.launch {
+            val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            while (isActive) {
+                delay(2500)
+                try {
+                    if (Build.VERSION.SDK_INT >= 23 && streaming) {
+                        val alive = nm.activeNotifications.any { it.id == NOTIF_ID }
+                        if (!alive) repostNotification()
+                    }
+                } catch (_: Exception) {}
+            }
+        }
+    }
+
+    private fun repostNotification() {
+        try {
+            if (!streaming) return
+            if (!NotificationManagerCompat.from(this).areNotificationsEnabled()) return
+            // startForeground (а не notify) — надёжно перепривязывает
+            // уведомление к foreground-сервису после ручного скрытия.
+            startForeground(NOTIF_ID, buildNotification())
+        } catch (_: Exception) {}
     }
     
     private fun updateNotification() {

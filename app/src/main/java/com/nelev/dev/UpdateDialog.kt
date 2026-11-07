@@ -18,8 +18,10 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -71,10 +73,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -610,19 +617,51 @@ fun WhatsNewDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
+        // Окно диалога всегда полноэкранное: оно создаётся сразу фиксированного
+        // размера и больше никогда не меняет габариты — поэтому карточка не
+        // «телепортируется» и не дёргается при открытии.
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp)
-                .wrapContentHeight(),
+            Modifier
+                .fillMaxSize()
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { onDismiss() },
             contentAlignment = Alignment.Center
         ) {
+            BoxWithConstraints(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp),
+                contentAlignment = Alignment.Center
+            ) {
+            // Высота текста измеряется ДО первого кадра, поэтому карточка
+            // открывается уже финального размера и не сужается после появления.
+            val surfaceWidth = if (maxWidth < 430.dp) maxWidth else 430.dp
+            val bodyText = changelog?.takeIf { it.isNotBlank() }
+                ?: UpdateText.get("no_changelog", lang)
+            val bodyStyle = TextStyle(fontSize = 14.sp, lineHeight = 21.sp)
+            val density = LocalDensity.current
+            val textMeasurer = rememberTextMeasurer()
+            val bodyHeight = remember(bodyText, surfaceWidth, density) {
+                val widthPx = with(density) { (surfaceWidth - 40.dp).roundToPx() }
+                val measuredPx = textMeasurer.measure(
+                    text = AnnotatedString(bodyText),
+                    style = bodyStyle,
+                    constraints = Constraints(maxWidth = widthPx)
+                ).size.height
+                with(density) { measuredPx.toDp() }
+            }
+            val maxBodyHeight = 300.dp
+            val scrollHeight =
+                if (bodyHeight + 12.dp > maxBodyHeight) maxBodyHeight else bodyHeight + 12.dp
+
             Surface(
                 shape = RoundedCornerShape(28.dp),
                 color = card,
                 tonalElevation = 0.dp,
                 shadowElevation = 20.dp,
-                modifier = Modifier.fillMaxWidth().widthIn(max = 430.dp)
+                modifier = Modifier.width(surfaceWidth)
             ) {
                 Column {
                 Box(
@@ -683,18 +722,17 @@ fun WhatsNewDialog(
                     val canScrollDown by remember {
                         derivedStateOf { scroll.value < scroll.maxValue - 20 }
                     }
-                    Box(Modifier.fillMaxWidth().weight(1f, fill = false)) {
+                    // Фиксированная высота из предварительного измерения:
+                    // размер известен до первого кадра и не меняется.
+                    Box(Modifier.fillMaxWidth().height(scrollHeight)) {
                         Text(
-                            changelog?.takeIf { it.isNotBlank() }
-                                ?: UpdateText.get("no_changelog", lang),
-                            fontSize = 14.sp,
-                            lineHeight = 21.sp,
+                            bodyText,
+                            style = bodyStyle,
                             color = muted,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .heightIn(max = 300.dp)
                                 .verticalScroll(scroll)
-                                .padding(bottom = if (canScrollDown) 18.dp else 0.dp)
+                                .padding(bottom = 12.dp)
                         )
                         androidx.compose.animation.AnimatedVisibility(
                             visible = canScrollDown,
@@ -756,6 +794,7 @@ fun WhatsNewDialog(
         }
         }
     }
+}
 }
 
 // ─── Разрешение на установку ─────────────────────────────────────────────────

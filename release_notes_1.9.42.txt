@@ -1,0 +1,18 @@
+✨ NELEV 1.9.42 — Стабильный диалог и уведомление
+
+## Что изменилось
+
+• **Диалог «Что нового» больше не дёргается.** Размер текста измеряется заранее, окно сразу открывается финального размера — кнопка «Отлично» больше не «телепортируется», пустого пространства и сужения нет
+• **Уведомление сервиса возвращается в шторку**, если его скрыть — приложение сразу переотправляет его, плюс раз в пару секунд проверяет, что оно на месте
+
+---
+
+## What's Changed
+
+• **The What's New dialog no longer jitters.** Text size is measured in advance, so the window opens at its final size — the OK button no longer "teleports", with no empty space or shrinking
+• **The service notification is restored to the shade if dismissed** — the app re-posts it immediately and also checks every couple of seconds that it stays there
+
+---
+
+**Download:** nelev-app-release-1.9.42.apk  
+**GitHub:** https://github.com/neveruserlos/nelev
