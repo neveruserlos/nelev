@@ -1,10 +1,10 @@
-# NELEV Release Script v1.9.44
+# NELEV Release Script v1.9.45
 # Automated GitHub Release Upload
 
 $apkPath = "app\build\outputs\apk\release\app-release.apk"
-$versionName = "1.9.44"
-$versionCode = "79"
-$notesFile = "release_notes_1.9.44.txt"
+$versionName = "1.9.45"
+$versionCode = "80"
+$notesFile = "release_notes_1.9.45.txt"
 
 Write-Host "=== NELEV Release v$versionName ===" -ForegroundColor Cyan
 
@@ -32,7 +32,7 @@ Write-Host "Size: $sizeBytes bytes" -ForegroundColor Green
 # Create version.json
 # NOTE: must be UTF-8 WITHOUT BOM and ASCII-safe bullets, otherwise
 # org.json.JSONObject() in Updater.kt fails and the update is never found.
-$changelog = "- Full reset now wipes language, theme, all settings, IP, session history and update cache, then returns to onboarding`n- Reset survives background writes and does not show the What's New dialog"
+$changelog = "- Animations now instantly disable when Visual effects is off`n- Blur on overlays works always, independent of visual effects`n- Theme switch livelier: 650 ms FastOutSlowInEasing with overshoot feel`n- Theme button press animation: scale 0.95x + gradient shift"
 # Localized changelogs for all languages, so the update window does not depend
 # on raw.githubusercontent.com (which can be blocked). Old clients ignore this
 # field and keep using the plain "changelog" above.

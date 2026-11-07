@@ -1,0 +1,15 @@
+NELEV 1.9.45 — Animation Polish & Theme Button
+
+RU:
+• Анимации окон/свайпов теперь мгновенно выключаются при отключении «Визуальные эффекты» (0 мс вместо 300/420/500 мс)
+• Блюр при открытых окнах (история сессий / About) теперь работает всегда, независимо от настройки визуальных эффектов
+• Смена темы стала живей: 650 мс с FastOutSlowInEasing и overshoot-ощущением (было 250/500 мс)
+• Кнопка смены темы: при нажатии — плавный scale down до 0.95× + сдвиг градиента (press-анимация через InteractionSource)
+
+EN:
+• Window/swipe animations now instantly disable when "Visual effects" is turned off (0 ms instead of 300/420/500 ms)
+• Blur on open overlays (history/About) now works always, independent of visual effects setting
+• Theme switching is livelier: 650 ms with FastOutSlowInEasing and overshoot feel (was 250/500 ms)
+• Theme button: press animation with scale down to 0.95× + gradient shift (via InteractionSource)
+
+Full reset (v1.9.44) remains: language, theme, all settings, IP, audio params, session history, update cache wiped; app returns to onboarding immediately.

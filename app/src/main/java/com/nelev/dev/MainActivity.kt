@@ -43,6 +43,7 @@ import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.ui.geometry.Offset
 import kotlin.math.sqrt
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -2179,7 +2180,10 @@ class NelevColors internal constructor(private val values: Map<String, Color>) {
 fun nelevColors(isDark: Boolean, effectsEnabled: Boolean = true): NelevColors {
     val t by animateFloatAsState(
         targetValue = if (isDark) 1f else 0f,
-        animationSpec = tween(if (effectsEnabled) 500 else 0, easing = FastOutSlowInEasing),
+        animationSpec = if (effectsEnabled)
+            tween(650, easing = FastOutSlowInEasing)
+        else
+            snap(),
         label = "themeProgress"
     )
     fun lerp(a: Color, b: Color): Color = Color(
@@ -2400,7 +2404,7 @@ class MainActivity : ComponentActivity() {
             NelevTheme(darkTheme = appSettings.value.isDark) {
                 val appBg by animateColorAsState(
                     if (appSettings.value.isDark) Color(0xFF060606) else Color(0xFFFFFCFF),
-                    tween(if (effectsEnabled) 250 else 0) // OPTIMIZATION: 500ms → 250ms - быстрее смена темы
+                    animationSpec = if (effectsEnabled) tween(650, easing = FastOutSlowInEasing) else snap()
                 )
                 val rootColors = nelevColors(appSettings.value.isDark, effectsEnabled)
 
@@ -2795,12 +2799,15 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
         AnimatedContent(
             targetState = step,
             transitionSpec = {
+                val dur = if (effectsEnabled) 420 else 0
+                val durFade = if (effectsEnabled) 280 else 0
+                val durFadeOut = if (effectsEnabled) 180 else 0
                 if (targetState > initialState) {
-                    (slideInHorizontally(tween(420, easing = FastOutSlowInEasing)) { it } + fadeIn(tween(280))) togetherWith
-                        (slideOutHorizontally(tween(420, easing = FastOutSlowInEasing)) { -it } + fadeOut(tween(180)))
+                    (slideInHorizontally(tween(dur, easing = FastOutSlowInEasing)) { it } + fadeIn(tween(durFade))) togetherWith
+                        (slideOutHorizontally(tween(dur, easing = FastOutSlowInEasing)) { -it } + fadeOut(tween(durFadeOut)))
                 } else {
-                    (slideInHorizontally(tween(420, easing = FastOutSlowInEasing)) { -it } + fadeIn(tween(280))) togetherWith
-                        (slideOutHorizontally(tween(420, easing = FastOutSlowInEasing)) { it } + fadeOut(tween(180)))
+                    (slideInHorizontally(tween(dur, easing = FastOutSlowInEasing)) { -it } + fadeIn(tween(durFade))) togetherWith
+                        (slideOutHorizontally(tween(dur, easing = FastOutSlowInEasing)) { it } + fadeOut(tween(durFadeOut)))
                 }
             },
             label = "onboarding_step"
@@ -2854,8 +2861,9 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                                 AnimatedContent(
                                     targetState = langIndex,
                                     transitionSpec = {
-                                        (slideInHorizontally(tween(360, easing = FastOutSlowInEasing)) { it / 2 } + fadeIn(tween(260))) togetherWith
-                                            (slideOutHorizontally(tween(360, easing = FastOutSlowInEasing)) { -it / 2 } + fadeOut(tween(180)))
+                                        val dur = if (effectsEnabled) 360 else 0
+                                        (slideInHorizontally(tween(dur, easing = FastOutSlowInEasing)) { it / 2 } + fadeIn(tween(if (effectsEnabled) 260 else 0))) togetherWith
+                                            (slideOutHorizontally(tween(dur, easing = FastOutSlowInEasing)) { -it / 2 } + fadeOut(tween(if (effectsEnabled) 180 else 0)))
                                     },
                                     label = "onboarding_greeting"
                                 ) { idx ->
@@ -2879,8 +2887,9 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                         AnimatedContent(
                             targetState = currentLang,
                             transitionSpec = {
-                                (fadeIn(tween(320)) + slideInHorizontally(tween(360, easing = FastOutSlowInEasing)) { it / 4 }) togetherWith
-                                    (fadeOut(tween(200)) + slideOutHorizontally(tween(360, easing = FastOutSlowInEasing)) { -it / 4 })
+                                val dur = if (effectsEnabled) 360 else 0
+                                (fadeIn(tween(if (effectsEnabled) 320 else 0)) + slideInHorizontally(tween(dur, easing = FastOutSlowInEasing)) { it / 4 }) togetherWith
+                                    (fadeOut(tween(if (effectsEnabled) 200 else 0)) + slideOutHorizontally(tween(dur, easing = FastOutSlowInEasing)) { -it / 4 })
                             },
                             label = "onboarding_subtitle"
                         ) { l ->
@@ -2919,8 +2928,9 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                             AnimatedContent(
                                 targetState = currentLang,
                                 transitionSpec = {
-                                    (fadeIn(tween(280)) + slideInHorizontally(tween(320)) { it / 4 }) togetherWith
-                                        (fadeOut(tween(160)) + slideOutHorizontally(tween(320)) { -it / 4 })
+                                    val dur = if (effectsEnabled) 320 else 0
+                                    (fadeIn(tween(if (effectsEnabled) 280 else 0)) + slideInHorizontally(tween(dur)) { it / 4 }) togetherWith
+                                        (fadeOut(tween(if (effectsEnabled) 160 else 0)) + slideOutHorizontally(tween(dur)) { -it / 4 })
                                 },
                                 label = "onboarding_theme_title"
                             ) { l ->
@@ -4050,10 +4060,8 @@ fun NelevMainScreen(
                 Box(
                     Modifier
                         .fillMaxSize()
-                        // BETA-БЛЮР: при включённых визуальных эффектах фон размывается,
-                        // при выключенных — прежнее затемнение (alpha 0.62), чтобы не терять акцент
-                        .alpha(if (!effectsEnabled && (showHistory.value || showAbout.value)) 0.62f else 1f)
-                        .blur(if (effectsEnabled && (showHistory.value || showAbout.value)) 6.dp else 0.dp)
+                        // Блюр всегда активен при открытых оверлеях (не зависит от visualEffects)
+                        .blur(if (showHistory.value || showAbout.value) 6.dp else 0.dp)
                         .onSizeChanged { screenWidth = it.width.toFloat() }
                         .then(
                             if (showHistory.value || showAbout.value) {
@@ -4219,16 +4227,17 @@ fun NelevMainScreen(
                                     AnimatedContentTransitionScope.SlideDirection.Left 
                                 else 
                                     AnimatedContentTransitionScope.SlideDirection.Right
+                                val dur = if (effectsEnabled) 300 else 0
                                 slideIntoContainer(
                                     direction, 
-                                    animationSpec = tween(300, easing = FastOutSlowInEasing),
+                                    animationSpec = tween(dur, easing = FastOutSlowInEasing),
                                     initialOffset = { it / 3 }
-                                ) + fadeIn(tween(300)) togetherWith
+                                ) + fadeIn(tween(dur)) togetherWith
                                     slideOutOfContainer(
                                         direction, 
-                                        animationSpec = tween(300, easing = FastOutSlowInEasing),
+                                        animationSpec = tween(dur, easing = FastOutSlowInEasing),
                                         targetOffset = { -it / 3 }
-                                    ) + fadeOut(tween(300))
+                                    ) + fadeOut(tween(dur))
                             },
                             label = "tab_content"
                         ) { tab ->
@@ -4380,9 +4389,8 @@ fun NelevMainScreen(
                 Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    // BETA-БЛЮР: навбар тоже размывается под открытым окном «О приложении»
-                    .alpha(if (!effectsEnabled && showAbout.value) 0.62f else 1f)
-                    .blur(if (effectsEnabled && showAbout.value) 6.dp else 0.dp)
+                    // Блюр навбара под About — всегда, не зависит от visualEffects
+                    .blur(if (showAbout.value) 6.dp else 0.dp)
             ) {
                 ModernNavBar(
                     selectedTab = selectedTab,
@@ -4727,22 +4735,22 @@ fun ModernNavBar(
     val navBg  = colors["navBg"]!!
     val activeBg by animateColorAsState(
         if (isDark) Color.White else Color(0xFFE79BC0),
-        tween(if (effectsEnabled) 250 else 0, easing = FastOutSlowInEasing), // OPTIMIZATION: 500ms → 250ms - мгновенная смена темы
+        animationSpec = if (effectsEnabled) tween(650, easing = FastOutSlowInEasing) else snap(),
         label = "activeBgTheme"
     )
     val activeContent by animateColorAsState(
         if (isDark) Color(0xFF070707) else Color.White,
-        tween(if (effectsEnabled) 250 else 0, easing = FastOutSlowInEasing),
+        animationSpec = if (effectsEnabled) tween(650, easing = FastOutSlowInEasing) else snap(),
         label = "activeContent"
     )
     val ghostIcon by animateColorAsState(
         if (isDark) Color(0xFF757575) else Color(0xFFD29AB6),
-        tween(if (effectsEnabled) 250 else 0, easing = FastOutSlowInEasing),
+        animationSpec = if (effectsEnabled) tween(650, easing = FastOutSlowInEasing) else snap(),
         label = "ghostIcon"
     )
     val ghostTxt by animateColorAsState(
         if (isDark) Color(0xFF7D7D7D) else Color(0xFFC98CAB),
-        tween(if (effectsEnabled) 250 else 0, easing = FastOutSlowInEasing),
+        animationSpec = if (effectsEnabled) tween(650, easing = FastOutSlowInEasing) else snap(),
         label = "ghostTxt"
     )
     val ctx = LocalContext.current
@@ -7545,23 +7553,40 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
         }
 
         val themeLabel = remember(lang, isDark) { if (isDark) Strings.get("switch_to_light", lang) else Strings.get("switch_to_dark", lang) }
-        Button(onClick = { if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx); save(appSettings.value.copy(isDark = !isDark)) },
-            modifier = Modifier.fillMaxWidth().height(56.dp), shape = panelShape,
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-            elevation = ButtonDefaults.buttonElevation(0.dp), contentPadding = PaddingValues(0.dp)) {
+        // Press-анимация: scale down + gradient shift через InteractionSource
+        val interactionSource = remember { MutableInteractionSource() }
+        val isPressed by interactionSource.collectIsPressedAsState()
+        val pressScale by animateFloatAsState(if (isPressed) 0.95f else 1f, animationSpec = tween(100, easing = FastOutSlowInEasing), label = "themeBtnPressScale")
+        val pressProgress by animateFloatAsState(if (isPressed) 1f else 0f, animationSpec = tween(150, easing = FastOutSlowInEasing), label = "themeBtnPressProgress")
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .graphicsLayer { scaleX = pressScale; scaleY = pressScale }
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClickLabel = "themeSwitch"
+                ) { if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx); save(appSettings.value.copy(isDark = !isDark)) }
+                .background(Color.Transparent, panelShape)
+                .border(1.dp, Color.White.copy(alpha = 0.2f), panelShape)
+        ) {
             Box(
                 Modifier
                     .fillMaxSize()
                     .background(
                         Brush.linearGradient(
-                            listOf(currentColor, nextColor),
+                            listOf(
+                                if (pressProgress > 0f) lerp(currentColor, nextColor, pressProgress) else currentColor,
+                                if (pressProgress > 0f) lerp(nextColor, currentColor, pressProgress) else nextColor
+                            ),
                             Offset(0f, 0f),
                             Offset(600f, 56f)
                         ),
                         panelShape
-                    )
-                    .border(1.dp, Color.White.copy(alpha = 0.2f), panelShape),
-                contentAlignment = Alignment.Center) {
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
                 Text(themeLabel, color = if (isDark) Color.Black else Color.White, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
             }
         }
