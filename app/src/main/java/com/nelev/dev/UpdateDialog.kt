@@ -98,6 +98,7 @@ fun UpdateDialog(
     colors: NelevColors,
     lang: String,
     isDark: Boolean,
+    effectsEnabled: Boolean = true,
     onDismiss: () -> Unit
 ) {
     val ctx = LocalContext.current
@@ -204,7 +205,7 @@ fun UpdateDialog(
                         if (notesText.isNotBlank()) {
                             val arrow by animateFloatAsState(
                                 if (showNotes) 180f else 0f,
-                                tween(220),
+                                tween(if (effectsEnabled) 220 else 0),
                                 label = "update_notes_arrow"
                             )
                             Column(
@@ -236,28 +237,28 @@ fun UpdateDialog(
                                     visible = showNotes,
                                     enter = expandVertically(
                                         animationSpec = tween(
-                                            durationMillis = 320,
+                                            durationMillis = if (effectsEnabled) 320 else 0,
                                             easing = FastOutSlowInEasing
                                         ),
                                         expandFrom = Alignment.Top,
                                         clip = true
                                     ) + fadeIn(
                                         animationSpec = tween(
-                                            durationMillis = 220,
-                                            delayMillis = 60,
+                                            durationMillis = if (effectsEnabled) 220 else 0,
+                                            delayMillis = if (effectsEnabled) 60 else 0,
                                             easing = FastOutSlowInEasing
                                         )
                                     ),
                                     exit = shrinkVertically(
                                         animationSpec = tween(
-                                            durationMillis = 240,
+                                            durationMillis = if (effectsEnabled) 240 else 0,
                                             easing = FastOutSlowInEasing
                                         ),
                                         shrinkTowards = Alignment.Top,
                                         clip = true
                                     ) + fadeOut(
                                         animationSpec = tween(
-                                            durationMillis = 160,
+                                            durationMillis = if (effectsEnabled) 160 else 0,
                                             easing = FastOutSlowInEasing
                                         )
                                     )
@@ -279,28 +280,28 @@ fun UpdateDialog(
                             visible = downloading,
                             enter = expandVertically(
                                 animationSpec = tween(
-                                    durationMillis = 350,
+                                    durationMillis = if (effectsEnabled) 350 else 0,
                                     easing = FastOutSlowInEasing
                                 ),
                                 expandFrom = Alignment.Top,
                                 clip = true
                             ) + fadeIn(
                                 animationSpec = tween(
-                                    durationMillis = 250,
-                                    delayMillis = 50,
+                                    durationMillis = if (effectsEnabled) 250 else 0,
+                                    delayMillis = if (effectsEnabled) 50 else 0,
                                     easing = FastOutSlowInEasing
                                 )
                             ),
                             exit = shrinkVertically(
                                 animationSpec = tween(
-                                    durationMillis = 300,
+                                    durationMillis = if (effectsEnabled) 300 else 0,
                                     easing = FastOutSlowInEasing
                                 ),
                                 shrinkTowards = Alignment.Top,
                                 clip = true
                             ) + fadeOut(
                                 animationSpec = tween(
-                                    durationMillis = 200,
+                                    durationMillis = if (effectsEnabled) 200 else 0,
                                     easing = FastOutSlowInEasing
                                 )
                             )
@@ -604,6 +605,7 @@ fun WhatsNewDialog(
     colors: NelevColors,
     lang: String,
     isDark: Boolean,
+    effectsEnabled: Boolean = true,
     onDismiss: () -> Unit
 ) {
     val card = colors["card"] ?: Color(0xFF101010)
@@ -736,8 +738,8 @@ fun WhatsNewDialog(
                         )
                         androidx.compose.animation.AnimatedVisibility(
                             visible = canScrollDown,
-                            enter = fadeIn(tween(300)),
-                            exit = fadeOut(tween(300)),
+                            enter = fadeIn(tween(if (effectsEnabled) 300 else 0)),
+                            exit = fadeOut(tween(if (effectsEnabled) 300 else 0)),
                             modifier = Modifier.align(Alignment.BottomCenter)
                         ) {
                             Column(Modifier.fillMaxWidth()) {
@@ -978,6 +980,7 @@ fun UpdatePauseDialog(
     isDark: Boolean,
     pausedUntilMs: Long,
     pausedForever: Boolean,
+    effectsEnabled: Boolean = true,
     onPause: (untilMs: Long, forever: Boolean) -> Unit,
     onResume: () -> Unit,
     onDismiss: () -> Unit
@@ -1045,8 +1048,10 @@ fun UpdatePauseDialog(
                 androidx.compose.animation.AnimatedContent(
                     targetState = selectedOption,
                     transitionSpec = {
-                        fadeIn(tween(300)) + expandVertically(tween(300)) togetherWith
-                                fadeOut(tween(200)) + shrinkVertically(tween(200))
+                        val dIn = if (effectsEnabled) 300 else 0
+                        val dOut = if (effectsEnabled) 200 else 0
+                        fadeIn(tween(dIn)) + expandVertically(tween(dIn)) togetherWith
+                                fadeOut(tween(dOut)) + shrinkVertically(tween(dOut))
                     },
                     label = "pause_content"
                 ) { currentOption ->

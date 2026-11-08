@@ -1,0 +1,19 @@
+NELEV 1.9.46 — Full Motion Off & Venom Theme Reveal
+
+RU:
+• Все анимации, включая окна обновлений и «Что нового», теперь мгновенно выключаются при отключённых «Визуальных эффектах» (0 мс)
+• Смена темы: новая тема растекается круговой волной из кнопки переключения (Venom-style)
+• Кнопка темы: pop-анимация с пружинистым отскоком при коротком нажатии
+• Блюр на оверлеях (история / About) остаётся включённым всегда
+• Сканер QR: линия сканирования и вспышка теперь тоже следуют настройке визуальных эффектов
+• Онбординг и сплэш полностью статичны при выключенных эффектах
+
+EN:
+• All animations, including update dialogs and What's New, now instantly disable when "Visual effects" is off (0 ms)
+• Theme switch: the new theme spreads as a circular wave from the toggle button (Venom-style)
+• Theme button: pop animation with a springy bounce on short tap
+• Blur on overlays (history / About) always stays on
+• QR scanner: scan line and flash now also follow the visual effects setting
+• Onboarding and splash are fully static when effects are off
+
+Full reset (v1.9.44) remains: language, theme, all settings, IP, audio params, session history, update cache wiped; app returns to onboarding immediately.

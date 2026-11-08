@@ -113,6 +113,16 @@ import kotlinx.coroutines.launch
 // Bump versionCode/versionName in version.properties when releasing.
 val APP_VERSION: String = BuildConfig.VERSION_NAME
 
+// Запуск «растекания» новой темы из центра кнопки переключения.
+object ThemeReveal {
+    var trigger by mutableStateOf(0L)
+    var center by mutableStateOf(Offset.Zero)
+    fun launch(centerPx: Offset) {
+        center = centerPx
+        trigger = System.nanoTime()
+    }
+}
+
 
 
 data class AppSettings(
@@ -2404,11 +2414,27 @@ class MainActivity : ComponentActivity() {
             NelevTheme(darkTheme = appSettings.value.isDark) {
                 val appBg by animateColorAsState(
                     if (appSettings.value.isDark) Color(0xFF060606) else Color(0xFFFFFCFF),
-                    animationSpec = if (effectsEnabled) tween(650, easing = FastOutSlowInEasing) else snap()
+                    animationSpec = if (effectsEnabled) tween(700, easing = FastOutSlowInEasing) else snap()
                 )
                 val rootColors = nelevColors(appSettings.value.isDark, effectsEnabled)
 
+                // Venom-style «растекание» новой темы из кнопки переключения
+                val themeReveal = remember { Animatable(0f) }
+                var themeRevealCenter by remember { mutableStateOf(Offset.Zero) }
+                var themeRevealToDark by remember { mutableStateOf(appSettings.value.isDark) }
+                var themeRevealActive by remember { mutableStateOf(false) }
+                LaunchedEffect(ThemeReveal.trigger) {
+                    if (ThemeReveal.trigger == 0L || !effectsEnabled) return@LaunchedEffect
+                    themeRevealCenter = ThemeReveal.center
+                    themeRevealToDark = appSettings.value.isDark
+                    themeRevealActive = true
+                    themeReveal.snapTo(0f)
+                    themeReveal.animateTo(1f, tween(620, easing = FastOutSlowInEasing))
+                    themeRevealActive = false
+                }
+
                 LaunchedEffect(Unit) {
+                    if (!effectsEnabled) { uiAlpha = 1f; return@LaunchedEffect }
                     delay(20)
                     val start = withFrameMillis { it }
                     var lastFrame = start
@@ -2467,7 +2493,29 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     if (!splashDone || uiAlpha < 1f) {
-                        NelevSplash(isDark = appSettings.value.isDark) { splashDone = true }
+                        NelevSplash(isDark = appSettings.value.isDark, effectsEnabled = effectsEnabled) { splashDone = true }
+                    }
+
+                    // Волна новой темы поверх контента: расходится кругом из кнопки
+                    if (themeRevealActive) {
+                        val revealColor = if (themeRevealToDark) Color(0xFF060606) else Color(0xFFFFFCFF)
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .drawWithContent {
+                                    drawContent()
+                                    val p = themeReveal.value
+                                    val cx = if (themeRevealCenter == Offset.Zero) size.width / 2f else themeRevealCenter.x
+                                    val cy = if (themeRevealCenter == Offset.Zero) size.height / 2f else themeRevealCenter.y
+                                    val maxR = hypot(max(cx, size.width - cx), max(cy, size.height - cy))
+                                    val fade = (1f - (p - 0.70f) / 0.30f).coerceIn(0f, 1f)
+                                    drawCircle(
+                                        color = revealColor.copy(alpha = fade),
+                                        radius = maxR * p * 1.03f,
+                                        center = Offset(cx, cy)
+                                    )
+                                }
+                        )
                     }
 
                     whatsNewVersion?.let { version ->
@@ -2478,6 +2526,7 @@ class MainActivity : ComponentActivity() {
                                 colors = rootColors,
                                 lang = appSettings.value.language,
                                 isDark = appSettings.value.isDark,
+                                effectsEnabled = effectsEnabled,
                                 onDismiss = { whatsNewVersion = null }
                             )
                         }
@@ -2844,7 +2893,7 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            OnboardingArrow("‹", accent, direction = -1, animated = true) {
+                            OnboardingArrow("‹", accent, direction = -1, animated = true, effectsEnabled = effectsEnabled) {
                                 if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                                 langIndex = (langIndex + onboardingLangOrder.size - 1) % onboardingLangOrder.size
                                 speakGreeting(langIndex)
@@ -2877,7 +2926,7 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                                     )
                                 }
                             }
-                            OnboardingArrow("›", accent, direction = 1, animated = true) {
+                            OnboardingArrow("›", accent, direction = 1, animated = true, effectsEnabled = effectsEnabled) {
                                 if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                                 langIndex = (langIndex + 1) % onboardingLangOrder.size
                                 speakGreeting(langIndex)
@@ -2915,7 +2964,8 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                     Box(Modifier.fillMaxSize().padding(horizontal = 28.dp, vertical = 40.dp)) {
                         OnboardingArrow(
                             "←", muted, direction = -1, animated = false,
-                            modifier = Modifier.align(Alignment.TopStart)
+                            modifier = Modifier.align(Alignment.TopStart),
+                            effectsEnabled = effectsEnabled
                         ) {
                             if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                             step = 0
@@ -2952,7 +3002,8 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                                     selected = !themeDark,
                                     isDarkPreview = false,
                                     text = text, muted = muted, accent = accent, border = border, card = card,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
+                                    effectsEnabled = effectsEnabled
                                 ) {
                                     if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                                     themeDark = false
@@ -2963,7 +3014,8 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                                     selected = themeDark,
                                     isDarkPreview = true,
                                     text = text, muted = muted, accent = accent, border = border, card = card,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
+                                    effectsEnabled = effectsEnabled
                                 ) {
                                     if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                                     themeDark = true
@@ -2984,7 +3036,8 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                     Box(Modifier.fillMaxSize().padding(horizontal = 28.dp, vertical = 40.dp)) {
                         OnboardingArrow(
                             "←", muted, direction = -1, animated = false,
-                            modifier = Modifier.align(Alignment.TopStart)
+                            modifier = Modifier.align(Alignment.TopStart),
+                            effectsEnabled = effectsEnabled
                         ) {
                             if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                             step = 1
@@ -2997,8 +3050,11 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                             AnimatedContent(
                                 targetState = currentLang,
                                 transitionSpec = {
-                                    (fadeIn(tween(280)) + slideInHorizontally(tween(320)) { it / 4 }) togetherWith
-                                        (fadeOut(tween(160)) + slideOutHorizontally(tween(320)) { -it / 4 })
+                                    val dIn = if (effectsEnabled) 280 else 0
+                                    val dSlide = if (effectsEnabled) 320 else 0
+                                    val dOut = if (effectsEnabled) 160 else 0
+                                    (fadeIn(tween(dIn)) + slideInHorizontally(tween(dSlide)) { it / 4 }) togetherWith
+                                        (fadeOut(tween(dOut)) + slideOutHorizontally(tween(dSlide)) { -it / 4 })
                                 },
                                 label = "onboarding_perm_title"
                             ) { l ->
@@ -3075,7 +3131,8 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                     Box(Modifier.fillMaxSize().padding(horizontal = 28.dp, vertical = 40.dp)) {
                         OnboardingArrow(
                             "←", muted, direction = -1, animated = false,
-                            modifier = Modifier.align(Alignment.TopStart)
+                            modifier = Modifier.align(Alignment.TopStart),
+                            effectsEnabled = effectsEnabled
                         ) {
                             if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                             step = 2
@@ -3120,9 +3177,11 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                                         else -> 3
                                     } to currentLang,
                                     transitionSpec = {
-                                        fadeIn(tween(400, easing = FastOutSlowInEasing)) + 
-                                            scaleIn(initialScale = 0.92f, animationSpec = tween(400, easing = FastOutSlowInEasing)) togetherWith
-                                            fadeOut(tween(200, easing = FastOutSlowInEasing))
+                                        val dIn = if (effectsEnabled) 400 else 0
+                                        val dOut = if (effectsEnabled) 200 else 0
+                                        fadeIn(tween(dIn, easing = FastOutSlowInEasing)) + 
+                                            scaleIn(initialScale = 0.92f, animationSpec = tween(dIn, easing = FastOutSlowInEasing)) togetherWith
+                                            fadeOut(tween(dOut, easing = FastOutSlowInEasing))
                                     },
                                     label = "version_check_content"
                                 ) { (state, _) ->
@@ -3304,6 +3363,7 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                             colors = onbColors,
                             lang = currentLang,
                             isDark = themeDark,
+                            effectsEnabled = effectsEnabled,
                             onDismiss = { showOnbUpdateDialog = false }
                         )
                     }
@@ -3337,7 +3397,8 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                     ) {
                         OnboardingArrow(
                             "←", muted, direction = -1, animated = false,
-                            modifier = Modifier.align(Alignment.TopStart)
+                            modifier = Modifier.align(Alignment.TopStart),
+                            effectsEnabled = effectsEnabled
                         ) {
                             if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                             step = 3
@@ -3350,8 +3411,11 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                             AnimatedContent(
                                 targetState = currentLang,
                                 transitionSpec = {
-                                    (fadeIn(tween(280)) + slideInHorizontally(tween(320)) { it / 4 }) togetherWith
-                                        (fadeOut(tween(160)) + slideOutHorizontally(tween(320)) { -it / 4 })
+                                    val dIn = if (effectsEnabled) 280 else 0
+                                    val dSlide = if (effectsEnabled) 320 else 0
+                                    val dOut = if (effectsEnabled) 160 else 0
+                                    (fadeIn(tween(dIn)) + slideInHorizontally(tween(dSlide)) { it / 4 }) togetherWith
+                                        (fadeOut(tween(dOut)) + slideOutHorizontally(tween(dSlide)) { -it / 4 })
                                 },
                                 label = "onboarding_source_label"
                             ) { l ->
@@ -3434,36 +3498,45 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
 private fun OnboardingArrow(
     glyph: String, color: Color, direction: Int, animated: Boolean,
     modifier: Modifier = Modifier,
+    effectsEnabled: Boolean = true,
     onClick: () -> Unit
 ) {
-    val infinite = rememberInfiniteTransition(label = "onboarding_arrow")
-    val shift by infinite.animateFloat(
-        initialValue = 0f,
-        targetValue = if (animated) 11f * direction else 0f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(700, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "onboarding_arrow_shift"
-    )
-    val fade by infinite.animateFloat(
-        initialValue = if (animated) 0.28f else 0.85f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(700, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "onboarding_arrow_fade"
-    )
-    val arrowScale by infinite.animateFloat(
-        initialValue = if (animated) 0.9f else 1f,
-        targetValue = if (animated) 1.1f else 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(700, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "onboarding_arrow_scale"
-    )
+    val shift: Float
+    val fade: Float
+    val arrowScale: Float
+    if (effectsEnabled && animated) {
+        val infinite = rememberInfiniteTransition(label = "onboarding_arrow")
+        val s by infinite.animateFloat(
+            initialValue = 0f,
+            targetValue = 11f * direction,
+            animationSpec = infiniteRepeatable(
+                animation = tween(700, easing = FastOutSlowInEasing),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "onboarding_arrow_shift"
+        )
+        val f by infinite.animateFloat(
+            initialValue = 0.28f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(700, easing = FastOutSlowInEasing),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "onboarding_arrow_fade"
+        )
+        val sc by infinite.animateFloat(
+            initialValue = 0.9f,
+            targetValue = 1.1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(700, easing = FastOutSlowInEasing),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "onboarding_arrow_scale"
+        )
+        shift = s; fade = f; arrowScale = sc
+    } else {
+        shift = 0f; fade = 1f; arrowScale = 1f
+    }
     Box(
         modifier
             .size(64.dp)
@@ -3485,9 +3558,14 @@ private fun OnboardingThemeCard(
     label: String, selected: Boolean, isDarkPreview: Boolean,
     text: Color, muted: Color, accent: Color, border: Color, card: Color,
     modifier: Modifier = Modifier,
+    effectsEnabled: Boolean = true,
     onClick: () -> Unit
 ) {
-    val scale by animateFloatAsState(if (selected) 1f else 0.97f, tween(180), label = "themeCardScale")
+    val scale by animateFloatAsState(
+        if (selected) 1f else 0.97f,
+        tween(if (effectsEnabled) 180 else 0),
+        label = "themeCardScale"
+    )
     val previewBg = if (isDarkPreview) Color(0xFF050505) else Color(0xFFFFFBFF)
     val previewCard = if (isDarkPreview) Color(0xFF161616) else Color(0xFFFFF7FC)
     val previewBorder = if (isDarkPreview) Color(0xFF2A2A2A) else Color(0xFFF1DEE9)
@@ -3591,7 +3669,7 @@ private fun OnboardingPermissionCard(
 // ─── Splash ───────────────────────────────────────────────────────────────────
 
 @Composable
-fun NelevSplash(isDark: Boolean, onFinish: () -> Unit) {
+fun NelevSplash(isDark: Boolean, effectsEnabled: Boolean = true, onFinish: () -> Unit) {
     val bgColor     = if (isDark) Color(0xFF060606) else Color(0xFFFFFAFE)
     val strokeColor = if (isDark) Color(0xFFFFFFFF) else Color(0xFFE79BC0)
     val fillColor   = strokeColor
@@ -3615,6 +3693,13 @@ fun NelevSplash(isDark: Boolean, onFinish: () -> Unit) {
     }
 
     LaunchedEffect(Unit) {
+        if (!effectsEnabled) {
+            outlineAlpha = 1f
+            fillProgress = 1f
+            splashAlpha = 1f
+            onFinish()
+            return@LaunchedEffect
+        }
         delay(60)
         animateTo(200) { outlineAlpha = easeOutCubic(it) }
         delay(30)
@@ -4335,6 +4420,7 @@ fun NelevMainScreen(
                         colors = colors,
                         lang = lang,
                         isDark = isDark,
+                        effectsEnabled = effectsEnabled,
                         onDismiss = {
                             Updater.markPostponedUntilRestart(ctx)
                             updateInfo = null
@@ -4362,6 +4448,7 @@ fun NelevMainScreen(
                     isDark = isDark,
                     pausedUntilMs = appSettings.value.updatesPausedUntilMs,
                     pausedForever = appSettings.value.updatesPausedForever,
+                    effectsEnabled = effectsEnabled,
                     onPause = { untilMs, forever ->
                         val s = appSettings.value.copy(
                             updatesPausedUntilMs = untilMs,
@@ -5070,19 +5157,31 @@ fun ConnectionBar(isStreaming: Boolean, pcConnected: Boolean, colors: NelevColor
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        DeviceIcon("phone", isStreaming, active, base, if (isStreaming) phonePulse else 1f)
-        Box(Modifier.weight(1f).padding(horizontal = 5.dp)) { ConnectorLine((prog * 2f).coerceIn(0f, 1f), active, base) }
-        val hc by animateColorAsState(if (prog >= 0.5f) active else base, tween(600), label = "hc")
+        DeviceIcon("phone", isStreaming, active, base, if (isStreaming) phonePulse else 1f, effectsEnabled)
+        Box(Modifier.weight(1f).padding(horizontal = 5.dp)) { ConnectorLine((prog * 2f).coerceIn(0f, 1f), active, base, effectsEnabled) }
+        val hc by animateColorAsState(
+            if (prog >= 0.5f) active else base,
+            tween(if (effectsEnabled) 600 else 0),
+            label = "hc"
+        )
         Canvas(Modifier.size(22.dp).alpha(if (isStreaming && !pcConnected) heartPulse else 1f)) { drawHeart(hc) }
-        Box(Modifier.weight(1f).padding(horizontal = 5.dp)) { ConnectorLine(((prog - .5f) * 2f).coerceIn(0f, 1f), active, base) }
-        val pcA by animateFloatAsState(if (pcConnected) 1f else 0.72f, tween(500), label = "pca")
-        DeviceIcon("pc", pcConnected, active, base, pcA)
+        Box(Modifier.weight(1f).padding(horizontal = 5.dp)) { ConnectorLine(((prog - .5f) * 2f).coerceIn(0f, 1f), active, base, effectsEnabled) }
+        val pcA by animateFloatAsState(
+            if (pcConnected) 1f else 0.72f,
+            tween(if (effectsEnabled) 500 else 0),
+            label = "pca"
+        )
+        DeviceIcon("pc", pcConnected, active, base, pcA, effectsEnabled)
     }
 }
 
 @Composable
-fun DeviceIcon(type: String, lit: Boolean, litColor: Color, dimColor: Color, alpha: Float) {
-    val color by animateColorAsState(if (lit) litColor else dimColor, tween(300), label = "dc") // OPTIMIZATION: 500ms → 300ms
+fun DeviceIcon(type: String, lit: Boolean, litColor: Color, dimColor: Color, alpha: Float, effectsEnabled: Boolean = true) {
+    val color by animateColorAsState(
+        if (lit) litColor else dimColor,
+        tween(if (effectsEnabled) 300 else 0),
+        label = "dc"
+    )
     Canvas(Modifier.size(28.dp).alpha(alpha)) {
         val w = size.width; val h = size.height
         val stroke = Stroke(2.2f, cap = StrokeCap.Round, join = StrokeJoin.Round)
@@ -5110,7 +5209,7 @@ fun androidx.compose.ui.graphics.drawscope.DrawScope.drawHeart(color: Color) {
 }
 
 @Composable
-fun ConnectorLine(progress: Float, activeColor: Color, baseColor: Color) {
+fun ConnectorLine(progress: Float, activeColor: Color, baseColor: Color, effectsEnabled: Boolean = true) {
     val dotCount = 5
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -5119,8 +5218,16 @@ fun ConnectorLine(progress: Float, activeColor: Color, baseColor: Color) {
     ) {
         repeat(dotCount) { i ->
             val lit = progress >= (i + 1f) / (dotCount + 1f)
-            val dc  by animateColorAsState(if (lit) activeColor else baseColor, tween(200, i * 40), label = "d$i") // OPTIMIZATION: 300ms → 200ms, delay 60 → 40
-            val ds: Dp by animateDpAsState(if (lit) 5.dp else 3.5.dp, tween(200, i * 40), label = "ds$i")
+            val dc  by animateColorAsState(
+                if (lit) activeColor else baseColor,
+                tween(if (effectsEnabled) 200 else 0, i * 40),
+                label = "d$i"
+            )
+            val ds: Dp by animateDpAsState(
+                if (lit) 5.dp else 3.5.dp,
+                tween(if (effectsEnabled) 200 else 0, i * 40),
+                label = "ds$i"
+            )
             Box(Modifier.size(ds).clip(RoundedCornerShape(50)).background(dc))
         }
     }
@@ -6522,12 +6629,12 @@ fun EasterHeart(
             alpha.snapTo(0f)
             alpha.animateTo(1f, tween(if (effectsEnabled) 260 else 0, easing = FastOutSlowInEasing))
 
-            val breathJob = launch {
+            val breathJob = if (effectsEnabled) launch {
                 while (true) {
-                    breathAnim.animateTo(1f, tween(if (effectsEnabled) 850 else 0, easing = FastOutSlowInEasing))
-                    breathAnim.animateTo(0f, tween(if (effectsEnabled) 850 else 0, easing = FastOutSlowInEasing))
+                    breathAnim.animateTo(1f, tween(850, easing = FastOutSlowInEasing))
+                    breathAnim.animateTo(0f, tween(850, easing = FastOutSlowInEasing))
                 }
-            }
+            } else null
 
             suspend fun moveTo(target: Offset, targetState: GuidedTourTarget) {
                 guidedTourTarget.value = targetState
@@ -6572,7 +6679,7 @@ fun EasterHeart(
 
             guidedTourTarget.value = GuidedTourTarget.DONE
             alpha.animateTo(0f, tween(if (effectsEnabled) 520 else 0, easing = FastOutSlowInEasing))
-            breathJob.cancel()
+            breathJob?.cancel()
             guidedTourTarget.value = null
             onDone()
         }
@@ -7236,7 +7343,7 @@ fun SessionHistoryScreen(
                     Box(
                         Modifier
                             .fillMaxSize()
-                            .blur(if (effectsEnabled) 8.dp else 0.dp)
+                            .blur(8.dp)
                             .background(
                                 if (showClearConfirm) {
                                     Brush.linearGradient(
@@ -7291,7 +7398,7 @@ fun SessionHistoryScreen(
                 Box(
                     Modifier
                         .fillMaxSize()
-                        .blur(if (effectsEnabled) 8.dp else 0.dp)
+                        .blur(8.dp)
                         .background(
                             Brush.linearGradient(
                                 listOf(
@@ -7556,18 +7663,56 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
         // Press-анимация: scale down + gradient shift через InteractionSource
         val interactionSource = remember { MutableInteractionSource() }
         val isPressed by interactionSource.collectIsPressedAsState()
-        val pressScale by animateFloatAsState(if (isPressed) 0.95f else 1f, animationSpec = tween(100, easing = FastOutSlowInEasing), label = "themeBtnPressScale")
-        val pressProgress by animateFloatAsState(if (isPressed) 1f else 0f, animationSpec = tween(150, easing = FastOutSlowInEasing), label = "themeBtnPressProgress")
+        val pressScale by animateFloatAsState(
+            if (isPressed) 0.95f else 1f,
+            animationSpec = tween(if (effectsEnabled) 100 else 0, easing = FastOutSlowInEasing),
+            label = "themeBtnPressScale"
+        )
+        val pressProgress by animateFloatAsState(
+            if (isPressed) 1f else 0f,
+            animationSpec = tween(if (effectsEnabled) 150 else 0, easing = FastOutSlowInEasing),
+            label = "themeBtnPressProgress"
+        )
+        // Pop-анимация при коротком нажатии: пружинистое «вдавливание» и отпускание
+        val themeScope = rememberCoroutineScope()
+        val tapScale = remember { Animatable(1f) }
+        var themeBtnCenter by remember { mutableStateOf(Offset.Zero) }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
-                .graphicsLayer { scaleX = pressScale; scaleY = pressScale }
+                .onGloballyPositioned { coords ->
+                    val p = coords.positionInRoot()
+                    themeBtnCenter = Offset(
+                        p.x + coords.size.width / 2f,
+                        p.y + coords.size.height / 2f
+                    )
+                }
+                .graphicsLayer { scaleX = pressScale * tapScale.value; scaleY = pressScale * tapScale.value }
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null,
                     onClickLabel = "themeSwitch"
-                ) { if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx); save(appSettings.value.copy(isDark = !isDark)) }
+                ) {
+                    if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
+                    save(appSettings.value.copy(isDark = !isDark))
+                    if (effectsEnabled) {
+                        // Новая тема «растекается» круговой волной из центра кнопки
+                        ThemeReveal.launch(themeBtnCenter)
+                        themeScope.launch {
+                            tapScale.snapTo(1f)
+                            tapScale.animateTo(0.92f, tween(70, easing = FastOutSlowInEasing))
+                            tapScale.animateTo(1.05f, tween(90, easing = FastOutSlowInEasing))
+                            tapScale.animateTo(
+                                1f,
+                                spring(
+                                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                                    stiffness = Spring.StiffnessMedium
+                                )
+                            )
+                        }
+                    }
+                }
                 .background(Color.Transparent, panelShape)
                 .border(1.dp, Color.White.copy(alpha = 0.2f), panelShape)
         ) {
@@ -7642,16 +7787,22 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                             )
                         }
                         if (updateAvailable) {
-                            val infiniteTransition = rememberInfiniteTransition(label = "heart_pulse")
-                            val heartAlpha by infiniteTransition.animateFloat(
-                                initialValue = 0.3f,
-                                targetValue = 1f,
-                                animationSpec = infiniteRepeatable(
-                                    animation = tween(1000, easing = FastOutSlowInEasing),
-                                    repeatMode = RepeatMode.Reverse
-                                ),
-                                label = "heart_alpha"
-                            )
+                            val heartAlpha: Float
+                            if (effectsEnabled) {
+                                val infiniteTransition = rememberInfiniteTransition(label = "heart_pulse")
+                                val a by infiniteTransition.animateFloat(
+                                    initialValue = 0.3f,
+                                    targetValue = 1f,
+                                    animationSpec = infiniteRepeatable(
+                                        animation = tween(1000, easing = FastOutSlowInEasing),
+                                        repeatMode = RepeatMode.Reverse
+                                    ),
+                                    label = "heart_alpha"
+                                )
+                                heartAlpha = a
+                            } else {
+                                heartAlpha = 1f
+                            }
                             Icon(
                                 Icons.Filled.Favorite,
                                 contentDescription = null,
@@ -7706,6 +7857,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                 colors = colors,
                 lang = lang,
                 isDark = appSettings.value.isDark,
+                effectsEnabled = effectsEnabled,
                 onDismiss = { showWhatsNewLocal = false }
             )
         }
@@ -7941,25 +8093,34 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
 
 @Composable
 fun AnimatedLightbulb(isDark: Boolean, effectsEnabled: Boolean) {
-    val infinite = rememberInfiniteTransition(label = "lightbulb")
-    val glowAlpha by infinite.animateFloat(
-        initialValue = if (effectsEnabled) 0.22f else 0.16f,
-        targetValue = if (effectsEnabled) 0.5f else 0.16f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(if (effectsEnabled) 900 else 0, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "glowAlpha"
-    )
-    val scale by infinite.animateFloat(
-        initialValue = 1f,
-        targetValue = if (effectsEnabled) 1.08f else 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(if (effectsEnabled) 900 else 0, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "glowScale"
-    )
+    val glowAlpha: Float
+    val scale: Float
+    if (effectsEnabled) {
+        val infinite = rememberInfiniteTransition(label = "lightbulb")
+        val ga by infinite.animateFloat(
+            initialValue = 0.22f,
+            targetValue = 0.5f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(900, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "glowAlpha"
+        )
+        val sc by infinite.animateFloat(
+            initialValue = 1f,
+            targetValue = 1.08f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(900, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "glowScale"
+        )
+        glowAlpha = ga
+        scale = sc
+    } else {
+        glowAlpha = 0.16f
+        scale = 1f
+    }
 
     val bulbColor = if (isDark) Color(0xFFFFF3B0) else Color(0xFFE79BC0)
 
@@ -8700,10 +8861,10 @@ fun AboutAppOverlay(
                                     Column(
                                         verticalArrangement = Arrangement.spacedBy(16.dp),
                                         modifier = Modifier.animateContentSize(
-                                            animationSpec = spring(
+                                            animationSpec = if (effectsEnabled) spring(
                                                 dampingRatio = Spring.DampingRatioNoBouncy,
                                                 stiffness = Spring.StiffnessMediumLow
-                                            )
+                                            ) else snap()
                                         )
                                     ) {
                                         if (isPaused) {
@@ -8741,7 +8902,7 @@ fun AboutAppOverlay(
                                                     val targetOffset = if (selectedPauseOption != null) (selectedPauseOption!! * 52).dp else 0.dp
                                                     val animatedOffset by animateDpAsState(
                                                         targetValue = targetOffset,
-                                                        animationSpec = if (pausePlateSnap) snap() else spring(
+                                                        animationSpec = if (pausePlateSnap || !effectsEnabled) snap() else spring(
                                                             dampingRatio = Spring.DampingRatioNoBouncy,
                                                             stiffness = Spring.StiffnessLow
                                                         ),
@@ -8794,8 +8955,8 @@ fun AboutAppOverlay(
                                                         ) {
                                                             androidx.compose.animation.AnimatedVisibility(
                                                                 visible = isSelected,
-                                                                enter = scaleIn(animationSpec = tween(150, easing = FastOutSlowInEasing)),
-                                                                exit = scaleOut(animationSpec = tween(150, easing = FastOutSlowInEasing))
+                                                                enter = scaleIn(animationSpec = tween(if (effectsEnabled) 150 else 0, easing = FastOutSlowInEasing)),
+                                                                exit = scaleOut(animationSpec = tween(if (effectsEnabled) 150 else 0, easing = FastOutSlowInEasing))
                                                             ) {
                                                                 Box(
                                                                     Modifier

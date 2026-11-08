@@ -504,18 +504,24 @@ private fun ScannerScreen(
         )
     }
 
-    val scanProgress by rememberInfiniteTransition(label = "scan_line").animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(if (effectsEnabled) 2200 else 1, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "scan_progress"
-    )
+    val scanProgress: Float
+    if (effectsEnabled) {
+        val scanAnim = rememberInfiniteTransition(label = "scan_line").animateFloat(
+            initialValue = 0f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(2200, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "scan_progress"
+        )
+        scanProgress = scanAnim.value
+    } else {
+        scanProgress = 0f
+    }
     val flashAlpha by animateFloatAsState(
         targetValue = if (detected) 0.5f else 0f,
-        animationSpec = tween(120),
+        animationSpec = tween(if (effectsEnabled) 120 else 0),
         label = "flash"
     )
     val focusAlpha by animateFloatAsState(
