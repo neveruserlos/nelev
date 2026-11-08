@@ -7595,32 +7595,19 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                 Color(0xFFFFC1CC), Color(0xFFFFB6C1)
             )
         }
-        // Палитра противоположной темы — её градиент «заезжает» на кнопку.
-        val altGradColors = if (!isDark) {
-            listOf(
-                Color(0xFFFFFFFF), Color(0xFFF5F5F5), Color(0xFFEEEEEE),
-                Color(0xFFF8F8F8), Color(0xFFFFFFFF)
-            )
-        } else {
-            listOf(
-                Color(0xFFFFB6C1), Color(0xFFFF69B4), Color(0xFFFFAEC9),
-                Color(0xFFFFC1CC), Color(0xFFFFB6C1)
-            )
-        }
 
-        fun gradientPair(colors: List<Color>): Pair<Color, Color> {
-            val idx = (phase * colors.size).toInt() % colors.size
-            val nIdx = (idx + 1) % colors.size
-            val p = (phase * colors.size) % 1f
-            return if (effectsEnabled) {
-                lerp(colors[idx], colors[nIdx], p) to
-                    lerp(colors[nIdx], colors[(nIdx + 1) % colors.size], p)
-            } else {
-                colors[0] to colors[1]
+        // Пять плавно перетекающих полос палитры; shift двигает их по кругу.
+        fun gradientStops(colors: List<Color>, shift: Float): List<Color> {
+            if (!effectsEnabled) return listOf(colors[0], colors[1], colors[2], colors[3], colors[0])
+            val n = colors.size
+            return List(5) { i ->
+                val pos = ((i / 4f) + shift) % 1f
+                val scaled = pos * n
+                val idx = scaled.toInt() % n
+                val next = (idx + 1) % n
+                lerp(colors[idx], colors[next], scaled % 1f)
             }
         }
-
-        val (currentColor, nextColor) = gradientPair(tGradColors)
 
         val themeLabel = remember(lang, isDark) { if (isDark) Strings.get("switch_to_light", lang) else Strings.get("switch_to_dark", lang) }
         // Press-анимация: лёгкое сжатие кнопки через InteractionSource
@@ -7636,13 +7623,12 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
             animationSpec = tween(if (effectsEnabled) 150 else 0, easing = FastOutSlowInEasing),
             label = "themeBtnPressProgress"
         )
-        // Вместо pop-анимации: градиент новой темы плавно проносится слева направо,
-        // в конце ускоряется и только потом переключается тема.
-        val sweep = remember { Animatable(0f) }
-        var sweepFrom by remember { mutableStateOf<Pair<Color, Color>?>(null) }
-        var sweepTo by remember { mutableStateOf<Pair<Color, Color>?>(null) }
-        var sweeping by remember { mutableStateOf(false) }
-        var themeBtnWidth by remember { mutableStateOf(1f) }
+        // Тема переключается сразу, а кнопка уже после этого мягко «растворяет»
+        // старую краску в новой — как капля в воде.
+        val melt = remember { Animatable(1f) }
+        var meltFromStops by remember { mutableStateOf<List<Color>?>(null) }
+        var meltFromText by remember { mutableStateOf(Color.Unspecified) }
+        var melting by remember { mutableStateOf(false) }
         // Анимация должна идти в scope композиции: только у него в контексте есть
         // MonotonicFrameClock, без которого Animatable.animateTo падает.
         val themeScope = rememberCoroutineScope()
@@ -7656,7 +7642,6 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                 .fillMaxWidth()
                 .height(56.dp)
                 .clip(panelShape)
-                .onSizeChanged { themeBtnWidth = it.width.toFloat().coerceAtLeast(1f) }
                 .graphicsLayer { scaleX = pressScale; scaleY = pressScale }
                 .clickable(
                     interactionSource = interactionSource,
@@ -7666,96 +7651,101 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                     if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                     if (!effectsEnabled) {
                         applyTheme()
-                    } else if (!sweeping) {
-                        sweeping = true
-                        sweepFrom = currentColor to nextColor
-                        sweepTo = gradientPair(altGradColors)
-                        // Тема меняется после того, как новый градиент полностью зальёт кнопку.
+                    } else if (!melting) {
+                        meltFromStops = gradientStops(tGradColors, phase)
+                        meltFromText = if (isDark) Color.Black else Color.White
+                        melting = true
+                        // Смена темы — мгновенная, без ожидания анимации.
+                        applyTheme()
                         themeScope.launch {
                             try {
-                                sweep.snapTo(0f)
-                                sweep.animateTo(0.45f, tween(230, easing = LinearEasing))
-                                sweep.animateTo(
+                                melt.snapTo(0f)
+                                melt.animateTo(
                                     1f,
-                                    tween(180, easing = CubicBezierEasing(0.45f, 0f, 0.9f, 0.35f))
+                                    tween(
+                                        durationMillis = 900,
+                                        easing = CubicBezierEasing(0.22f, 0.61f, 0.36f, 1f)
+                                    )
                                 )
                             } catch (_: kotlinx.coroutines.CancellationException) {
-                                // Экран могли покинуть посреди анимации — тему всё равно меняем.
+                                // Экран могли покинуть посреди анимации.
                             } catch (_: Exception) {
                                 // Любой сбой анимации не должен ронять приложение.
                             } finally {
                                 kotlinx.coroutines.withContext(kotlinx.coroutines.NonCancellable) {
-                                    applyTheme()
-                                    sweep.snapTo(0f)
-                                    sweepFrom = null
-                                    sweepTo = null
-                                    sweeping = false
+                                    melt.snapTo(1f)
+                                    meltFromStops = null
+                                    melting = false
                                 }
                             }
                         }
                     }
                 }
-                .background(Color.Transparent, panelShape)
                 .border(1.dp, Color.White.copy(alpha = 0.2f), panelShape),
             contentAlignment = Alignment.Center
         ) {
-            // Нижний слой: градиент текущей темы
-            val base = sweepFrom ?: (currentColor to nextColor)
-            val baseStart = if (pressProgress > 0f) lerp(base.first, base.second, pressProgress) else base.first
-            val baseEnd = if (pressProgress > 0f) lerp(base.second, base.first, pressProgress) else base.second
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.linearGradient(
-                            listOf(baseStart, baseEnd),
-                            Offset(0f, 0f),
-                            Offset(600f, 56f)
-                        ),
-                        panelShape
-                    )
-            )
-            // Верхний слой: градиент новой темы выезжает слева направо
-            sweepTo?.let { to ->
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .graphicsLayer {
-                            translationX = -(1f - sweep.value) * themeBtnWidth
-                        }
-                        .background(
-                            Brush.linearGradient(
-                                listOf(to.first, to.second),
-                                Offset(0f, 0f),
-                                Offset(600f, 56f)
-                            ),
-                            panelShape
-                        )
-                )
+            // Живой градиент новой темы (с переливанием phase).
+            val liveStops = gradientStops(tGradColors, phase + pressProgress * 0.04f)
+            val fromStops = meltFromStops
+            val meltP = if (melting) melt.value else 1f
+            // Каждая полоса растворяется чуть со своей задержкой — край получается
+            // неровным и живым, а не жёсткой волной слева направо.
+            val stops = if (fromStops != null) {
+                List(liveStops.size) { i ->
+                    val local = ((meltP * 1.35f) - i * 0.055f).coerceIn(0f, 1f)
+                    lerp(fromStops[i % fromStops.size], liveStops[i], local)
+                }
+            } else {
+                liveStops
             }
-            // Светящаяся кромка, бегущая вместе с волной градиента
-            if (sweeping) {
-                Box(
-                    Modifier
-                        .align(Alignment.CenterStart)
-                        .fillMaxHeight()
-                        .width(42.dp)
-                        .offset {
-                            IntOffset(
-                                (sweep.value * themeBtnWidth - 21.dp.toPx()).toInt(),
-                                0
-                            )
-                        }
-                        .background(
-                            Brush.horizontalGradient(
-                                listOf(
-                                    Color.Transparent,
-                                    Color.White.copy(alpha = 0.42f),
-                                    Color.Transparent
-                                )
-                            )
+            val bloom = if (melting) sin(meltP * PI).toFloat().coerceIn(0f, 1f) else 0f
+            Canvas(Modifier.fillMaxSize()) {
+                drawRect(
+                    brush = Brush.linearGradient(
+                        colors = stops,
+                        start = Offset(
+                            -size.width * 0.12f + size.width * 0.12f * meltP,
+                            -size.height * 0.2f
+                        ),
+                        end = Offset(
+                            size.width * 1.1f,
+                            size.height * (1.15f - 0.15f * meltP)
                         )
+                    )
                 )
+                if (melting) {
+                    // Расплывающиеся пятна новой краски — эффект «капля в воде».
+                    fun ink(cx: Float, cy: Float, radius: Float, color: Color, alpha: Float) {
+                        drawCircle(
+                            brush = Brush.radialGradient(
+                                colors = listOf(color.copy(alpha = alpha), Color.Transparent),
+                                center = Offset(cx, cy),
+                                radius = radius
+                            ),
+                            radius = radius,
+                            center = Offset(cx, cy)
+                        )
+                    }
+                    val w = size.width
+                    val h = size.height
+                    val spread = 0.22f + 0.78f * meltP
+                    ink(w * 0.24f, h * 0.38f, w * 0.34f * spread, liveStops[1], 0.30f * bloom)
+                    ink(w * 0.72f, h * 0.62f, w * 0.38f * spread, liveStops[3], 0.26f * bloom)
+                    ink(w * 0.52f, h * 0.18f, w * 0.24f * spread, liveStops[2], 0.20f * bloom)
+                    // Мягкий светящийся блик, тающий вместе с переходом.
+                    val sheenX = w * (-0.45f + 1.9f * meltP)
+                    drawRect(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                Color.White.copy(alpha = 0.16f * bloom),
+                                Color.Transparent
+                            ),
+                            startX = sheenX - w * 0.35f,
+                            endX = sheenX + w * 0.35f
+                        )
+                    )
+                }
             }
             Box(
                 Modifier
@@ -7769,11 +7759,12 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                         panelShape
                     )
             )
-            val textColor = lerp(
-                if (isDark) Color.Black else Color.White,
-                if (!isDark) Color.Black else Color.White,
-                if (sweeping) sweep.value else 0f
-            )
+            val newText = if (isDark) Color.Black else Color.White
+            val textColor = if (melting && meltFromText != Color.Unspecified) {
+                lerp(meltFromText, newText, (meltP * 2.2f).coerceIn(0f, 1f))
+            } else {
+                newText
+            }
             Text(themeLabel, color = textColor, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
         }
 

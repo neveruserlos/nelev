@@ -1,0 +1,15 @@
+NELEV 1.9.50 — Instant Theme Switch & Paint-in-Water Gradient
+
+RU:
+• Смена темы теперь происходит мгновенно по нажатию, без ожидания анимации
+• Кнопка темы: вместо резкой волны — мягкое «растворение краски в воде», старый градиент плавно перетекает в новый
+• Убрана жёсткая светящаяся кромка, добавлены мягкие расплывающиеся пятна новой палитры
+• Переливание градиента кнопки стало более плавным и живым
+
+EN:
+• Theme switching is now instant on tap, with no waiting for the animation
+• Theme button: instead of a sharp wave, a soft paint-in-water dissolve — the old gradient melts smoothly into the new one
+• Removed the hard glowing edge, added soft spreading blots of the new palette
+• The button gradient shimmer is smoother and more alive
+
+Full reset (v1.9.44) remains: language, theme, all settings, IP, audio params, session history, update cache wiped; app returns to onboarding immediately.
