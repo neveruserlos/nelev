@@ -3,18 +3,18 @@ p = 'app/src/main/assets/version_history.json'
 with io.open(p, encoding='utf-8') as f:
     d = json.load(f)
 entry = {
-    "versionCode": 82,
-    "versionName": "1.9.47",
+    "versionCode": 83,
+    "versionName": "1.9.48",
     "releaseDate": "2026-11-08",
     "changelog": {
-        "ru": "• Вернули старую плавную смену темы (250 мс crossfade) вместо эффекта «растекания»\n• Окна обновлений и «Что нового» теперь открываются и закрываются мгновенно, без системной анимации окна\n• Pop-анимация кнопки темы при коротком нажатии сохранена\n• Все анимации по-прежнему отключаются при выключенных «Визуальных эффектах»",
-        "en": "• Restored the old smooth theme switch (250 ms crossfade) instead of the spreading-circle effect\n• Update and What's New dialogs now open and close instantly, without the system window animation\n• Theme button pop animation on short tap is kept\n• All animations still disable when Visual effects is off",
-        "es": "• Se restauró el cambio de tema suave anterior (crossfade de 250 ms) en lugar del efecto de onda\n• Los diálogos de actualización y Novedades ahora se abren y cierran al instante, sin la animación del sistema\n• Se mantiene la animación pop del botón de tema al toque corto\n• Todas las animaciones siguen desactivándose con \"Efectos visuales\" apagado",
-        "zh": "• 恢复了原来的平滑主题切换（250 毫秒交叉淡化），取代扩散圆环效果\n• 更新和\"新功能\"对话框现在立即打开和关闭，没有系统窗口动画\n• 保留主题按钮短按时的弹出动画\n• 关闭\"视觉效果\"时所有动画仍会禁用",
-        "ja": "• 広がる円の効果をやめ、元の滑らかなテーマ切り替え（250 ms クロスフェード）に戻しました\n• 更新ダイアログと「新機能」ダイアログがシステムのウィンドウアニメーションなしで即座に開閉します\n• テーマボタンの短いタップ時のポップアニメーションは維持\n• 「視覚効果」オフ時はすべてのアニメーションが無効のままです",
-        "ko": "• 퍼지는 원 효과 대신 이전의 부드러운 테마 전환(250ms 크로스페이드)으로 되돌렸습니다\n• 업데이트 및 \"새 기능\" 대화상자가 시스템 창 애니메이션 없이 즉시 열리고 닫힙니다\n• 테마 버튼의 짧은 탭 팝 애니메이션은 유지됩니다\n• \"시각 효과\"가 꺼져 있으면 모든 애니메이션이 계속 비활성화됩니다",
-        "pt": "• Restaurada a troca de tema suave antiga (crossfade de 250 ms) em vez do efeito de onda\n• Os diálogos de atualização e Novidades agora abrem e fecham instantaneamente, sem a animação do sistema\n• A animação pop do botão de tema em toque curto foi mantida\n• Todas as animações continuam desativadas com \"Efeitos visuais\" desligado",
-        "uk": "• Повернули стару зміну теми (250 мс crossfade) замість ефекту «розтікання»\n• Вікна оновлень і «Що нового» тепер відкриваються й закриваються миттєво, без системної анімації вікна\n• Pop-анімація кнопки теми при короткому натисканні збережена\n• Усі анімації так само вимикаються при вимкнених «Візуальних ефектах»"
+        "ru": "• Окно «Что нового» больше не выезжает снизу вверх: системная/OEM-анимация окна отключена на уровне темы\n• Окна обновлений и уведомлений теперь тоже появляются без анимации окна\n• Кнопка темы: вместо pop-анимации градиент новой темы плавно проносится слева направо, ускоряется и затем переключает тему\n• При выключенных «Визуальных эффектах» кнопка темы переключает тему мгновенно, без прогона градиента",
+        "en": "• The What's New window no longer slides up from the bottom: system/OEM window animation is disabled at the theme level\n• Update and notice dialogs also appear without window animation now\n• Theme button: instead of a pop, the new theme gradient sweeps left to right, accelerates, then switches the theme\n• With Visual effects off, the theme button switches instantly without the gradient sweep",
+        "es": "• La ventana de Novedades ya no sube desde abajo: la animación de ventana del sistema/OEM está desactivada a nivel de tema\n• Los diálogos de actualización y avisos también aparecen sin animación de ventana\n• Botón de tema: en lugar de pop, el gradiente del nuevo tema recorre de izquierda a derecha, acelera y luego cambia el tema\n• Con \"Efectos visuales\" apagado, el botón cambia el tema al instante sin recorrido de gradiente",
+        "zh": "• \"新功能\"窗口不再从底部向上滑入：系统/OEM 窗口动画已在主题层面禁用\n• 更新和通知对话框现在也没有窗口动画\n• 主题按钮：新主题渐变从左到右扫过并加速，然后切换主题（取代弹出动画）\n• 关闭\"视觉效果\"时，主题按钮立即切换，不播放渐变扫过",
+        "ja": "• 「新機能」ウィンドウが下から上へスライドしなくなりました。システム/OEMのウィンドウアニメーションをテーマ側で無効化\n• 更新ダイアログと通知ダイアログもウィンドウアニメーションなしで表示されます\n• テーマボタン: ポップの代わりに新しいテーマのグラデーションが左から右へ流れ、加速してからテーマを切り替えます\n• 「視覚効果」オフ時はグラデーションを流さず即座にテーマを切り替えます",
+        "ko": "• \"새 기능\" 창이 더 이상 아래에서 위로 슬라이드하지 않습니다. 시스템/OEM 창 애니메이션을 테마 수준에서 비활성화했습니다\n• 업데이트 및 알림 대화상자도 창 애니메이션 없이 나타납니다\n• 테마 버튼: 팝 대신 새 테마 그라데이션이 왼쪽에서 오른쪽으로 흐르고 가속된 뒤 테마를 전환합니다\n• \"시각 효과\"가 꺼져 있으면 그라데이션 없이 즉시 테마가 전환됩니다",
+        "pt": "• A janela Novidades não sobe mais de baixo: a animação de janela do sistema/OEM foi desativada no tema\n• Os diálogos de atualização e avisos também aparecem sem animação de janela\n• Botão de tema: em vez de pop, o gradiente do novo tema passa da esquerda para a direita, acelera e então troca o tema\n• Com \"Efeitos visuais\" desligado, o botão troca o tema instantaneamente, sem o gradiente",
+        "uk": "• Вікно «Що нового» більше не виїжджає знизу вгору: системну/OEM-анімацію вікна вимкнено на рівні теми\n• Вікна оновлень і повідомлень тепер теж з'являються без анімації вікна\n• Кнопка теми: замість pop-анімації градієнт нової теми плавно проноситься зліва направо, прискорюється й потім перемикає тему\n• При вимкнених «Візуальних ефектах» кнопка теми перемикає тему миттєво, без прогону градієнта"
     }
 }
 d['versions'].insert(0, entry)

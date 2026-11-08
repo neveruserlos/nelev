@@ -2,4 +2,20 @@
 <resources>
 
     <style name="Theme.Nelev" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- Compose Dialogs use these library styles. Override them so the dialog
+         window itself never plays the system/OEM open-close animation (slide
+         from bottom, fade/scale, etc.). App-level resources win over the
+         AndroidX library ones with the same name. -->
+    <style name="DialogWindowTheme">
+        <item name="android:windowClipToOutline">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+    <style name="FloatingDialogWindowTheme">
+        <item name="android:windowClipToOutline">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:dialogTheme">@style/FloatingDialogTheme</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
 </resources>

@@ -7595,29 +7595,39 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                 Color(0xFFFFC1CC), Color(0xFFFFB6C1)
             )
         }
-
-        val colorIndex = (phase * tGradColors.size).toInt() % tGradColors.size
-        val nextColorIndex = (colorIndex + 1) % tGradColors.size
-        val colorProgress = (phase * tGradColors.size) % 1f
-
-        val currentColor = if (effectsEnabled) {
-            lerp(tGradColors[colorIndex], tGradColors[nextColorIndex], colorProgress)
+        // Палитра противоположной темы — её градиент «заезжает» на кнопку.
+        val altGradColors = if (!isDark) {
+            listOf(
+                Color(0xFFFFFFFF), Color(0xFFF5F5F5), Color(0xFFEEEEEE),
+                Color(0xFFF8F8F8), Color(0xFFFFFFFF)
+            )
         } else {
-            tGradColors[0]
+            listOf(
+                Color(0xFFFFB6C1), Color(0xFFFF69B4), Color(0xFFFFAEC9),
+                Color(0xFFFFC1CC), Color(0xFFFFB6C1)
+            )
         }
 
-        val nextColor = if (effectsEnabled) {
-            lerp(tGradColors[nextColorIndex], tGradColors[(nextColorIndex + 1) % tGradColors.size], colorProgress)
-        } else {
-            tGradColors[1]
+        fun gradientPair(colors: List<Color>): Pair<Color, Color> {
+            val idx = (phase * colors.size).toInt() % colors.size
+            val nIdx = (idx + 1) % colors.size
+            val p = (phase * colors.size) % 1f
+            return if (effectsEnabled) {
+                lerp(colors[idx], colors[nIdx], p) to
+                    lerp(colors[nIdx], colors[(nIdx + 1) % colors.size], p)
+            } else {
+                colors[0] to colors[1]
+            }
         }
+
+        val (currentColor, nextColor) = gradientPair(tGradColors)
 
         val themeLabel = remember(lang, isDark) { if (isDark) Strings.get("switch_to_light", lang) else Strings.get("switch_to_dark", lang) }
-        // Press-анимация: scale down + gradient shift через InteractionSource
+        // Press-анимация: лёгкое сжатие кнопки через InteractionSource
         val interactionSource = remember { MutableInteractionSource() }
         val isPressed by interactionSource.collectIsPressedAsState()
         val pressScale by animateFloatAsState(
-            if (isPressed) 0.95f else 1f,
+            if (isPressed) 0.97f else 1f,
             animationSpec = tween(if (effectsEnabled) 100 else 0, easing = FastOutSlowInEasing),
             label = "themeBtnPressScale"
         )
@@ -7626,57 +7636,134 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
             animationSpec = tween(if (effectsEnabled) 150 else 0, easing = FastOutSlowInEasing),
             label = "themeBtnPressProgress"
         )
-        // Pop-анимация при коротком нажатии: пружинистое «вдавливание» и отпускание
-        val themeScope = rememberCoroutineScope()
-        val tapScale = remember { Animatable(1f) }
+        // Вместо pop-анимации: градиент новой темы плавно проносится слева направо,
+        // в конце ускоряется и только потом переключается тема.
+        val sweep = remember { Animatable(0f) }
+        var sweepFrom by remember { mutableStateOf<Pair<Color, Color>?>(null) }
+        var sweepTo by remember { mutableStateOf<Pair<Color, Color>?>(null) }
+        var sweeping by remember { mutableStateOf(false) }
+        var themeBtnWidth by remember { mutableStateOf(1f) }
+
+        fun applyTheme() {
+            save(appSettings.value.copy(isDark = !appSettings.value.isDark))
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
-                .graphicsLayer { scaleX = pressScale * tapScale.value; scaleY = pressScale * tapScale.value }
+                .clip(panelShape)
+                .onSizeChanged { themeBtnWidth = it.width.toFloat().coerceAtLeast(1f) }
+                .graphicsLayer { scaleX = pressScale; scaleY = pressScale }
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null,
                     onClickLabel = "themeSwitch"
                 ) {
                     if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
-                    save(appSettings.value.copy(isDark = !isDark))
-                    if (effectsEnabled) {
-                        themeScope.launch {
-                            tapScale.snapTo(1f)
-                            tapScale.animateTo(0.92f, tween(70, easing = FastOutSlowInEasing))
-                            tapScale.animateTo(1.05f, tween(90, easing = FastOutSlowInEasing))
-                            tapScale.animateTo(
-                                1f,
-                                spring(
-                                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                                    stiffness = Spring.StiffnessMedium
+                    if (!effectsEnabled) {
+                        applyTheme()
+                    } else if (!sweeping) {
+                        sweeping = true
+                        sweepFrom = currentColor to nextColor
+                        sweepTo = gradientPair(altGradColors)
+                        // Тема меняется после того, как новый градиент полностью зальёт кнопку.
+                        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
+                            try {
+                                sweep.snapTo(0f)
+                                sweep.animateTo(0.45f, tween(230, easing = LinearEasing))
+                                sweep.animateTo(
+                                    1f,
+                                    tween(180, easing = CubicBezierEasing(0.45f, 0f, 0.9f, 0.35f))
                                 )
-                            )
+                                applyTheme()
+                            } finally {
+                                sweep.snapTo(0f)
+                                sweepFrom = null
+                                sweepTo = null
+                                sweeping = false
+                            }
                         }
                     }
                 }
                 .background(Color.Transparent, panelShape)
                 .border(1.dp, Color.White.copy(alpha = 0.2f), panelShape)
         ) {
+            // Нижний слой: градиент текущей темы
+            val base = sweepFrom ?: (currentColor to nextColor)
+            val baseStart = if (pressProgress > 0f) lerp(base.first, base.second, pressProgress) else base.first
+            val baseEnd = if (pressProgress > 0f) lerp(base.second, base.first, pressProgress) else base.second
             Box(
                 Modifier
                     .fillMaxSize()
                     .background(
                         Brush.linearGradient(
-                            listOf(
-                                if (pressProgress > 0f) lerp(currentColor, nextColor, pressProgress) else currentColor,
-                                if (pressProgress > 0f) lerp(nextColor, currentColor, pressProgress) else nextColor
-                            ),
+                            listOf(baseStart, baseEnd),
                             Offset(0f, 0f),
                             Offset(600f, 56f)
                         ),
                         panelShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(themeLabel, color = if (isDark) Color.Black else Color.White, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+                    )
+            )
+            // Верхний слой: градиент новой темы выезжает слева направо
+            sweepTo?.let { to ->
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .graphicsLayer {
+                            translationX = -(1f - sweep.value) * themeBtnWidth
+                        }
+                        .background(
+                            Brush.linearGradient(
+                                listOf(to.first, to.second),
+                                Offset(0f, 0f),
+                                Offset(600f, 56f)
+                            ),
+                            panelShape
+                        )
+                )
             }
+            // Светящаяся кромка, бегущая вместе с волной градиента
+            if (sweeping) {
+                Box(
+                    Modifier
+                        .fillMaxHeight()
+                        .width(42.dp)
+                        .offset {
+                            IntOffset(
+                                (sweep.value * themeBtnWidth - 21.dp.toPx()).toInt(),
+                                0
+                            )
+                        }
+                        .background(
+                            Brush.horizontalGradient(
+                                listOf(
+                                    Color.Transparent,
+                                    Color.White.copy(alpha = 0.42f),
+                                    Color.Transparent
+                                )
+                            )
+                        )
+                )
+            }
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(22.dp)
+                    .align(Alignment.TopCenter)
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(Color.White.copy(alpha = 0.16f), Color.Transparent)
+                        ),
+                        panelShape
+                    )
+            )
+            val textColor = lerp(
+                if (isDark) Color.Black else Color.White,
+                if (!isDark) Color.Black else Color.White,
+                if (sweeping) sweep.value else 0f
+            )
+            Text(themeLabel, color = textColor, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
         }
 
         AnimatedOutlinedButton(

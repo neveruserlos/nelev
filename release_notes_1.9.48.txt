@@ -1,0 +1,15 @@
+NELEV 1.9.48 — Instant Dialogs & Gradient Theme Sweep
+
+RU:
+• Окно «Что нового» больше не выезжает снизу вверх: системная/OEM-анимация окна отключена на уровне темы
+• Окна обновлений и уведомлений теперь тоже появляются без анимации окна
+• Кнопка темы: вместо pop-анимации градиент новой темы плавно проносится слева направо, ускоряется и затем переключает тему
+• При выключенных «Визуальных эффектах» кнопка темы переключает тему мгновенно, без прогона градиента
+
+EN:
+• The What's New window no longer slides up from the bottom: system/OEM window animation is disabled at the theme level
+• Update and notice dialogs also appear without window animation now
+• Theme button: instead of a pop, the new theme gradient sweeps left to right, accelerates, then switches the theme
+• With "Visual effects" off, the theme button switches instantly without the gradient sweep
+
+Full reset (v1.9.44) remains: language, theme, all settings, IP, audio params, session history, update cache wiped; app returns to onboarding immediately.
