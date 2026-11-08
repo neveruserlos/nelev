@@ -1,0 +1,15 @@
+NELEV 1.9.47 — Theme Switch Rollback & Instant Dialogs
+
+RU:
+• Вернули старую плавную смену темы (250 мс crossfade) вместо эффекта «растекания»
+• Окна обновлений и «Что нового» теперь открываются и закрываются мгновенно, без системной анимации окна
+• Pop-анимация кнопки темы при коротком нажатии сохранена
+• Все анимации по-прежнему отключаются при выключенных «Визуальных эффектах»
+
+EN:
+• Restored the old smooth theme switch (250 ms crossfade) instead of the spreading-circle effect
+• Update and What's New dialogs now open and close instantly, without the system window animation
+• Theme button pop animation on short tap is kept
+• All animations still disable when "Visual effects" is off
+
+Full reset (v1.9.44) remains: language, theme, all settings, IP, audio params, session history, update cache wiped; app returns to onboarding immediately.

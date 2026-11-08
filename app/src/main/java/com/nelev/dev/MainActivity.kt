@@ -113,16 +113,6 @@ import kotlinx.coroutines.launch
 // Bump versionCode/versionName in version.properties when releasing.
 val APP_VERSION: String = BuildConfig.VERSION_NAME
 
-// Запуск «растекания» новой темы из центра кнопки переключения.
-object ThemeReveal {
-    var trigger by mutableStateOf(0L)
-    var center by mutableStateOf(Offset.Zero)
-    fun launch(centerPx: Offset) {
-        center = centerPx
-        trigger = System.nanoTime()
-    }
-}
-
 
 
 data class AppSettings(
@@ -2414,24 +2404,9 @@ class MainActivity : ComponentActivity() {
             NelevTheme(darkTheme = appSettings.value.isDark) {
                 val appBg by animateColorAsState(
                     if (appSettings.value.isDark) Color(0xFF060606) else Color(0xFFFFFCFF),
-                    animationSpec = if (effectsEnabled) tween(700, easing = FastOutSlowInEasing) else snap()
+                    animationSpec = if (effectsEnabled) tween(250) else snap()
                 )
                 val rootColors = nelevColors(appSettings.value.isDark, effectsEnabled)
-
-                // Venom-style «растекание» новой темы из кнопки переключения
-                val themeReveal = remember { Animatable(0f) }
-                var themeRevealCenter by remember { mutableStateOf(Offset.Zero) }
-                var themeRevealToDark by remember { mutableStateOf(appSettings.value.isDark) }
-                var themeRevealActive by remember { mutableStateOf(false) }
-                LaunchedEffect(ThemeReveal.trigger) {
-                    if (ThemeReveal.trigger == 0L || !effectsEnabled) return@LaunchedEffect
-                    themeRevealCenter = ThemeReveal.center
-                    themeRevealToDark = appSettings.value.isDark
-                    themeRevealActive = true
-                    themeReveal.snapTo(0f)
-                    themeReveal.animateTo(1f, tween(620, easing = FastOutSlowInEasing))
-                    themeRevealActive = false
-                }
 
                 LaunchedEffect(Unit) {
                     if (!effectsEnabled) { uiAlpha = 1f; return@LaunchedEffect }
@@ -2494,28 +2469,6 @@ class MainActivity : ComponentActivity() {
                     }
                     if (!splashDone || uiAlpha < 1f) {
                         NelevSplash(isDark = appSettings.value.isDark, effectsEnabled = effectsEnabled) { splashDone = true }
-                    }
-
-                    // Волна новой темы поверх контента: расходится кругом из кнопки
-                    if (themeRevealActive) {
-                        val revealColor = if (themeRevealToDark) Color(0xFF060606) else Color(0xFFFFFCFF)
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .drawWithContent {
-                                    drawContent()
-                                    val p = themeReveal.value
-                                    val cx = if (themeRevealCenter == Offset.Zero) size.width / 2f else themeRevealCenter.x
-                                    val cy = if (themeRevealCenter == Offset.Zero) size.height / 2f else themeRevealCenter.y
-                                    val maxR = hypot(max(cx, size.width - cx), max(cy, size.height - cy))
-                                    val fade = (1f - (p - 0.70f) / 0.30f).coerceIn(0f, 1f)
-                                    drawCircle(
-                                        color = revealColor.copy(alpha = fade),
-                                        radius = maxR * p * 1.03f,
-                                        center = Offset(cx, cy)
-                                    )
-                                }
-                        )
                     }
 
                     whatsNewVersion?.let { version ->
@@ -7676,18 +7629,10 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
         // Pop-анимация при коротком нажатии: пружинистое «вдавливание» и отпускание
         val themeScope = rememberCoroutineScope()
         val tapScale = remember { Animatable(1f) }
-        var themeBtnCenter by remember { mutableStateOf(Offset.Zero) }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
-                .onGloballyPositioned { coords ->
-                    val p = coords.positionInRoot()
-                    themeBtnCenter = Offset(
-                        p.x + coords.size.width / 2f,
-                        p.y + coords.size.height / 2f
-                    )
-                }
                 .graphicsLayer { scaleX = pressScale * tapScale.value; scaleY = pressScale * tapScale.value }
                 .clickable(
                     interactionSource = interactionSource,
@@ -7697,8 +7642,6 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                     if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                     save(appSettings.value.copy(isDark = !isDark))
                     if (effectsEnabled) {
-                        // Новая тема «растекается» круговой волной из центра кнопки
-                        ThemeReveal.launch(themeBtnCenter)
                         themeScope.launch {
                             tapScale.snapTo(1f)
                             tapScale.animateTo(0.92f, tween(70, easing = FastOutSlowInEasing))

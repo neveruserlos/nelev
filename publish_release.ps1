@@ -1,10 +1,10 @@
-# NELEV Release Script v1.9.46
+# NELEV Release Script v1.9.47
 # Automated GitHub Release Upload
 
 $apkPath = "app\build\outputs\apk\release\app-release.apk"
-$versionName = "1.9.46"
-$versionCode = "81"
-$notesFile = "release_notes_1.9.46.txt"
+$versionName = "1.9.47"
+$versionCode = "82"
+$notesFile = "release_notes_1.9.47.txt"
 
 Write-Host "=== NELEV Release v$versionName ===" -ForegroundColor Cyan
 
@@ -32,7 +32,7 @@ Write-Host "Size: $sizeBytes bytes" -ForegroundColor Green
 # Create version.json
 # NOTE: must be UTF-8 WITHOUT BOM and ASCII-safe bullets, otherwise
 # org.json.JSONObject() in Updater.kt fails and the update is never found.
-$changelog = "- All animations, including update/What's New dialogs, disable instantly when Visual effects is off`n- Theme switch spreads as a circular wave from the toggle button (Venom-style)`n- Theme button pops with a springy bounce on short tap`n- Blur on overlays always stays on`n- QR scanner line/flash follow the visual effects setting`n- Onboarding and splash are fully static without effects"
+$changelog = "- Restored old smooth theme switch (250 ms crossfade), removed spreading-circle effect`n- Update/What's New dialogs open and close instantly without system window animation`n- Theme button pop animation on short tap is kept`n- All animations still disable when Visual effects is off"
 # Localized changelogs for all languages, so the update window does not depend
 # on raw.githubusercontent.com (which can be blocked). Old clients ignore this
 # field and keep using the plain "changelog" above.

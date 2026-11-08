@@ -74,6 +74,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -86,11 +87,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 // ─── Обновление ──────────────────────────────────────────────────────────────
+
+// Диалоговое окно должно появляться и исчезать мгновенно: системная анимация
+// окна (fade/scale) не относится к нашим эффектам и выглядит как «рывок».
+@Composable
+private fun NoDialogWindowAnimation() {
+    val view = LocalView.current
+    LaunchedEffect(view) {
+        val provider = view as? DialogWindowProvider
+            ?: view.parent as? DialogWindowProvider
+        provider?.window?.setWindowAnimations(0)
+    }
+}
 
 @Composable
 fun UpdateDialog(
@@ -141,6 +155,7 @@ fun UpdateDialog(
         onDismissRequest = { if (!downloading && canDismiss) onDismiss() },
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
+        NoDialogWindowAnimation()
         // Окно фиксированного размера: при раскрытии «Что нового» меняется только
         // контент внутри, а не размер окна — так анимация не дёргается.
         Box(
@@ -512,6 +527,7 @@ fun UpdateErrorDialog(
     val danger = Color(0xFFE5484D)
 
     Dialog(onDismissRequest = onDismiss) {
+        NoDialogWindowAnimation()
         Surface(
             shape = RoundedCornerShape(26.dp),
             color = card,
@@ -619,6 +635,7 @@ fun WhatsNewDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
+        NoDialogWindowAnimation()
         // Окно диалога всегда полноэкранное: оно создаётся сразу фиксированного
         // размера и больше никогда не меняет габариты — поэтому карточка не
         // «телепортируется» и не дёргается при открытии.
@@ -816,6 +833,7 @@ fun InstallPermissionDialog(
     val buttonContent = if (isDark) Color.Black else Color.White
 
     Dialog(onDismissRequest = onDismiss) {
+        NoDialogWindowAnimation()
         Surface(
             shape = RoundedCornerShape(26.dp),
             color = card,
@@ -899,6 +917,7 @@ fun UpdateAvailableNotice(
     val buttonContent = if (isDark) Color.Black else Color.White
 
     Dialog(onDismissRequest = onDismiss) {
+        NoDialogWindowAnimation()
         Surface(
             shape = RoundedCornerShape(26.dp),
             color = card,
