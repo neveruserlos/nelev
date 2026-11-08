@@ -1,0 +1,15 @@
+NELEV 1.9.49 — Theme Button Fix
+
+RU:
+• Исправлен краш при переключении темы кнопкой
+• Текст на кнопке темы снова по центру
+• Надпись «Доступно обновление» снова обычного цвета, как остальные настройки
+• Градиент новой темы по-прежнему плавно проносится слева направо с ускорением в конце
+
+EN:
+• Fixed a crash when switching the theme with the button
+• Theme button text is centered again
+• The "Update available" label is back to the regular text color like other settings
+• The new theme gradient still sweeps left to right with acceleration at the end
+
+Full reset (v1.9.44) remains: language, theme, all settings, IP, audio params, session history, update cache wiped; app returns to onboarding immediately.

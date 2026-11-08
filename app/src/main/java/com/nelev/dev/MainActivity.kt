@@ -7643,6 +7643,9 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
         var sweepTo by remember { mutableStateOf<Pair<Color, Color>?>(null) }
         var sweeping by remember { mutableStateOf(false) }
         var themeBtnWidth by remember { mutableStateOf(1f) }
+        // Анимация должна идти в scope композиции: только у него в контексте есть
+        // MonotonicFrameClock, без которого Animatable.animateTo падает.
+        val themeScope = rememberCoroutineScope()
 
         fun applyTheme() {
             save(appSettings.value.copy(isDark = !appSettings.value.isDark))
@@ -7668,7 +7671,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                         sweepFrom = currentColor to nextColor
                         sweepTo = gradientPair(altGradColors)
                         // Тема меняется после того, как новый градиент полностью зальёт кнопку.
-                        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
+                        themeScope.launch {
                             try {
                                 sweep.snapTo(0f)
                                 sweep.animateTo(0.45f, tween(230, easing = LinearEasing))
@@ -7676,18 +7679,25 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                                     1f,
                                     tween(180, easing = CubicBezierEasing(0.45f, 0f, 0.9f, 0.35f))
                                 )
-                                applyTheme()
+                            } catch (_: kotlinx.coroutines.CancellationException) {
+                                // Экран могли покинуть посреди анимации — тему всё равно меняем.
+                            } catch (_: Exception) {
+                                // Любой сбой анимации не должен ронять приложение.
                             } finally {
-                                sweep.snapTo(0f)
-                                sweepFrom = null
-                                sweepTo = null
-                                sweeping = false
+                                kotlinx.coroutines.withContext(kotlinx.coroutines.NonCancellable) {
+                                    applyTheme()
+                                    sweep.snapTo(0f)
+                                    sweepFrom = null
+                                    sweepTo = null
+                                    sweeping = false
+                                }
                             }
                         }
                     }
                 }
                 .background(Color.Transparent, panelShape)
-                .border(1.dp, Color.White.copy(alpha = 0.2f), panelShape)
+                .border(1.dp, Color.White.copy(alpha = 0.2f), panelShape),
+            contentAlignment = Alignment.Center
         ) {
             // Нижний слой: градиент текущей темы
             val base = sweepFrom ?: (currentColor to nextColor)
@@ -7727,6 +7737,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
             if (sweeping) {
                 Box(
                     Modifier
+                        .align(Alignment.CenterStart)
                         .fillMaxHeight()
                         .width(42.dp)
                         .offset {
@@ -7811,9 +7822,9 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                         Column {
                             Text(
                                 if (updateAvailable) Strings.get("update_available", lang) else Strings.get("check_update", lang),
-                                color = if (updateAvailable) accent else text,
+                                color = text,
                                 fontSize = 14.sp,
-                                fontWeight = if (updateAvailable) FontWeight.SemiBold else FontWeight.Normal
+                                fontWeight = FontWeight.Normal
                             )
                         }
                         if (updateAvailable) {

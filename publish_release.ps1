@@ -1,10 +1,10 @@
-# NELEV Release Script v1.9.48
+# NELEV Release Script v1.9.49
 # Automated GitHub Release Upload
 
 $apkPath = "app\build\outputs\apk\release\app-release.apk"
-$versionName = "1.9.48"
-$versionCode = "83"
-$notesFile = "release_notes_1.9.48.txt"
+$versionName = "1.9.49"
+$versionCode = "84"
+$notesFile = "release_notes_1.9.49.txt"
 
 Write-Host "=== NELEV Release v$versionName ===" -ForegroundColor Cyan
 
@@ -32,7 +32,7 @@ Write-Host "Size: $sizeBytes bytes" -ForegroundColor Green
 # Create version.json
 # NOTE: must be UTF-8 WITHOUT BOM and ASCII-safe bullets, otherwise
 # org.json.JSONObject() in Updater.kt fails and the update is never found.
-$changelog = "- The What's New window no longer slides up from the bottom: system/OEM window animation is disabled at the theme level`n- Update and notice dialogs also appear without window animation now`n- Theme button: instead of a pop, the new theme gradient sweeps left to right, accelerates, then switches the theme`n- With Visual effects off, the theme button switches instantly without the gradient sweep"
+$changelog = "- Fixed a crash when switching the theme with the button`n- Theme button text is centered again`n- The 'Update available' label is back to the regular text color like other settings`n- The new theme gradient still sweeps left to right with acceleration at the end"
 # Localized changelogs for all languages, so the update window does not depend
 # on raw.githubusercontent.com (which can be blocked). Old clients ignore this
 # field and keep using the plain "changelog" above.

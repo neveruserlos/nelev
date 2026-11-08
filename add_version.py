@@ -3,18 +3,18 @@ p = 'app/src/main/assets/version_history.json'
 with io.open(p, encoding='utf-8') as f:
     d = json.load(f)
 entry = {
-    "versionCode": 83,
-    "versionName": "1.9.48",
+    "versionCode": 84,
+    "versionName": "1.9.49",
     "releaseDate": "2026-11-08",
     "changelog": {
-        "ru": "• Окно «Что нового» больше не выезжает снизу вверх: системная/OEM-анимация окна отключена на уровне темы\n• Окна обновлений и уведомлений теперь тоже появляются без анимации окна\n• Кнопка темы: вместо pop-анимации градиент новой темы плавно проносится слева направо, ускоряется и затем переключает тему\n• При выключенных «Визуальных эффектах» кнопка темы переключает тему мгновенно, без прогона градиента",
-        "en": "• The What's New window no longer slides up from the bottom: system/OEM window animation is disabled at the theme level\n• Update and notice dialogs also appear without window animation now\n• Theme button: instead of a pop, the new theme gradient sweeps left to right, accelerates, then switches the theme\n• With Visual effects off, the theme button switches instantly without the gradient sweep",
-        "es": "• La ventana de Novedades ya no sube desde abajo: la animación de ventana del sistema/OEM está desactivada a nivel de tema\n• Los diálogos de actualización y avisos también aparecen sin animación de ventana\n• Botón de tema: en lugar de pop, el gradiente del nuevo tema recorre de izquierda a derecha, acelera y luego cambia el tema\n• Con \"Efectos visuales\" apagado, el botón cambia el tema al instante sin recorrido de gradiente",
-        "zh": "• \"新功能\"窗口不再从底部向上滑入：系统/OEM 窗口动画已在主题层面禁用\n• 更新和通知对话框现在也没有窗口动画\n• 主题按钮：新主题渐变从左到右扫过并加速，然后切换主题（取代弹出动画）\n• 关闭\"视觉效果\"时，主题按钮立即切换，不播放渐变扫过",
-        "ja": "• 「新機能」ウィンドウが下から上へスライドしなくなりました。システム/OEMのウィンドウアニメーションをテーマ側で無効化\n• 更新ダイアログと通知ダイアログもウィンドウアニメーションなしで表示されます\n• テーマボタン: ポップの代わりに新しいテーマのグラデーションが左から右へ流れ、加速してからテーマを切り替えます\n• 「視覚効果」オフ時はグラデーションを流さず即座にテーマを切り替えます",
-        "ko": "• \"새 기능\" 창이 더 이상 아래에서 위로 슬라이드하지 않습니다. 시스템/OEM 창 애니메이션을 테마 수준에서 비활성화했습니다\n• 업데이트 및 알림 대화상자도 창 애니메이션 없이 나타납니다\n• 테마 버튼: 팝 대신 새 테마 그라데이션이 왼쪽에서 오른쪽으로 흐르고 가속된 뒤 테마를 전환합니다\n• \"시각 효과\"가 꺼져 있으면 그라데이션 없이 즉시 테마가 전환됩니다",
-        "pt": "• A janela Novidades não sobe mais de baixo: a animação de janela do sistema/OEM foi desativada no tema\n• Os diálogos de atualização e avisos também aparecem sem animação de janela\n• Botão de tema: em vez de pop, o gradiente do novo tema passa da esquerda para a direita, acelera e então troca o tema\n• Com \"Efeitos visuais\" desligado, o botão troca o tema instantaneamente, sem o gradiente",
-        "uk": "• Вікно «Що нового» більше не виїжджає знизу вгору: системну/OEM-анімацію вікна вимкнено на рівні теми\n• Вікна оновлень і повідомлень тепер теж з'являються без анімації вікна\n• Кнопка теми: замість pop-анімації градієнт нової теми плавно проноситься зліва направо, прискорюється й потім перемикає тему\n• При вимкнених «Візуальних ефектах» кнопка теми перемикає тему миттєво, без прогону градієнта"
+        "ru": "• Исправлен краш при переключении темы кнопкой\n• Текст на кнопке темы снова по центру\n• Надпись «Доступно обновление» снова обычного цвета, как остальные настройки\n• Градиент новой темы по-прежнему плавно проносится слева направо с ускорением в конце",
+        "en": "• Fixed a crash when switching the theme with the button\n• Theme button text is centered again\n• The \"Update available\" label is back to the regular text color like other settings\n• The new theme gradient still sweeps left to right with acceleration at the end",
+        "es": "• Corregido el fallo al cambiar el tema con el botón\n• El texto del botón de tema vuelve a estar centrado\n• La etiqueta «Actualización disponible» vuelve al color normal como los demás ajustes\n• El degradado del nuevo tema sigue pasando de izquierda a derecha con aceleración al final",
+        "zh": "• 修复了使用按钮切换主题时的崩溃\n• 主题按钮文字重新居中\n• “有可用更新”文字恢复为与其他设置相同的常规颜色\n• 新主题渐变仍会从左到右扫过并在末尾加速",
+        "ja": "• テーマボタンでテーマを切り替える際のクラッシュを修正\n• テーマボタンのテキストが再び中央に表示されます\n• 「アップデートがあります」の文字が他の設定と同じ通常の色に戻りました\n• 新しいテーマのグラデーションは最後に加速しながら左から右へ流れます",
+        "ko": "• 테마 버튼으로 테마를 전환할 때 발생하던 크래시를 수정했습니다\n• 테마 버튼 텍스트가 다시 중앙에 표시됩니다\n• \"업데이트 가능\" 문구가 다른 설정과 같은 일반 텍스트 색상으로 돌아왔습니다\n• 새 테마 그라데이션은 마지막에 가속하며 왼쪽에서 오른쪽으로 흐릅니다",
+        "pt": "• Corrigido o crash ao trocar o tema pelo botão\n• O texto do botão de tema voltou ao centro\n• O rótulo \"Atualização disponível\" voltou à cor normal como os demais ajustes\n• O gradiente do novo tema continua passando da esquerda para a direita com aceleração no final",
+        "uk": "• Виправлено краш під час перемикання теми кнопкою\n• Текст на кнопці теми знову по центру\n• Напис «Доступне оновлення» знову звичайного кольору, як інші налаштування\n• Градієнт нової теми так само плавно проноситься зліва направо з прискоренням наприкінці"
     }
 }
 d['versions'].insert(0, entry)
