@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "versionCode": 82,
+      "versionName": "1.9.51",
+      "releaseDate": "2026-11-09",
+      "changelog": {
+        "ru": "• Кнопка смены темы как в v1.9.45: при нажатии — плавный scale down до 0.95× + сдвиг градиента (press-анимация через InteractionSource)\n• Мгновенное переключение темы без анимации «растворения»\n• Анимации окон/свайпов мгновенно выключаются при отключении «Визуальные эффекты» (0 мс)\n• Блюр при открытых окнах работает всегда\n• Смена темы — 650 мс с FastOutSlowInEasing",
+        "en": "• Theme button as in v1.9.45: press animation — scale down to 0.95× + gradient shift via InteractionSource\n• Instant theme switching without ink dissolve animation\n• Window/swipe animations instantly disable when Visual effects is off (0 ms)\n• Blur on open overlays works always\n• Theme switching — 650 ms with FastOutSlowInEasing",
+        "es": "• Botón de cambio de tema como en v1.9.45: al presionar — escala suave a 0.95× + desplazamiento de gradiente (animación de presión a través de InteractionSource)\n• Cambio de tema instantáneo sin animación de \"disolución de tinta\"\n• Las animaciones de ventana/deslizamiento se desactivan al instante al desactivar \"Efectos visuales\" (0 ms)\n• Desenfoque en superposiciones abiertas funciona siempre\n• Cambio de tema — 650 ms con FastOutSlowInEasing",
+        "zh": "• 主题切换按钮同 v1.9.45: 按下时 — 平滑缩放至 0.95× + 渐变位移（通过 InteractionSource 的按压动画）\n• 即时主题切换，无“墨水溶解”动画\n• 关闭“视觉效果”时窗口/滑动动画立即禁用（0 ms）\n• 打开的覆盖层模糊始终可用\n• 主题切换 — 650 ms，使用 FastOutSlowInEasing",
+        "ja": "• テーマ切换ボタンは v1.9.45 と同様: 押下時 — 0.95× へのスムーズなスケールダウン + グラデーションシフト（InteractionSource によるプレスアニメーション）\n• テーマの即時切替、「インク溶解」アニメーションなし\n• 「ビジュアルエフェクト」をオフにするとウィンドウ/スワイプアニメーションが即座に無効化（0 ms）\n• 開いているオーバーレイのぼやけは常に有効\n• テーマ切替 — 650 ms、FastOutSlowInEasing",
+        "ko": "• 테마 전환 버튼은 v1.9.45와 동일: 누를 때 — 0.95×로 부드러운 스케일 다운 + 그라데이션 이동 (InteractionSource를 통한 프레스 애니메이션)\n• 즉시 테마 전환, \"잉크 용해\" 애니메이션 없음\n• 시각 효과를 끄면 창/스와이프 애니메이션이 즉시 비활성화 (0 ms)\n• 열려 있는 오버레이의 블러는 항상 사용 가능\n• 테마 전환 — 650 ms, FastOutSlowInEasing",
+        "pt": "• Botão de alteração de tema como na v1.9.45: ao pressionar — escala suave para 0.95× + deslocamento de gradiente (animação de pressão via InteractionSource)\n• Mudança de tema instantânea sem animação de \"dissolução de tinta\"\n• Animações de janela/deslizamento desativadas instantaneamente ao desativar \"Efeitos visuais\" (0 ms)\n• Desfoque em sobreposições abertas funciona sempre\n• Mudança de tema — 650 ms com FastOutSlowInEasing",
+        "uk": "• Кнопка зміни теми як у v1.9.45: при натисканні — плавне зменшення масштабу до 0.95× + зсув градієнта (анімація натискання через InteractionSource)\n• Міжменне перемикання теми без анімації «растворення»\n• Анімації вікон/свайпів миттєво вимикаються при вимкненні «Візуальні ефекти» (0 мс)\n• Блюр при відкритих вікнах працює завжди\n• Зміна теми — 650 мс з FastOutSlowInEasing"
+      }
+    },
+    {
       "versionCode": 80,
       "versionName": "1.9.45",
       "releaseDate": "2026-11-08",

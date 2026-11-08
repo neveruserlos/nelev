@@ -340,10 +340,14 @@ object Updater {
         return result
     }
 
-    suspend fun changelogFor(ctx: Context, versionCode: Int): String? = withContext(Dispatchers.IO) {        try {
+    suspend fun changelogFor(ctx: Context, versionCode: Int, lang: String = "en"): String? = withContext(Dispatchers.IO) {
+        try {
             val o = JSONObject(fetchText(MANIFEST_URL))
             if (o.optInt("versionCode", 0) == versionCode) {
-                o.optString("changelog", "").trim().ifBlank { null }
+                val changelogs = parseChangelogs(o.optJSONObject("changelogs"))
+                val localized = changelogs[lang]
+                if (localized?.isNotBlank() == true) localized
+                else o.optString("changelog", "").trim().ifBlank { null }
             } else null
         } catch (_: Exception) {
             null
@@ -402,9 +406,13 @@ object Updater {
             throw IOException("checksum mismatch")
         }
         // Сохраняем список изменений: после установки покажем его на первом запуске.
-        // Манифест на английском, поэтому кладём как "en", чтобы не перекрывать
-        // локализованные переводы из version_history.json.
-        if (info.changelog.isNotBlank()) {
+        // Манифест может содержать локализованные переводы в changelogs — кладем каждый под своим языком,
+        // чтобы окно «Что нового» показывал перевод только выбранного языка.
+        if (info.changelogs.isNotEmpty()) {
+            info.changelogs.forEach { (lang, text) ->
+                VersionHistory.saveChangelog(ctx, info.versionCode, text, lang)
+            }
+        } else if (info.changelog.isNotBlank()) {
             VersionHistory.saveChangelog(ctx, info.versionCode, info.changelog, "en")
         }
         onProgress(100)

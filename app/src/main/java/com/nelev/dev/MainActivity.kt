@@ -2433,7 +2433,7 @@ class MainActivity : ComponentActivity() {
                     if (!launchInfo.updated) return@LaunchedEffect
                     val currentLang = appSettings.value.language
                     val notes = VersionHistory.changelog(ctx, launchInfo.currentCode, currentLang)
-                        ?: Updater.changelogFor(ctx, launchInfo.currentCode)
+                        ?: Updater.changelogFor(ctx, launchInfo.currentCode, currentLang)
                     whatsNewNotes = notes
                     whatsNewVersion = APP_VERSION
                 }
@@ -2443,7 +2443,7 @@ class MainActivity : ComponentActivity() {
                     if (whatsNewVersion != null) {
                         val currentLang = appSettings.value.language
                         val notes = VersionHistory.changelog(ctx, launchInfo.currentCode, currentLang)
-                            ?: Updater.changelogFor(ctx, launchInfo.currentCode)
+                            ?: Updater.changelogFor(ctx, launchInfo.currentCode, currentLang)
                         whatsNewNotes = notes
                     }
                 }
