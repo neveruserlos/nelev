@@ -3269,6 +3269,24 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                                                     fontSize = 12.sp,
                                                     color = muted
                                                 )
+                                                Spacer(modifier = Modifier.height(12.dp))
+                                                Button(
+                                                    onClick = {
+                                                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
+                                                        checkVersionOnboarding()
+                                                    },
+                                                    shape = RoundedCornerShape(13.dp),
+                                                    colors = ButtonDefaults.buttonColors(
+                                                        containerColor = accent,
+                                                        contentColor = buttonContent
+                                                    )
+                                                ) {
+                                                    Text(
+                                                        UpdateText.get("check_again", currentLang),
+                                                        fontSize = 12.sp,
+                                                        fontWeight = FontWeight.SemiBold
+                                                    )
+                                                }
                                             }
                                         }
                                     }
@@ -7636,7 +7654,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                         Column {
                             Text(
                                 if (updateAvailable) Strings.get("update_available", lang) else Strings.get("check_update", lang),
-                                color = if (updateAvailable) accent else text,
+                                color = text,
                                 fontSize = 14.sp,
                                 fontWeight = if (updateAvailable) FontWeight.SemiBold else FontWeight.Normal
                             )
