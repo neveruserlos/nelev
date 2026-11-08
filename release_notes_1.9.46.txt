@@ -1,84 +1,20 @@
-✨ NELEV 1.9.46 — Возврат смены темы как в v1.9.45
+NELEV 1.9.46 — Return Theme Switch as in v1.9.45
 
-## Что изменилось
+RU:
+• Кнопка смены темы как в v1.9.45: при нажатии — плавный scale down до 0.95× + сдвиг градиента (press-анимация через InteractionSource)
+• Мгновенное переключение темы без анимации «растворения»
+• Анимации окон/свайпов мгновенно выключаются при отключении «Визуальные эффекты» (0 мс)
+• Блюр при открытых окнах работает всегда
+• Смена темы — 650 мс с FastOutSlowInEasing
 
-• **Кнопка смены темы как в v1.9.45**: при нажатии — плавный scale down до 0.95× + сдвиг градиента (press-анимация через InteractionSource)
-• **Мгновенное переключение темы** без анимации «растворения» старой краски в новой
-• **Анимации окон/свайпов мгновенно выключаются** при отключении «Визуальные эффекты» (0 мс вместо 300/420/500 мс)
-• **Блюр при открытых окнах** (история сессий / About) теперь работает всегда, независимо от настройки визуальных эффектов
-• **Смена темы — 650 мс с FastOutSlowInEasing и overshoot-ощущением**
+EN:
+• Theme button as in v1.9.45: press animation — scale down to 0.95× + gradient shift via InteractionSource
+• Instant theme switching without ink dissolve animation
+• Window/swipe animations instantly disable when Visual effects is off (0 ms)
+• Blur on open overlays works always
+• Theme switching — 650 ms with FastOutSlowInEasing
 
----
-
-## What's Changed
-
-• **Theme button as in v1.9.45**: press animation — smooth scale down to 0.95× + gradient shift (via InteractionSource)
-• **Instant theme switching** without the "ink dissolving" animation
-• **Window/swipe animations instantly disable** when "Visual effects" is turned off (0 ms instead of 300/420/500 ms)
-• **Blur on open overlays** (session history / About) now works always, independent of visual effects setting
-• **Theme switching — 650 ms** with FastOutSlowInEasing and overshoot feel
-
----
-
-## ¿Qué cambió?
-
-• **Botón de cambio de tema como en v1.9.45**: al presionar — escala suave a 0.95× + desplazamiento de gradiente (animación de presión a través de InteractionSource)
-• **Cambio de tema instantáneo** sin animación de "disolución de tinta"
-• **Las animaciones de ventana/deslizamiento se desactivan al instante** al desactivar "Efectos visuales" (0 ms en lugar de 300/420/500 ms)
-• **Desenfoque en superposiciones abiertas** (historial de sesiones / Acerca de) ahora funciona siempre, independientemente de la configuración de efectos visuales
-• **Cambio de tema — 650 ms** con FastOutSlowInEasing y sensación de overshoot
-
----
-
-## 变更内容
-
-• **主题切换按钮同 v1.9.45**：按下时 — 平滑缩放至 0.95× + 渐变位移（通过 InteractionSource 的按压动画）
-• **即时主题切换**，无“墨水溶解”动画
-• **关闭“视觉效果”时窗口/滑动动画立即禁用**（0 ms 而不是 300/420/500 ms）
-• **打开的覆盖层（会话历史 / 关于）模糊始终可用**，不受视觉效果设置影响
-• **主题切换 — 650 ms**，使用 FastOutSlowInEasing 并带有 overshoot 效果
-
----
-
-## 変更点
-
-• **テーマ切换ボタンは v1.9.45 と同様**：押下時 — 0.95× へのスムーズなスケールダウン + グラデーションシフト（InteractionSource によるプレスアニメーション）
-• **テーマの即時切替**、「インク溶解」アニメーションなし
-• **「ビジュアルエフェクト」をオフにするとウィンドウ/スワイプアニメーションが即座に無効化**（0 ms、300/420/500 ms ではなく）
-• **開いているオーバーレイ（セッション履歴 / 詳細情報）のぼやけは常に有効**、ビジュアルエフェクト設定に関係なく
-• **テーマ切替 — 650 ms**、FastOutSlowInEasing とオーバーシュート感
-
----
-
-## 변경 사항
-
-• **테마 전환 버튼은 v1.9.45와 동일**: 누를 때 — 0.95×로 부드러운 스케일 다운 + 그라데이션 이동 (InteractionSource를 통한 프레스 애니메이션)
-• **즉시 테마 전환**, "잉크 용해" 애니메이션 없음
-• **시각 효과를 끄면 창/스와이프 애니메이션이 즉시 비활성화** (0 ms, 300/420/500 ms가 아님)
-• **열려 있는 오버레이 (세션 기록 / 정보)의 블러는 항상 사용 가능**, 시각 효과 설정과 무관하게
-• **테마 전환 — 650 ms**, FastOutSlowInEasing 및 오버슈트 느낌
-
----
-
-## O que mudou
-
-• **Botão de alteração de tema como na v1.9.45**: ao pressionar — escala suave para 0.95× + deslocamento de gradiente (animação de pressão via InteractionSource)
-• **Mudança de tema instantânea** sem animação de "dissolução de tinta"
-• **Animações de janela/deslizamento desativadas instantaneamente** ao desativar "Efeitos visuais" (0 ms em vez de 300/420/500 ms)
-• **Desfoque em sobreposições abertas** (histórico de sessões / Sobre) agora funciona sempre, independentemente da configuração de efeitos visuais
-• **Mudança de tema — 650 ms** com FastOutSlowInEasing e sensação de overshoot
-
----
-
-## Що змінилося
-
-• **Кнопка зміни теми як у v1.9.45**: при натисканні — плавне зменшення масштабу до 0.95× + зсув градієнта (анімація натискання через InteractionSource)
-• **Міжменне перемикання теми** без анімації «растворення» старої фарби в нову
-• **Анімації вікон/свайпів миттєво вимикаються** при вимкненні «Візуальні ефекти» (0 мс замість 300/420/500 мс)
-• **Блюр при відкритих вікнах** (історія сесій / Про додаток) тепер працює завжди, незалежно від налаштування візуальних ефектів
-• **Зміна теми — 650 мс** з FastOutSlowInEasing та overshoot-відчуттям
-
----
+Full reset (v1.9.44) remains: language, theme, all settings, IP, audio params, session history, update cache wiped; app returns to onboarding immediately.
 
 **Download:** nelev-app-release-1.9.46.apk  
 **GitHub:** https://github.com/neveruserlos/nelev
