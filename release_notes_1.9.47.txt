@@ -1,5 +1,9 @@
-NELEV 1.9.47
+NELEV 1.9.47 — Stable release
 
-• Fixed: "What's New" changelog translations — now complete and correct on all eight languages
-  (fixed Chinese, Japanese, Korean and Ukrainian for 1.9.46).
-• Version history synced: every version has a full changelog in all eight languages.
+RU:
+• Исправлены переводы списка изменений «Что нового» — теперь на всех восьми языках без искажений (исправлен китайский, японский, корейский и украинский для 1.9.46)
+• История версий синхронизирована: каждая версия имеет полный список изменений на всех языках
+
+EN:
+• Fixed: "What's New" changelog translations — now complete and correct on all eight languages (fixed Chinese, Japanese, Korean and Ukrainian for 1.9.46)
+• Version history synced: every version has a full changelog in all eight languages
