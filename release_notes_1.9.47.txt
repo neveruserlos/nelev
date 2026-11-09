@@ -1,0 +1,5 @@
+NELEV 1.9.47
+
+• Fixed: "What's New" changelog translations — now complete and correct on all eight languages
+  (fixed Chinese, Japanese, Korean and Ukrainian for 1.9.46).
+• Version history synced: every version has a full changelog in all eight languages.
