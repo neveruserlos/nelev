@@ -1,0 +1,9 @@
+NELEV 1.9.46 — Stable release
+
+RU:
+• Исправлено: цвет текста кнопки «Доступно обновление» теперь такой же, как у остальных кнопок (text), а не выделялся иным цветом
+• Добавлена: кнопка «Проверить снова» на экране, когда версия актуальна
+
+EN:
+• Fixed: "update available" button text color is now consistent with all other buttons
+• Added: "Check again" button on the up-to-date version screen

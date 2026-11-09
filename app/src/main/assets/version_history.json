@@ -1,6 +1,15 @@
 {
   "versions": [
     {
+      "versionCode": 81,
+      "versionName": "1.9.46",
+      "releaseDate": "2026-11-09",
+      "changelog": {
+        "ru": "• Исправлено: цвет текста кнопки «Доступно обновление» теперь также, как у остальных кнопок (текст), а не выделялся иным цветом\n• Добавлена: кнопка «Проверить снова» на экране, когда версия актуальна",
+        "en": "• Fixed: \"update available\" button text color is now consistent with all other buttons\n• Added: \"Check again\" button on the up-to-date version screen"
+      }
+    },
+    {
       "versionCode": 80,
       "versionName": "1.9.45",
       "releaseDate": "2026-11-08",
