@@ -5,14 +5,14 @@
       "versionName": "1.9.47",
       "releaseDate": "2026-11-09",
       "changelog": {
-        "ru": "• Исправлены переводы списка изменений «Что нового» — теперь на всех восьми языках без искажений (исправлен китайский, японский, корейский и украинский для 1.9.46)\\n• История версий синхронизирована: каждая версия имеет полный список изменений на всех языках",
-        "en": "• Fixed: \"What's New\" changelog translations — now complete and correct on all eight languages (fixed Chinese, Japanese, Korean and Ukrainian for 1.9.46)\\n• Version history synced: every version has a full changelog in all eight languages",
-        "es": "• Corregidas las traducciones del listado de novedades — ahora completas y correctas en los ocho idiomas (chino, japonés, coreano y ucraniano corregidos para 1.9.46)\\n• Historial de versiones sincronizado: cada versión tiene su lista de cambios completa en los ocho idiomas",
-        "zh": "• 修复了“什么新功能”列表的翻译——现在八种语言都完整正确（已修复 1.9.46 的中文、日文、韩文和乌克兰文）\\n• 版本历史已同步：每个版本都有八种语言的完整更新列表",
-        "ja": "• 「新機能」リストの翻訳を修正——8 か国語すべてで完全かつ正しくなりました（1.9.46 の中国語、日本語、韓国語、ウクライナ語を修正）\\n• バージョン履歴を同期：すべてのバージョンに 8 か国語の完全な変更リストがあります",
-        "ko": "• 수정: \"새로운 기능\" 목록 번역을 완료했습니다 — 8개 언어 모두 정확합니다 (1.9.46의 중국어, 일본어, 한국어, 우크라이나어 수정)\\n• 버전 기록이 동기화되었습니다: 모든 버전이 8개 언어로 된 전체 변경 목록을 가지고 있습니다",
-        "pt": "• Corrigidas as traduções da lista de \"Novidades\" — agora completas e corretas em todos os oito idiomas (chinês, japonês, coreano e ucraniano corrigidos para 1.9.46)\\n• Histórico de versões sincronizado: cada versão tem a lista completa de alterações em todos os oito idiomas",
-        "uk": "• Виправлені переклади списку «Що нового» — тепер повні і коректні на всіх восьми мовах (китайська, японська, корейська та українська виправлені для 1.9.46)\\n• Історію версій синхронізовано: кожна версія має повний список змін на всіх восьми мовах"
+        "ru": "• Исправлены переводы списка изменений «Что нового» — теперь на всех восьми языках без искажений (исправлен китайский, японский, корейский и украинский для 1.9.46)\n• История версий синхронизирована: каждая версия имеет полный список изменений на всех языках",
+        "en": "• Fixed: \"What's New\" changelog translations — now complete and correct on all eight languages (fixed Chinese, Japanese, Korean and Ukrainian for 1.9.46)\n• Version history synced: every version has a full changelog in all eight languages",
+        "es": "• Corregidas las traducciones del listado de novedades — ahora completas y correctas en los ocho idiomas (chino, japonés, coreano y ucraniano corregidos para 1.9.46)\n• Historial de versiones sincronizado: cada versión tiene su lista de cambios completa en los ocho idiomas",
+        "zh": "• 修复了“什么新功能”列表的翻译——现在八种语言都完整正确（已修复 1.9.46 的中文、日文、韩文和乌克兰文）\n• 版本历史已同步：每个版本都有八种语言的完整更新列表",
+        "ja": "• 「新機能」リストの翻訳を修正——8 か国語すべてで完全かつ正しくなりました（1.9.46 の中国語、日本語、韓国語、ウクライナ語を修正）\n• バージョン履歴を同期：すべてのバージョンに 8 か国語の完全な変更リストがあります",
+        "ko": "• 수정: \"새로운 기능\" 목록 번역을 완료했습니다 — 8개 언어 모두 정확합니다 (1.9.46의 중국어, 일본어, 한국어, 우크라이나어 수정)\n• 버전 기록이 동기화되었습니다: 모든 버전이 8개 언어로 된 전체 변경 목록을 가지고 있습니다",
+        "pt": "• Corrigidas as traduções da lista de \"Novidades\" — agora completas e corretas em todos os oito idiomas (chinês, japonês, coreano e ucraniano corrigidos para 1.9.46)\n• Histórico de versões sincronizado: cada versão tem a lista completa de alterações em todos os oito idiomas",
+        "uk": "• Виправлені переклади списку «Що нового» — тепер повні і коректні на всіх восьми мовах (китайська, японська, корейська та українська виправлені для 1.9.46)\n• Історію версій синхронізовано: кожна версія має повний список змін на всіх восьми мовах"
       }
     },
 
