@@ -4,6 +4,7 @@
       "versionCode": 82,
       "versionName": "1.9.47",
       "releaseDate": "2026-11-09",
+      "stable": true,
       "changelog": {
         "ru": "• Исправлены переводы списка изменений «Что нового» — теперь на всех восьми языках без искажений (исправлен китайский, японский, корейский и украинский для 1.9.46)\n• История версий синхронизирована: каждая версия имеет полный список изменений на всех языках",
         "en": "• Fixed: \"What's New\" changelog translations — now complete and correct on all eight languages (fixed Chinese, Japanese, Korean and Ukrainian for 1.9.46)\n• Version history synced: every version has a full changelog in all eight languages",
