@@ -1,6 +1,52 @@
 {
   "versions": [
     {
+      "versionCode": 82,
+      "versionName": "1.9.47",
+      "releaseDate": "2026-11-09",
+      "changelog": {
+        "ru": "• Исправлены переводы списка изменений «Что нового» — теперь на всех восьми языках без искажений (исправлен китайский, японский, корейский и украинский для 1.9.46)\\n• История версий синхронизирована: каждая версия имеет полный список изменений на всех языках",
+        "en": "• Fixed: \"What's New\" changelog translations — now complete and correct on all eight languages (fixed Chinese, Japanese, Korean and Ukrainian for 1.9.46)\\n• Version history synced: every version has a full changelog in all eight languages",
+        "es": "• Corregidas las traducciones del listado de novedades — ahora completas y correctas en los ocho idiomas (chino, japonés, coreano y ucraniano corregidos para 1.9.46)\\n• Historial de versiones sincronizado: cada versión tiene su lista de cambios completa en los ocho idiomas",
+        "zh": "• 修复了“什么新功能”列表的翻译——现在八种语言都完整正确（已修复 1.9.46 的中文、日文、韩文和乌克兰文）\\n• 版本历史已同步：每个版本都有八种语言的完整更新列表",
+        "ja": "• 「新機能」リストの翻訳を修正——8 か国語すべてで完全かつ正しくなりました（1.9.46 の中国語、日本語、韓国語、ウクライナ語を修正）\\n• バージョン履歴を同期：すべてのバージョンに 8 か国語の完全な変更リストがあります",
+        "ko": "• 수정: \"새로운 기능\" 목록 번역을 완료했습니다 — 8개 언어 모두 정확합니다 (1.9.46의 중국어, 일본어, 한국어, 우크라이나어 수정)\\n• 버전 기록이 동기화되었습니다: 모든 버전이 8개 언어로 된 전체 변경 목록을 가지고 있습니다",
+        "pt": "• Corrigidas as traduções da lista de \"Novidades\" — agora completas e corretas em todos os oito idiomas (chinês, japonês, coreano e ucraniano corrigidos para 1.9.46)\\n• Histórico de versões sincronizado: cada versão tem a lista completa de alterações em todos os oito idiomas",
+        "uk": "• Виправлені переклади списку «Що нового» — тепер повні і коректні на всіх восьми мовах (китайська, японська, корейська та українська виправлені для 1.9.46)\\n• Історію версій синхронізовано: кожна версія має повний список змін на всіх восьми мовах"
+      }
+    },
+
+    {
+      "versionCode": 81,
+      "versionName": "1.9.46",
+      "releaseDate": "2026-11-09",
+      "changelog": {
+        "ru": "• Исправлено: цвет текста кнопки «Доступно обновление» теперь такой же, как у остальных кнопок (текст), а не выделялся иным цветом\n• Добавлена: кнопка «Проверить снова» на экране, когда версия актуальна",
+        "en": "• Fixed: \"update available\" button text color is now consistent with all other buttons\n• Added: \"Check again\" button on the up-to-date version screen",
+        "es": "• Corregido: el color del texto del botón \"Actualización disponible\" ahora es consistente con los demás botones\n• Añadido: botón \"Comprobar de nuevo\" en la pantalla de versión actualizada",
+        "zh": "• 修复:“可用更新”按钮的文本颜色现在与其他按钮一致，不再使用其他颜色\n• 新增:当版本是最新时，在屏幕上添加了“再次检查”按钮",
+        "ja": "• 修正:「更新あり」ボタンのテキストカラーが他のボタンと同じになり、別の色で強調されなくなりました\n• 追加:バージョンが最新の画面に「再チェック」ボタンが追加されました",
+        "ko": "• 수정: \"업데이트 가능\" 버튼 텍스트 색상이 다른 버튼들과 동일하게 변경되어 별도의 색으로 강조되지 않습니다\n• 추가: 버전이 최신일 때 표시되는 화면에 \"다시 확인\" 버튼이 추가되었습니다",
+        "pt": "• Corrigido: a cor do texto do botão \"Atualização disponível\" agora é consistente com os demais botões\n• Adicionado: botão \"Verificar novamente\" na tela de versão atualizada",
+        "uk": "• Виправлено: колір тексту кнопки «Доступне оновлення» тепер такий самий, як у решти кнопок, а не виділяється іншим кольором\n• Додано: кнопка «Перевірити знову» на екрані, коли версія актуальна"
+      }
+    },
+    {
+      "versionCode": 80,
+      "versionName": "1.9.45",
+      "releaseDate": "2026-11-08",
+      "changelog": {
+        "ru": "• Анимации окон/свайпов теперь мгновенно выключаются при отключении «Визуальные эффекты»\n• Блюр при открытых окнах (история/About) теперь работает всегда, независимо от настройки визуальных эффектов\n• Смена темы стала живей: 650 мс с FastOutSlowInEasing и overshoot-ощущением\n• Кнопка смены темы: press-анимация (scale down до 0.95× + сдвиг градиента) при нажатии",
+        "en": "• Window/swipe animations now instantly disable when \"Visual effects\" is turned off\n• Blur on open overlays (history/About) now works always, independent of visual effects setting\n• Theme switching is livelier: 650 ms with FastOutSlowInEasing and overshoot feel\n• Theme button: press animation (scale down to 0.95× + gradient shift) on tap",
+        "es": "• Las animaciones de ventanas/deslizamientos ahora se desactivan al instante al desactivar \"Efectos visuales\"\n• El desenfoque en ventanas abiertas (historial/About) ahora funciona siempre, independientemente de los efectos visuales\n• El cambio de tema es más fluido: 650 ms con FastOutSlowInEasing y sensación de overshoot\n• Botón de tema: animación al pulsar (escala a 0,95× + cambio de gradiente)",
+        "zh": "• 关闭\"视觉效果\"时，窗口/滑动动画现在会瞬间禁用\n• 打开覆盖层(历史记录/关于)时的模糊效果现在始终有效，与视觉效果设置无关\n• 主题切换更生动：650 ms 配合 FastOutSlowInEasing 和过冲感\n• 主题按钮：按下时有动画（缩放至 0.95× + 渐变位移）",
+        "ja": "• 「視覚効果」をオフにするとウィンドウ/スワイプアニメーションが即座に無効になります\n• 開いているオーバーレイ(履歴/About)のぼかしが常に有効になり、視覚効果設定に依存しません\n• テーマ切り替えがより生き生きと: 650 ms、FastOutSlowInEasing、オーバーシュート感あり\n• テーマボタン: タップ時にプレスアニメーション(0.95倍へのスケールダウン + グラデーションシフト)",
+        "ko": "• \"시각 효과\"를 끄면 창/스와이프 애니메이션이 즉시 비활성화됩니다\n• 열린 오버레이(기록/정보)의 블러가 항상 작동하며 시각 효과 설정과 무관합니다\n• 테마 전환이 더 생동감 있게: 650 ms, FastOutSlowInEasing, 오버슈트 느낌\n• 테마 버튼: 누를 때 프레스 애니메이션(0.95배로 축소 + 그라데이션 이동)",
+        "pt": "• Animações de janela/deslize agora desativam instantaneamente ao desligar \"Efeitos visuais\"\n• Desfoque em overlays abertos (histórico/Sobre) agora funciona sempre, independente dos efeitos visuais\n• Troca de tema mais viva: 650 ms com FastOutSlowInEasing e sensação de overshoot\n• Botão de tema: animação ao pressionar (escala para 0,95× + deslocamento de gradiente)",
+        "uk": "• Анімації вікон/свайпів тепер миттєво вимикаються при вимкненні \"Візуальні ефекти\"\n• Блур при відкритих вікнах (історія/About) тепер працює завжди, незалежно від налаштування візуальних ефектів\n• Зміна теми став живішою: 650 мс з FastOutSlowInEasing та відчуттям overshoot\n• Кнопка зміни теми: press-анімація (scale down до 0,95× + зміщення градієнта) при натисканні"
+      }
+    },
+    {
       "versionCode": 79,
       "versionName": "1.9.44",
       "releaseDate": "2026-11-07",
