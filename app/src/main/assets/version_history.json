@@ -6,7 +6,13 @@
       "releaseDate": "2026-11-09",
       "changelog": {
         "ru": "• Исправлено: цвет текста кнопки «Доступно обновление» теперь также, как у остальных кнопок (текст), а не выделялся иным цветом\n• Добавлена: кнопка «Проверить снова» на экране, когда версия актуальна",
-        "en": "• Fixed: \"update available\" button text color is now consistent with all other buttons\n• Added: \"Check again\" button on the up-to-date version screen"
+        "en": "• Fixed: \"update available\" button text color is now consistent with all other buttons\n• Added: \"Check again\" button on the up-to-date version screen",
+        "es": "• Corregido: el color del texto del botón \"Actualización disponible\" ahora es consistente con los demás botones\n• Añadido: botón \"Comprobar de nuevo\" en la pantalla de versión actualizada",
+        "zh": "• 修复:“可用更新”技术的文本颜色在所有其他技术的一致\n• 新增:在版本是最新的面板上添加“再次检查”技术",
+        "ja": "• 修正:“更新あります”技术のテキストカラーのいずれかのセットがその他の技术と一致するようになりました\n• 追加:バーションが最新なほのから画面に“再ちゃちゃキチャック”技术を追加しました",
+        "ko": "• 생성: \"에도된 네원터\" 발탈 포對의 타규별를 및타규의 발탈가리한 할 타규별리로 및타규별은 있다\n• 테단: 정보 비고 불은 프로를에로 “다리통착 테단” 발탈별규리구를 나턴하려면을",
+        "pt": "• Corrigido: a cor do texto do botão \"Atualização disponível\" agora é consistente com os demais botões\n• Adicionado: botão \"Verificar novamente\" na tela de versão atualizada",
+        "uk": "• Виправлено: колір текста кнопки «Доступне оновлення» теперь также, як у решті кнопок (текст), а не віддаєлься іншим цветом\n• Додано: кнопка «Перевірити зново» на екрані, когда версія актуальна"
       }
     },
     {
