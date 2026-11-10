@@ -7675,11 +7675,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Icon(
-                            IconsEx.SystemUpdate, null,
-                            Modifier.size(20.dp),
-                            tint = if (updateAvailable) accent else muted
-                        )
+
                         Column {
                             Text(
                                 updateTitle,
