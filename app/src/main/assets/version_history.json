@@ -600,6 +600,22 @@
         "uk": "• Виправлено очищення історії: кнопка кошика працює незалежно від візуальних ефектів. Перше натискання — підтвердження (червона кнопка), друге — очистити.\n• Прибрано анімацію планки терміну припсини оновлення — миттєвий перехід між варіантами.\n• Виправлено положення інтерфейсу при відображенні стартових фраз — не зсувається вгору при перенозі тексту.\n• Вимкнено анімацію точок планки з'єднання при вимкнених візуальних ефектах.\n• Колір тексту кнопки «Послухати» на вкладці «Фільтри» відповідає колір активної кнопки «Відновити»."
       },
       "stable": true
+    },
+    {
+      "versionCode": 84,
+      "versionName": "1.9.49",
+      "releaseDate": "2026-11-10",
+      "changelog": {
+        "ru": "• Исправлено поле фраз: разворачивается только когда анимированная фраза занимает более 1 строки, плавно растягивается и сужается при менее 2 строк\n• Поменяны местами цвета текста кнопок «Запись» и «Послушать»\n• Активные варианты приостановки обновления по-прежнему анимируются (фон активного срока)",
+        "en": "• Phrase field now expands only when animated phrase takes more than 1 line, smoothly stretches and shrinks when less than 2 lines\n• Swapped text colors of Record and Listen buttons\n• Active pause-update options still animate (active period background)",
+        "es": "• El campo de frases ahora se expande solo cuando la frase animada ocupa más de 1 línea, se estira suavemente y se encoge cuando es menos de 2 líneas\n• Se intercambiaron los colores de texto de los botones Grabar y Escuchar\n• Las opciones activas de pausa de actualización aún se animan (fondo del período activo)",
+        "zh": "• 短语字段仅在动画短语超过1行时展开，平滑拉伸，少于2行时平滑收缩\n• 交换了“录制”和“聆听”按钮的文本颜色\n• 暂停更新的活动选项仍然动画化（活动周期背景）",
+        "ja": "• フレーズフィールドは、アニメーションされたフレーズが1行を超える場合のみ展開され、2行未満の場合はスムーズに縮小\n• 「録音」と「聴く」ボタンのテキスト色を入れ替え\n• 更新一時停止のアクティブなオプションは依然としてアニメーション（アクティブ期間の背景）",
+        "ko": "• 구문 필드는 애니메이션된 구문이 1줄 이상일 때만 확장되며, 2줄 미만일 때 부드럽게 축소\n• \"기록\"과 \"듣기\" 버튼 텍스트 색상 교환\n• 업데이트 일시중지의 활성 옵션은 여전히 애니메이션 (활성 기간 배경)",
+        "pt": "• O campo de frases agora expande apenas quando a frase animada ocupa mais de 1 linha, estica suavemente e encolhe quando menos de 2 linhas\n• As cores do texto dos botões Gravar e Ouvir foram trocadas\n• As opções ativas de pausa de atualização ainda animam (fundo do período ativo)",
+        "uk": "• Поле фраз тепер розгортається лише коли анімована фраза займає більше 1 рядка, плавно розтягується і стискається при менше 2 рядках\n• Колір тексту кнопок «Запис» і «Послухати» обмінено місцями\n• Активні варіанти приписки оновлення все ще анімуються (фон активного періоду)"
+      },
+      "stable": true
     }
   ]
 }
