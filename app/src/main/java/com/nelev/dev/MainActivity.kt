@@ -1608,6 +1608,7 @@ object Strings {
         "check_update" to "Проверить обновление",
         "check_update_stub" to "Пока нет обновлений",
         "update_available" to "Доступно обновление",
+        "new_badge" to "NEW",
         "feedback_btn" to "Предложить изменение",
         "feedback_title" to "Обратная связь",
         "feedback_hint" to "Опиши, что добавить или исправить",
@@ -1679,6 +1680,7 @@ object Strings {
         "check_update" to "Buscar actualizaciones",
         "check_update_stub" to "Sin actualizaciones por ahora",
         "update_available" to "Actualización disponible",
+        "new_badge" to "NUEVO",
         "feedback_btn" to "Sugerir un cambio",
         "feedback_title" to "Comentarios",
         "feedback_hint" to "Describe qué añadir o corregir",
@@ -1744,6 +1746,7 @@ object Strings {
         "check_update" to "检查更新",
         "check_update_stub" to "暂无更新",
         "update_available" to "有可用更新",
+        "new_badge" to "新",
         "feedback_btn" to "建议更改",
         "feedback_title" to "反馈",
         "feedback_hint" to "描述要添加或修复的内容",
@@ -1815,6 +1818,7 @@ object Strings {
         "check_update" to "アップデートを確認",
         "check_update_stub" to "まだアップデートはありません",
         "update_available" to "アップデート利用可能",
+        "new_badge" to "新着",
         "feedback_btn" to "変更を提案",
         "feedback_title" to "フィードバック",
         "feedback_hint" to "追加・修正したい内容を記述",
@@ -1886,6 +1890,7 @@ object Strings {
         "check_update" to "업데이트 확인",
         "check_update_stub" to "아직 업데이트가 없습니다",
         "update_available" to "업데이트 사용 가능",
+        "new_badge" to "신규",
         "feedback_btn" to "변경 제안",
         "feedback_title" to "피드백",
         "feedback_hint" to "추가하거나 수정할 내용을 설명하세요",
@@ -1951,6 +1956,7 @@ object Strings {
         "check_update" to "Verificar atualizações",
         "check_update_stub" to "Sem atualizações por enquanto",
         "update_available" to "Atualização disponível",
+        "new_badge" to "NOVO",
         "feedback_btn" to "Sugerir alteração",
         "feedback_title" to "Feedback",
         "feedback_hint" to "Descreva o que adicionar ou corrigir",
@@ -2016,6 +2022,7 @@ object Strings {
         "check_update" to "Перевірити оновлення",
         "check_update_stub" to "Поки що немає оновлень",
         "update_available" to "Доступне оновлення",
+        "new_badge" to "NEW",
         "feedback_btn" to "Запропонувати зміну",
         "feedback_title" to "Зворотний зв'язок",
         "feedback_hint" to "Опиши, що додати або виправити",
@@ -2083,6 +2090,7 @@ object Strings {
         "check_update" to "Check for updates",
         "check_update_stub" to "No updates yet",
         "update_available" to "Update available",
+        "new_badge" to "NEW",
         "feedback_btn" to "Suggest a change",
         "feedback_title" to "Feedback",
         "feedback_hint" to "Describe what to add or fix",
@@ -2478,6 +2486,7 @@ class MainActivity : ComponentActivity() {
                                 colors = rootColors,
                                 lang = appSettings.value.language,
                                 isDark = appSettings.value.isDark,
+                                effectsEnabled = effectsEnabled,
                                 onDismiss = { whatsNewVersion = null }
                             )
                         }
@@ -3322,6 +3331,7 @@ fun OnboardingScreen(appSettings: MutableState<AppSettings>, onFinish: () -> Uni
                             colors = onbColors,
                             lang = currentLang,
                             isDark = themeDark,
+                            effectsEnabled = effectsEnabled,
                             onDismiss = { showOnbUpdateDialog = false }
                         )
                     }
@@ -3811,31 +3821,33 @@ fun NelevMainScreen(
         if (!updateChecking) {
             updateChecking = true
             val currentLang = appSettings.value.language
-            if (updateAvailable && cachedUpdateInfo != null) {
-                // Если обновление уже известно, просто показываем диалог
-                updateInfo = cachedUpdateInfo
-                updateChecking = false
-            } else {
-                // Иначе проверяем
-                Toast.makeText(ctx, UpdateText.get("checking", currentLang), Toast.LENGTH_SHORT).show()
-                updateScope.launch {
-                    Updater.check(ctx, respectSkip = false)
-                        .onSuccess { info ->
-                            if (info != null) {
-                                cachedUpdateInfo = info
-                                updateAvailable = true
-                                updateInfo = info
-                            } else {
-                                updateAvailable = false
-                                cachedUpdateInfo = null
-                                Toast.makeText(ctx, UpdateText.get("up_to_date", currentLang), Toast.LENGTH_SHORT).show()
-                            }
+            // Всегда проверяем манифест заново: за время работы мог выйти
+            // более новый релиз, чем тот, что запомнен при прошлой проверке.
+            Toast.makeText(ctx, UpdateText.get("checking", currentLang), Toast.LENGTH_SHORT).show()
+            updateScope.launch {
+                Updater.check(ctx, respectSkip = false)
+                    .onSuccess { info ->
+                        if (info != null) {
+                            cachedUpdateInfo = info
+                            updateAvailable = true
+                            updateInfo = info
+                        } else {
+                            updateAvailable = false
+                            cachedUpdateInfo = null
+                            Toast.makeText(ctx, UpdateText.get("up_to_date", currentLang), Toast.LENGTH_SHORT).show()
                         }
-                        .onFailure {
+                    }
+                    .onFailure {
+                        // Сеть недоступна — показываем последнюю известную версию,
+                        // если она есть, иначе сообщаем об ошибке.
+                        val cached = cachedUpdateInfo
+                        if (cached != null) {
+                            updateInfo = cached
+                        } else {
                             showUpdateError = true
                         }
-                    updateChecking = false
-                }
+                    }
+                updateChecking = false
             }
         }
     }
@@ -4224,7 +4236,7 @@ fun NelevMainScreen(
                             }
                             .graphicsLayer { alpha = (abs(dragOffset.value) / screenWidth).coerceIn(0f, 1f) }) {
                             TabContent(tabOrder[neighborIdx], appState, appSettings, colors, lang, isDark, sliderDragging,
-                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback)
+                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback, updateVersion = cachedUpdateInfo?.versionName)
                         }
                     }
 
@@ -4234,7 +4246,7 @@ fun NelevMainScreen(
                             .offset { IntOffset(dragOffset.value.toInt(), 0) }
                             .graphicsLayer { alpha = 1f - (abs(dragOffset.value) / screenWidth).coerceIn(0f, 1f) * 0.3f }) {
                             TabContent(selectedTab.value, appState, appSettings, colors, lang, isDark, sliderDragging,
-                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback, onShowPauseDialog = { showPauseDialog = true }, updateAvailable = updateAvailable)
+                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback, onShowPauseDialog = { showPauseDialog = true }, updateAvailable = updateAvailable, updateVersion = cachedUpdateInfo?.versionName)
                         }
                     } else {
                         // При клике используем AnimatedContent для плавного перехода
@@ -4260,7 +4272,7 @@ fun NelevMainScreen(
                             label = "tab_content"
                         ) { tab ->
                             TabContent(tab, appState, appSettings, colors, lang, isDark, sliderDragging,
-                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback, onShowPauseDialog = { showPauseDialog = true }, updateAvailable = updateAvailable)
+                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback, onShowPauseDialog = { showPauseDialog = true }, updateAvailable = updateAvailable, updateVersion = cachedUpdateInfo?.versionName)
                         }
                     }
                 }
@@ -4337,6 +4349,7 @@ fun NelevMainScreen(
                         colors = colors,
                         lang = lang,
                         isDark = isDark,
+                        effectsEnabled = effectsEnabled,
                         onOpenMenu = {
                             showUpdateNotice = false
                             selectedTab.value = NelevTab.SETTINGS
@@ -4353,6 +4366,7 @@ fun NelevMainScreen(
                         colors = colors,
                         lang = lang,
                         isDark = isDark,
+                        effectsEnabled = effectsEnabled,
                         onDismiss = {
                             Updater.markPostponedUntilRestart(ctx)
                             updateInfo = null
@@ -4721,7 +4735,8 @@ private fun TabContent(
     onCheckUpdates: () -> Unit = {},
     onScanQr: () -> Unit = {},
     onShowPauseDialog: () -> Unit = {},
-    updateAvailable: Boolean = false
+    updateAvailable: Boolean = false,
+    updateVersion: String? = null
 ) {
     val ctx = LocalContext.current
     when (tab) {
@@ -4730,7 +4745,7 @@ private fun TabContent(
             menuCentered = appSettings.value.menuCentered, onScanQr = onScanQr)
         NelevTab.FILTERS  -> FiltersScreen(appState, colors, lang, sliderDragging, appSettings.value.soundClickEnabled, effectsEnabled, isDark, menuCentered = appSettings.value.menuCentered)
         NelevTab.INFO     -> InfoScreen(colors, lang, effectsEnabled)
-        NelevTab.SETTINGS -> SettingsScreen(appSettings, colors, lang, ctx, showHistory, selectedTab, showAbout, onCheckUpdates, onShowPauseDialog, updateAvailable)
+        NelevTab.SETTINGS -> SettingsScreen(appSettings, colors, lang, ctx, showHistory, selectedTab, showAbout, onCheckUpdates, onShowPauseDialog, updateAvailable, updateVersion)
     }
 }
 
@@ -6210,12 +6225,12 @@ fun FiltersScreen(
         var snapshot by remember { mutableStateOf<Prefs.State?>(null) }
         var showUndo by remember { mutableStateOf(false) }
         val resetScale by animateFloatAsState(
-            if (resetPressed) 0.94f else 1f,
+            if (effectsEnabled && resetPressed) 0.94f else 1f,
             if (effectsEnabled) spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessMedium) else tween(0),
             label = "resetScale"
         )
         val undoScale by animateFloatAsState(
-            if (undoPressed) 0.94f else 1f,
+            if (effectsEnabled && undoPressed) 0.94f else 1f,
             if (effectsEnabled) spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessMedium) else tween(0),
             label = "undoScale"
         )
@@ -7419,7 +7434,8 @@ fun SettingsScreen(
     showAbout: MutableState<Boolean>,
     onCheckUpdates: () -> Unit = {},
     onShowPauseDialog: () -> Unit = {},
-    updateAvailable: Boolean = false
+    updateAvailable: Boolean = false,
+    updateVersion: String? = null
 ) {
     val bg = colors["bg"]!!
     val text = colors["text"]!!
@@ -7632,6 +7648,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
 
         // Кнопка "Проверить обновление" + иконка "Что нового"
         var showWhatsNewLocal by remember { mutableStateOf(false) }
+        val updateTitle = if (updateAvailable) Strings.get("update_available", lang) else Strings.get("check_update", lang)
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -7641,8 +7658,8 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                     .weight(1f)
                     .wrapContentHeight()
                     .clip(RoundedCornerShape(14.dp))
-                    .background(card)
-                    .border(1.dp, border, RoundedCornerShape(14.dp))
+                    .background(if (updateAvailable) accent.copy(alpha = 0.12f) else card)
+                    .border(1.dp, if (updateAvailable) accent else border, RoundedCornerShape(14.dp))
                     .clickable {
                         if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
                         onCheckUpdates()
@@ -7658,31 +7675,68 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
+                        Icon(
+                            IconsEx.SystemUpdate, null,
+                            Modifier.size(20.dp),
+                            tint = if (updateAvailable) accent else muted
+                        )
                         Column {
                             Text(
-                                if (updateAvailable) Strings.get("update_available", lang) else Strings.get("check_update", lang),
+                                updateTitle,
                                 color = text,
                                 fontSize = 14.sp,
                                 fontWeight = if (updateAvailable) FontWeight.SemiBold else FontWeight.Normal
                             )
+                            if (updateAvailable && updateVersion != null) {
+                                Text(
+                                    "v$updateVersion",
+                                    color = if (updateAvailable) accent else muted,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
                         }
                         if (updateAvailable) {
-                            val infiniteTransition = rememberInfiniteTransition(label = "heart_pulse")
-                            val heartAlpha by infiniteTransition.animateFloat(
-                                initialValue = 0.3f,
-                                targetValue = 1f,
-                                animationSpec = infiniteRepeatable(
-                                    animation = tween(1000, easing = FastOutSlowInEasing),
-                                    repeatMode = RepeatMode.Reverse
-                                ),
-                                label = "heart_alpha"
+                            Text(
+                                Strings.get("new_badge", lang),
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = accent,
+                                modifier = Modifier
+                                    .padding(top = 2.dp)
+                                    .background(accent.copy(alpha = 0.15f))
+                                    .padding(horizontal = 6.dp, vertical = 2.dp)
+                                    .clip(RoundedCornerShape(6.dp))
                             )
-                            Icon(
-                                Icons.Filled.Favorite,
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp).alpha(heartAlpha),
-                                tint = accent
-                            )
+                        }
+                        if (updateAvailable) {
+                            // Сердце пульсирует только при включённых визуальных эффектах,
+                            // иначе статично (alpha = 1f).
+                            if (effectsEnabled) {
+                                val infiniteTransition = rememberInfiniteTransition(label = "heart_pulse")
+                                val heartAlpha by infiniteTransition.animateFloat(
+                                    initialValue = 0.3f,
+                                    targetValue = 1f,
+                                    animationSpec = infiniteRepeatable(
+                                        animation = tween(1000, easing = FastOutSlowInEasing),
+                                        repeatMode = RepeatMode.Reverse
+                                    ),
+                                    label = "heart_alpha"
+                                )
+                                Icon(
+                                    Icons.Filled.Favorite,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp).alpha(heartAlpha),
+                                    tint = accent
+                                )
+                            } else {
+                                Icon(
+                                    Icons.Filled.Favorite,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp),
+                                    tint = accent
+                                )
+                            }
                         }
                     }
                     Icon(
@@ -7731,6 +7785,7 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
                 colors = colors,
                 lang = lang,
                 isDark = appSettings.value.isDark,
+                effectsEnabled = effectsEnabled,
                 onDismiss = { showWhatsNewLocal = false }
             )
         }

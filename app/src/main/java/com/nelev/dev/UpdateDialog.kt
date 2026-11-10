@@ -74,6 +74,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -86,11 +87,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 // ─── Обновление ──────────────────────────────────────────────────────────────
+
+// Отключает системную анимацию появления/исчезновения окна диалога,
+// когда визуальные эффекты выключены.
+@Composable
+private fun DialogWindowAnimation(effectsEnabled: Boolean) {
+    val view = LocalView.current
+    LaunchedEffect(effectsEnabled) {
+        val window = (view.parent as? DialogWindowProvider)?.window ?: return@LaunchedEffect
+        if (!effectsEnabled) window.setWindowAnimations(0)
+    }
+}
 
 @Composable
 fun UpdateDialog(
@@ -98,10 +111,22 @@ fun UpdateDialog(
     colors: NelevColors,
     lang: String,
     isDark: Boolean,
+    effectsEnabled: Boolean = true,
     onDismiss: () -> Unit
 ) {
     val ctx = LocalContext.current
     val scope = rememberCoroutineScope()
+
+    // Если между проверкой и открытием окна успела выйти новая версия,
+    // подтягиваем её, чтобы не обновлять пользователя на устаревший релиз.
+    var activeInfo by remember(info.versionCode) { mutableStateOf(info) }
+    LaunchedEffect(info.versionCode) {
+        Updater.check(ctx, respectSkip = false).onSuccess { fresh ->
+            if (fresh != null && fresh.versionCode > activeInfo.versionCode) {
+                activeInfo = fresh
+            }
+        }
+    }
 
     val card = colors["card"] ?: Color(0xFF101010)
     val text = colors["text"] ?: Color.White
@@ -126,20 +151,21 @@ fun UpdateDialog(
 
     // Приоритет: переводы из манифеста (тот же домен, что и проверка обновлений),
     // затем встроенные assets, затем raw GitHub и в конце changelog из манифеста.
-    val manifestNote = info.changelogs[lang]?.takeIf { it.isNotBlank() }
-    var localizedNotes by remember(info.versionCode, lang, manifestNote) { mutableStateOf<String?>(manifestNote) }
-    LaunchedEffect(info.versionCode, lang, manifestNote) {
+    val manifestNote = activeInfo.changelogs[lang]?.takeIf { it.isNotBlank() }
+    var localizedNotes by remember(activeInfo.versionCode, lang, manifestNote) { mutableStateOf<String?>(manifestNote) }
+    LaunchedEffect(activeInfo.versionCode, lang, manifestNote) {
         if (manifestNote == null) {
-            localizedNotes = VersionHistory.changelog(ctx, info.versionCode, lang)
-                ?: VersionHistoryManager.fetchChangelogFromGitHub(info.versionName, lang)
+            localizedNotes = VersionHistory.changelog(ctx, activeInfo.versionCode, lang)
+                ?: VersionHistoryManager.fetchChangelogFromGitHub(activeInfo.versionName, lang)
         }
     }
-    val notesText = localizedNotes?.takeIf { it.isNotBlank() } ?: info.changelog
+    val notesText = localizedNotes?.takeIf { it.isNotBlank() } ?: activeInfo.changelog
 
     Dialog(
         onDismissRequest = { if (!downloading && canDismiss) onDismiss() },
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
+        DialogWindowAnimation(effectsEnabled)
         // Окно фиксированного размера: при раскрытии «Что нового» меняется только
         // контент внутри, а не размер окна — так анимация не дёргается.
         Box(
@@ -171,7 +197,7 @@ fun UpdateDialog(
                 Column(Modifier.verticalScroll(rememberScrollState())) {
                     UpdateHero(
                         title = UpdateText.get("title", lang),
-                        subtitle = UpdateText.get("subtitle", lang).replace("%s", info.versionName),
+                        subtitle = UpdateText.get("subtitle", lang).replace("%s", activeInfo.versionName),
                         accent = accent,
                         buttonContent = buttonContent,
                         text = text,
@@ -194,7 +220,7 @@ fun UpdateDialog(
                             )
                             VersionBadge(
                                 label = versionLabel("new_version", lang),
-                                value = info.versionName,
+                                value = activeInfo.versionName,
                                 text = text, muted = muted, border = accent.copy(alpha = 0.45f),
                                 highlighted = true, accent = accent,
                                 modifier = Modifier.weight(1f)
@@ -204,7 +230,7 @@ fun UpdateDialog(
                         if (notesText.isNotBlank()) {
                             val arrow by animateFloatAsState(
                                 if (showNotes) 180f else 0f,
-                                tween(220),
+                                tween(if (effectsEnabled) 220 else 0),
                                 label = "update_notes_arrow"
                             )
                             Column(
@@ -236,28 +262,28 @@ fun UpdateDialog(
                                     visible = showNotes,
                                     enter = expandVertically(
                                         animationSpec = tween(
-                                            durationMillis = 320,
+                                            durationMillis = if (effectsEnabled) 320 else 0,
                                             easing = FastOutSlowInEasing
                                         ),
                                         expandFrom = Alignment.Top,
                                         clip = true
                                     ) + fadeIn(
                                         animationSpec = tween(
-                                            durationMillis = 220,
-                                            delayMillis = 60,
+                                            durationMillis = if (effectsEnabled) 220 else 0,
+                                            delayMillis = if (effectsEnabled) 60 else 0,
                                             easing = FastOutSlowInEasing
                                         )
                                     ),
                                     exit = shrinkVertically(
                                         animationSpec = tween(
-                                            durationMillis = 240,
+                                            durationMillis = if (effectsEnabled) 240 else 0,
                                             easing = FastOutSlowInEasing
                                         ),
                                         shrinkTowards = Alignment.Top,
                                         clip = true
                                     ) + fadeOut(
                                         animationSpec = tween(
-                                            durationMillis = 160,
+                                            durationMillis = if (effectsEnabled) 160 else 0,
                                             easing = FastOutSlowInEasing
                                         )
                                     )
@@ -279,28 +305,28 @@ fun UpdateDialog(
                             visible = downloading,
                             enter = expandVertically(
                                 animationSpec = tween(
-                                    durationMillis = 350,
+                                    durationMillis = if (effectsEnabled) 350 else 0,
                                     easing = FastOutSlowInEasing
                                 ),
                                 expandFrom = Alignment.Top,
                                 clip = true
                             ) + fadeIn(
                                 animationSpec = tween(
-                                    durationMillis = 250,
-                                    delayMillis = 50,
+                                    durationMillis = if (effectsEnabled) 250 else 0,
+                                    delayMillis = if (effectsEnabled) 50 else 0,
                                     easing = FastOutSlowInEasing
                                 )
                             ),
                             exit = shrinkVertically(
                                 animationSpec = tween(
-                                    durationMillis = 300,
+                                    durationMillis = if (effectsEnabled) 300 else 0,
                                     easing = FastOutSlowInEasing
                                 ),
                                 shrinkTowards = Alignment.Top,
                                 clip = true
                             ) + fadeOut(
                                 animationSpec = tween(
-                                    durationMillis = 200,
+                                    durationMillis = if (effectsEnabled) 200 else 0,
                                     easing = FastOutSlowInEasing
                                 )
                             )
@@ -373,7 +399,18 @@ fun UpdateDialog(
                                         error = null
                                         progress = 0
                                         try {
-                                            val file = Updater.download(ctx, info) { p ->
+                                            // Перед скачиванием ещё раз проверяем манифест:
+                                            // если вышла более новая версия, качаем именно её.
+                                            val latest = Updater.check(ctx, respectSkip = false).getOrNull()
+                                            val target = if (latest != null && latest.versionCode > activeInfo.versionCode) {
+                                                latest
+                                            } else {
+                                                activeInfo
+                                            }
+                                            if (target.versionCode > activeInfo.versionCode) {
+                                                activeInfo = target
+                                            }
+                                            val file = Updater.download(ctx, target) { p ->
                                                 withContext(Dispatchers.Main) { progress = p }
                                             }
                                             Updater.install(ctx, file)
@@ -604,6 +641,7 @@ fun WhatsNewDialog(
     colors: NelevColors,
     lang: String,
     isDark: Boolean,
+    effectsEnabled: Boolean = true,
     onDismiss: () -> Unit
 ) {
     val card = colors["card"] ?: Color(0xFF101010)
@@ -617,6 +655,7 @@ fun WhatsNewDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
+        DialogWindowAnimation(effectsEnabled)
         // Окно диалога всегда полноэкранное: оно создаётся сразу фиксированного
         // размера и больше никогда не меняет габариты — поэтому карточка не
         // «телепортируется» и не дёргается при открытии.
@@ -736,8 +775,8 @@ fun WhatsNewDialog(
                         )
                         androidx.compose.animation.AnimatedVisibility(
                             visible = canScrollDown,
-                            enter = fadeIn(tween(300)),
-                            exit = fadeOut(tween(300)),
+                            enter = fadeIn(tween(if (effectsEnabled) 300 else 0)),
+                            exit = fadeOut(tween(if (effectsEnabled) 300 else 0)),
                             modifier = Modifier.align(Alignment.BottomCenter)
                         ) {
                             Column(Modifier.fillMaxWidth()) {
@@ -887,6 +926,7 @@ fun UpdateAvailableNotice(
     colors: NelevColors,
     lang: String,
     isDark: Boolean,
+    effectsEnabled: Boolean = true,
     onOpenMenu: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -897,6 +937,7 @@ fun UpdateAvailableNotice(
     val buttonContent = if (isDark) Color.Black else Color.White
 
     Dialog(onDismissRequest = onDismiss) {
+        DialogWindowAnimation(effectsEnabled)
         Surface(
             shape = RoundedCornerShape(26.dp),
             color = card,
