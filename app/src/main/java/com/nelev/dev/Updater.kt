@@ -140,7 +140,8 @@ object VersionHistory {
             val files = ctx.filesDir.listFiles { f -> f.name.startsWith(CHANGELOG_PREFIX) }
                 ?.sortedByDescending { it.lastModified() }
                 ?: return
-            files.drop(10).forEach { it.delete() }
+            // Держим несколько версий × 8 языков, чтобы не терять переводы.
+            files.drop(24).forEach { it.delete() }
         } catch (_: Exception) {}
     }
 }
@@ -402,9 +403,13 @@ object Updater {
             throw IOException("checksum mismatch")
         }
         // Сохраняем список изменений: после установки покажем его на первом запуске.
-        // Манифест на английском, поэтому кладём как "en", чтобы не перекрывать
-        // локализованные переводы из version_history.json.
-        if (info.changelog.isNotBlank()) {
+        // Берём все локализованные переводы из changelogs, чтобы каждый язык
+        // показывал свой текст. Одиночный changelog — только как запасной вариант.
+        if (info.changelogs.isNotEmpty()) {
+            info.changelogs.forEach { (code, text) ->
+                if (text.isNotBlank()) VersionHistory.saveChangelog(ctx, info.versionCode, text, code)
+            }
+        } else if (info.changelog.isNotBlank()) {
             VersionHistory.saveChangelog(ctx, info.versionCode, info.changelog, "en")
         }
         onProgress(100)
