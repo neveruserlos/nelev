@@ -1,6 +1,22 @@
 {
   "versions": [
     {
+      "versionCode": 84,
+      "versionName": "1.9.49",
+      "releaseDate": "2026-11-10",
+      "stable": true,
+      "changelog": {
+        "ru": "• Исправлено: карточка стартовых фраз теперь плавно раскрывается вниз и не сдвигает интерфейс, когда фраза занимает две строки\n• Исправлено: цвет текста кнопок «Запись» и «Послушать» теперь совпадает с заголовком «Подключение»",
+        "en": "• Fixed: startup phrase card now expands smoothly downward without shifting the interface when a phrase wraps to two lines\n• Fixed: \"Record\" and \"Listen\" button text color now matches the \"Connection\" heading",
+        "es": "• Corregido: la tarjeta de frases de inicio ahora se expande suavemente hacia abajo sin desplazar la interfaz cuando la frase ocupa dos líneas\n• Corregido: el color del texto de los botones «Grabar» y «Escuchar» ahora coincide con el encabezado «Conexión»",
+        "zh": "• 修复：启动短语卡片现在平滑向下展开，短语换行到两行时不再移动界面\n• 修复：“录制”和“播放”按钮的文字颜色现在与“连接”标题一致",
+        "ja": "• 修正：起動フレーズカードが2行になったとき、インターフェースを動かさずに下方向へ滑らかに展開するように\n• 修正：「録音」と「再生」ボタンのテキスト色を「接続」見出しに合わせた",
+        "ko": "• 수정: 시작 문구 카드가 두 줄로 표시될 때 인터페이스를 움직이지 않고 아래로 부드럽게 확장되도록\n• 수정: \"녹음\" 및 \"재생\" 버튼 텍스트 색상을 \"연결\" 제목과 일치시킴",
+        "pt": "• Corrigido: o cartão de frases iniciais agora expande suavemente para baixo sem deslocar a interface quando a frase ocupa duas linhas\n• Corrigido: a cor do texto dos botões «Gravar» e «Ouvir» agora corresponde ao título «Conexão»",
+        "uk": "• Виправлено: картка стартових фраз тепер плавно розкривається вниз і не зсуває інтерфейс, коли фраза займає два рядки\n• Виправлено: колір тексту кнопок «Запис» і «Прослухати» тепер збігається із заголовком «Підключення»"
+      }
+    },
+    {
       "versionCode": 83,
       "versionName": "1.9.48",
       "releaseDate": "2026-11-10",

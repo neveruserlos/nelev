@@ -5501,23 +5501,30 @@ fun PhraseCard(
         }
     }
 
+    val density = LocalDensity.current
+    // Фиксированный слот под две строки: карточка раскрывается вниз внутри него
+    // и не сдвигает остальной интерфейс, когда фраза переносится на вторую строку.
+    val phraseSlotHeight = with(density) { 42.sp.toDp() } + 36.dp
+
     Box(
         Modifier
             .fillMaxWidth()
-            .onGloballyPositioned { coordinates ->
-                val pos = coordinates.positionInRoot()
-                val target = Offset(
-                    pos.x + coordinates.size.width / 2f,
-                    pos.y + coordinates.size.height / 2f
-                )
-                if (EasterEggGuide.phraseBoxCenter.value != target) {
-                    EasterEggGuide.phraseBoxCenter.value = target
-                }
-            }
+            .height(phraseSlotHeight)
     ) {
         Box(
             Modifier
                 .fillMaxWidth()
+                .animateContentSize(tween(if (effectsEnabled) 180 else 0))
+                .onGloballyPositioned { coordinates ->
+                    val pos = coordinates.positionInRoot()
+                    val target = Offset(
+                        pos.x + coordinates.size.width / 2f,
+                        pos.y + coordinates.size.height / 2f
+                    )
+                    if (EasterEggGuide.phraseBoxCenter.value != target) {
+                        EasterEggGuide.phraseBoxCenter.value = target
+                    }
+                }
                 .clip(shape)
                 .background(bgColor)
                 .border(1.dp, outline, shape)
@@ -6361,7 +6368,7 @@ fun FiltersScreen(
                                 }
                             }
                         }
-                    }, modifier = Modifier.scale(recScale), shape = RoundedCornerShape(18.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = if (isRecording) Color(0xFFFF4444) else accent), border = androidx.compose.foundation.BorderStroke(1.dp, if (isRecording) Color(0xFFFF4444) else accent)) {
+                    }, modifier = Modifier.scale(recScale), shape = RoundedCornerShape(18.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = if (isRecording) Color(0xFFFF4444) else text), border = androidx.compose.foundation.BorderStroke(1.dp, if (isRecording) Color(0xFFFF4444) else accent)) {
                         Text(if (isRecording) Strings.get("record_stop", lang) else Strings.get("record_start", lang), fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
                     }
                     val playScale by animateFloatAsState(if (isPlaying) 0.96f else 1f, tween(if (effectsEnabled) 120 else 0), label = "playScale")
@@ -6377,7 +6384,7 @@ fun FiltersScreen(
                                 isPlaying = true
                             } catch (e: Exception) { Toast.makeText(ctx, "Ошибка: ${e.message}", Toast.LENGTH_SHORT).show() }
                         }
-                    }, modifier = Modifier.scale(playScale), shape = RoundedCornerShape(18.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = accent), border = androidx.compose.foundation.BorderStroke(1.dp, border), enabled = recordFile != null && !isRecording) {
+                    }, modifier = Modifier.scale(playScale), shape = RoundedCornerShape(18.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = text), border = androidx.compose.foundation.BorderStroke(1.dp, border), enabled = recordFile != null && !isRecording) {
                         Text(if (isPlaying) Strings.get("record_stop", lang) else Strings.get("record_play", lang), fontSize = 13.sp)
                     }
                 }
