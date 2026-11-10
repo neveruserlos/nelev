@@ -125,11 +125,11 @@ fun UpdateDialog(
     }
 
     // Приоритет: переводы из манифеста (тот же домен, что и проверка обновлений),
-    // затем встроенные assets, затем raw GitHub и в конце английский из манифеста.
+    // затем встроенные assets, затем raw GitHub и в конце changelog из манифеста.
     val manifestNote = info.changelogs[lang]?.takeIf { it.isNotBlank() }
     var localizedNotes by remember(info.versionCode, lang, manifestNote) { mutableStateOf<String?>(manifestNote) }
     LaunchedEffect(info.versionCode, lang, manifestNote) {
-        if (manifestNote == null && lang != "en") {
+        if (manifestNote == null) {
             localizedNotes = VersionHistory.changelog(ctx, info.versionCode, lang)
                 ?: VersionHistoryManager.fetchChangelogFromGitHub(info.versionName, lang)
         }
