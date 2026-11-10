@@ -5540,7 +5540,6 @@ fun PhraseCard(
                 color = textColor,
                 textAlign = TextAlign.Center,
                 lineHeight = 21.sp,
-                minLines = 2,
                 maxLines = 3,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 2.dp, vertical = 2.dp)
             )
@@ -6098,8 +6097,8 @@ fun ConnectScreen(
 
             AnimatedVisibility(
                 state.currentPhrase.value != null && (appSettings.value.phrasesEnabled || EasterEggGuide.guidedTourTarget.value == GuidedTourTarget.PHRASE_BOX),
-                enter = fadeIn(tween(if (effectsEnabled) 300 else 0)), // OPTIMIZATION: 500ms → 300ms
-                exit  = fadeOut(tween(if (effectsEnabled) 250 else 0)) // OPTIMIZATION: 400ms → 250ms
+                enter = fadeIn(tween(if (effectsEnabled) 300 else 0)) + expandVertically(tween(if (effectsEnabled) 300 else 0, easing = FastOutSlowInEasing)), // OPTIMIZATION: 500ms → 300ms
+                exit  = fadeOut(tween(if (effectsEnabled) 250 else 0)) + shrinkVertically(tween(if (effectsEnabled) 250 else 0)) // OPTIMIZATION: 400ms → 250ms
             ) {
                 state.currentPhrase.value?.let { phrase ->
                     PhraseCard(
@@ -6339,7 +6338,7 @@ fun FiltersScreen(
                                 }
                             }
                         }
-                    }, modifier = Modifier.scale(recScale), shape = RoundedCornerShape(18.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = if (isRecording) Color(0xFFFF4444) else accent), border = androidx.compose.foundation.BorderStroke(1.dp, if (isRecording) Color(0xFFFF4444) else accent)) {
+                    }, modifier = Modifier.scale(recScale), shape = RoundedCornerShape(18.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = if (isRecording) Color(0xFFFF4444) else muted), border = androidx.compose.foundation.BorderStroke(1.dp, if (isRecording) Color(0xFFFF4444) else muted)) {
                         Text(if (isRecording) Strings.get("record_stop", lang) else Strings.get("record_start", lang), fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
                     }
                     val playScale by animateFloatAsState(if (isPlaying) 0.96f else 1f, tween(if (effectsEnabled) 120 else 0), label = "playScale")
