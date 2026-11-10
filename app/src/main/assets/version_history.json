@@ -1,6 +1,22 @@
 {
   "versions": [
     {
+      "versionCode": 86,
+      "versionName": "1.9.51",
+      "releaseDate": "2026-11-11",
+      "stable": true,
+      "changelog": {
+        "ru": "• Отключена анимация кнопок «Сбросить» и «Вернуть» на вкладке Фильтры при выключенных визуальных эффектах\\n• Отключена анимация появления и исчезновения окон «Что нового» и «Доступно обновление» при выключенных визуальных эффектах\\n• Ручная проверка обновлений всегда опрашивает сервер за свежей версией, а не использует устаревшую\\n• Кнопка проверки обновлений переработана: надпись «Доступно обновление», значок NEW, версия v1.9.51 и сердечко (пульсирует только с эффектами)",
+        "en": "• Disabled reset/undo button animation on Filters tab when visual effects are off\\n• Disabled open/close animation for “What’s New” and “Update Available” dialogs when visual effects are off\\n• Manual update check now always fetches the freshest version from the server instead of using a stale one\\n• Update button redesigned: “Update available” title, NEW badge, v1.9.51 version, heart (pulses only with effects)",
+        "es": "• Desactivada la animación de los botones «Restablecer» y «Volver» en la pestaña Filtros cuando los efectos visuales están desactivados\\n• Desactivada la animación de aparición y desaparición de las ventanas «Novedades» y «Actualización disponible» cuando los efectos visuales están desactivados\\n• La comprobación manual de actualizaciones ahora siempre consulta el servidor por la versión más reciente en lugar de usar una obsoleta\\n• Botón de comprobación de actualizaciones rediseñado: título «Actualización disponible», insignia NUEVO, versión v1.9.51 y corazón (latido solo con efectos)",
+        "zh": "• 当视觉效果关闭时，已禁用“滤波器”选项卡上“重置”和“撤销”按钮的动画\\n• 当视觉效果关闭时，已禁用“新增内容”和“可用更新”窗口的打开/关闭动画\\n• 手动更新检查现在始终从服务器获取最新版本，而不使用过时版本\\n• 更新按钮已重新设计：“可用更新”标题、NEW徽章、v1.9.51版本、心形（仅在启用效果时跳动）",
+        "ja": "• 視覚効果がオフのとき、フィルタータブの「リセット」と「元に戻す」ボタンのアニメーションを無効化\\n• 視覚効果がオフのとき、「新機能」と「更新可能」ダイアログの開閉アニメーションを無効化\\n• 手動更新チェックは常にサーバーから最新バージョンを取得し、古いものを使用しないように\\n• 更新ボタンを刷新：「更新可能」タイトル、NEWバッジ、v1.9.51バージョン、ハート（エフェクト時のみ脈動）",
+        "ko": "• 시각 효과가 꺼져 있을 때 필터 탭의 \"재설정\" 및 \"되돌리기\" 버튼 애니메이션 비활성화\\n• 시각 효과가 꺼져 있을 때 \"새로운 기능\" 및 \"업데이트 가능\" 대화 상자 열기/닫기 애니메이션 비활성화\\n• 수동 업데이트 확인 시 항상 서버에서 최신 버전을 가져오도록 변경 (오래된 버전 사용 안 함)\\n• 업데이트 버튼 재설계: \"업데이트 가능\" 제목, 신규 배지, v1.9.51 버전, 하트(효과 사용 시에만 펄럭임)",
+        "pt": "• Desativada a animação dos botões «Redefinir» e «Voltar» na guia Filtros quando os efeitos visuais estão desativados\\n• Desativada a animação de abertura e fechamento das janelas «Novidades» e «Atualização disponível» quando os efeitos visuais estão desativados\\n• A verificação manual de atualizações agora sempre consulta o servidor pela versão mais recente, em vez de usar uma desatualizada\\n• Botão de verificação de atualizações redesenhado: título «Atualização disponível», selo NOVO, versão v1.9.51 e coração (pulsa apenas com efeitos)",
+        "uk": "• Вимкнуто анімацію кнопок «Скинути» та «Повернути» на вкладці Фільтри при вимкнених візуальних ефектах\\n• Вимкнуто анімацію появы і зникнення вікон «Що нового» та «Доступне оновлення» при вимкнених візуальних ефектах\\n• Ручна перевірка оновлень завжди запитує на сервер свіжу версію, а не використовує застарілу\\n• Кнопку перевірки оновлень перероблено: надпис «Доступне оновлення», значок NEW, версія v1.9.51 та серце (пульсує лише з ефектами)"
+      }
+    },
+    {
       "versionCode": 85,
       "versionName": "1.9.50",
       "releaseDate": "2026-11-11",
