@@ -1,599 +1,605 @@
-﻿{
-    "versions":  [
-                     {
-                         "versionCode":  80,
-                         "versionName":  "1.9.45",
-                         "releaseDate":  "2026-11-08",
-                         "changelog":  {
-                                           "ru":  "• Анимации окон/свайпов теперь мгновенно выключаются при отключении «Визуальные эффекты»\n• Блюр при открытых окнах (история/About) теперь работает всегда, независимо от настройки визуальных эффектов\n• Смена темы стала живей: 650 мс с FastOutSlowInEasing и overshoot-ощущением\n• Кнопка смены темы: press-анимация (scale down до 0.95× + сдвиг градиента) при нажатии",
-                                           "en":  "• Window/swipe animations now instantly disable when \"Visual effects\" is turned off\n• Blur on open overlays (history/About) now works always, independent of visual effects setting\n• Theme switching is livelier: 650 ms with FastOutSlowInEasing and overshoot feel\n• Theme button: press animation (scale down to 0.95× + gradient shift) on tap",
-                                           "es":  "• Las animaciones de ventanas/deslizamientos ahora se desactivan al instante al desactivar \"Efectos visuales\"\n• El desenfoque en ventanas abiertas (historial/About) ahora funciona siempre, independientemente de los efectos visuales\n• El cambio de tema es más fluido: 650 ms con FastOutSlowInEasing y sensación de overshoot\n• Botón de tema: animación al pulsar (escala a 0,95× + cambio de gradiente)",
-                                           "zh":  "• 关闭\"视觉效果\"时，窗口/滑动动画现在会瞬间禁用\n• 打开覆盖层(历史记录/关于)时的模糊效果现在始终有效，与视觉效果设置无关\n• 主题切换更生动：650 ms 配合 FastOutSlowInEasing 和过冲感\n• 主题按钮：按下时有动画（缩放至 0.95× + 渐变位移）",
-                                           "ja":  "• 「視覚効果」をオフにするとウィンドウ/スワイプアニメーションが即座に無効になります\n• 開いているオーバーレイ(履歴/About)のぼかしが常に有効になり、視覚効果設定に依存しません\n• テーマ切り替えがより生き生きと: 650 ms、FastOutSlowInEasing、オーバーシュート感あり\n• テーマボタン: タップ時にプレスアニメーション(0.95倍へのスケールダウン + グラデーションシフト)",
-                                           "ko":  "• \"시각 효과\"를 끄면 창/스와이프 애니메이션이 즉시 비활성화됩니다\n• 열린 오버레이(기록/정보)의 블러가 항상 작동하며 시각 효과 설정과 무관합니다\n• 테마 전환이 더 생동감 있게: 650 ms, FastOutSlowInEasing, 오버슈트 느낌\n• 테마 버튼: 누를 때 프레스 애니메이션(0.95배로 축소 + 그라데이션 이동)",
-                                           "pt":  "• Animações de janela/deslize agora desativam instantaneamente ao desligar \"Efeitos visuais\"\n• Desfoque em overlays abertos (histórico/Sobre) agora funciona sempre, independente dos efeitos visuais\n• Troca de tema mais viva: 650 ms com FastOutSlowInEasing e sensação de overshoot\n• Botão de tema: animação ao pressionar (escala para 0,95× + deslocamento de gradiente)",
-                                           "uk":  "• Анімації вікон/свайпів тепер миттєво вимикаються при вимкненні \"Візуальні ефекти\"\n• Блур при відкритих вікнах (історія/About) тепер працює завжди, незалежно від налаштування візуальних ефектів\n• Зміна теми став живішою: 650 мс з FastOutSlowInEasing та відчуттям overshoot\n• Кнопка зміни теми: press-анімація (scale down до 0,95× + зміщення градієнта) при натисканні"
-                                       }
-                     },
-                     {
-                         "versionCode":  79,
-                         "versionName":  "1.9.44",
-                         "releaseDate":  "2026-11-07",
-                         "changelog":  {
-                                           "ru":  "• «Сбросить настройки» теперь полностью очищает приложение: язык, тема, все настройки, IP, параметры звука, история сессий, кэш обновлений\n• После сброса приложение сразу переходит на экран первоначальной настройки, как после установки\n• Сброс не сбрасывается фоновыми записями и не показывает окно «Что нового»",
-                                           "en":  "• \"Reset settings\" now fully wipes the app: language, theme, all settings, IP, audio parameters, session history, update cache\n• After reset the app immediately returns to the initial setup screen, just like after installation\n• Reset is not overwritten by background writes and does not show the What\u0027s New dialog",
-                                           "es":  "• \"Restablecer ajustes\" ahora borra completamente la app: idioma, tema, todos los ajustes, IP, parámetros de audio, historial de sesiones y caché de actualizaciones\n• Tras el restablecimiento la app vuelve inmediatamente a la pantalla de configuración inicial, como tras la instalación\n• El restablecimiento no se pierde por escrituras en segundo plano y no muestra el diálogo de novedades",
-                                           "zh":  "• “重置设置”现在会彻底清空应用：语言、主题、所有设置、IP、音频参数、会话历史和更新缓存\n• 重置后应用会立即返回初始设置界面，就像刚安装一样\n• 重置不会被后台写入覆盖，也不会弹出“更新内容”对话框",
-                                           "ja":  "• 「設定をリセット」で言語・テーマ・すべての設定・IP・音声パラメータ・セッション履歴・更新キャッシュを完全に消去します\n• リセット後はインストール直後と同様に初期設定画面へすぐ戻ります\n• リセットはバックグラウンドの書き込みで上書きされず、「新機能」ダイアログも表示されません",
-                                           "ko":  "• “설정 초기화”가 이제 언어, 테마, 모든 설정, IP, 오디오 매개변수, 세션 기록, 업데이트 캐시를 완전히 지웁니다\n• 초기화 후에는 설치 직후처럼 초기 설정 화면으로 즉시 돌아갑니다\n• 초기화는 백그라운드 저장으로 덮어써지지 않으며 “새로운 기능” 대화상자가 표시되지 않습니다",
-                                           "pt":  "• \"Redefinir configurações\" agora apaga completamente o app: idioma, tema, todas as configurações, IP, parâmetros de áudio, histórico de sessões e cache de atualizações\n• Após a redefinição o app volta imediatamente à tela de configuração inicial, como após a instalação\n• A redefinição não é sobrescrita por gravações em segundo plano e não mostra o diálogo de novidades",
-                                           "uk":  "• «Скинути налаштування» тепер повністю очищає застосунок: мову, тему, усі налаштування, IP, параметри звуку, історію сесій, кеш оновлень\n• Після скидання застосунок одразу повертається на екран початкового налаштування, як після встановлення\n• Скидання не перезаписується фоновими записами і не показує вікно «Що нового»"
-                                       }
-                     },
-                     {
-                         "versionCode":  78,
-                         "versionName":  "1.9.43",
-                         "releaseDate":  "2026-11-07",
-                         "changelog":  {
-                                           "ru":  "• Уведомление сервиса теперь появляется только при запуске передачи и исчезает при остановке — при открытии приложения без стриминга его нет\n• Каждые 5 секунд проверяется наличие уведомления: если его скрыли, оно возвращается — то же самое, без дублей и спама",
-                                           "en":  "• The service notification now appears only when streaming starts and disappears when stopped — no notification when opening the app without streaming\n• Every 5 seconds the notification is checked: if dismissed, it is restored — the same one, with no duplicates or spam",
-                                           "es":  "• La notificación del servicio ahora aparece solo al iniciar la transmisión y desaparece al detenerla — no hay notificación al abrir la app sin streaming\n• Cada 5 segundos se comprueba la notificación: si se descarta, se restaura — la misma, sin duplicados ni spam",
-                                           "zh":  "• 服务通知现在仅在开始传输时出现，停止时消失——未开启传输时打开应用不会显示通知\n• 每5秒检查一次通知：如果被关闭，会自动恢复——始终是同一条，无重复、无刷屏",
-                                           "ja":  "• サービスの通知はストリーミング開始時のみ表示され、停止時に消えます — ストリーミングなしでアプリを開いても通知は出ません\n• 5秒ごとに通知の有無を確認し、閉じられていたら復元します — 同じ通知で、重複やスパムはありません",
-                                           "ko":  "• 서비스 알림이 이제 스트리밍 시작 시에만 나타나고 중지 시 사라집니다 — 스트리밍 없이 앱을 열면 알림이 없습니다\n• 5초마다 알림 존재를 확인하고, 닫혀 있으면 복원합니다 — 동일한 알림 하나만, 중복이나 스팸 없음",
-                                           "pt":  "• A notificação do serviço agora aparece apenas ao iniciar a transmissão e desaparece ao parar — sem notificação ao abrir o app sem streaming\n• A cada 5 segundos a notificação é verificada: se for dispensada, é restaurada — a mesma, sem duplicados nem spam",
-                                           "uk":  "• Сповіщення сервісу тепер з\u0027являється лише під час запуску передачі та зникає після зупинки — при відкритті застосунку без стрімінгу його немає\n• Кожні 5 секунд перевіряється наявність сповіщення: якщо його приховали, воно повертається — те саме, без дублів і спаму"
-                                       }
-                     },
-                     {
-                         "versionCode":  77,
-                         "versionName":  "1.9.42",
-                         "releaseDate":  "2026-11-07",
-                         "changelog":  {
-                                           "ru":  "• Диалог «Что нового» теперь сразу открывается финального размера — кнопка «Отлично» больше не прыгает и окно не сужается\n• Уведомление сервиса автоматически возвращается в шторку, если его скрыть",
-                                           "en":  "• The What\u0027s New dialog now opens at its final size right away — the OK button no longer jumps and the window no longer shrinks\n• The service notification is automatically restored to the shade if dismissed",
-                                           "es":  "• El diálogo Novedades ahora se abre directamente con su tamaño final — el botón Aceptar ya no salta y la ventana no se encoge\n• La notificación del servicio se restaura automáticamente en la cortina si se descarta",
-                                           "zh":  "• “新功能”对话框现在直接以最终尺寸打开——确定按钮不再跳动，窗口不再收缩\n• 服务通知被关闭后会自动恢复到通知栏",
-                                           "ja":  "• 「新機能」ダイアログが最初から最終サイズで開くようになりました — OKボタンが跳ねたり、ウィンドウが縮んだりしません\n• サービスの通知を閉じても通知シェードに自動的に復元されます",
-                                           "ko":  "• \"새 기능\" 대화상자가 이제 처음부터 최종 크기로 열립니다 — 확인 버튼이 튀거나 창이 줄어들지 않습니다\n• 서비스 알림을 닫아도 알림 창에 자동으로 복원됩니다",
-                                           "pt":  "• O diálogo Novidades agora abre direto no tamanho final — o botão OK não pula mais e a janela não encolhe\n• A notificação do serviço é restaurada automaticamente na gaveta se for dispensada",
-                                           "uk":  "• Діалог «Що нового» тепер одразу відкривається фінального розміру — кнопка «Гаразд» більше не стрибає і вікно не звужується\n• Сповіщення сервісу автоматично повертається в шторку, якщо його приховати"
-                                       }
-                     },
-                     {
-                         "versionCode":  76,
-                         "versionName":  "1.9.41",
-                         "releaseDate":  "2026-11-07",
-                         "changelog":  {
-                                           "ru":  "• Исправлено отображение текста «Доступно обновление» на всех языках — раньше показывался технический ключ",
-                                           "en":  "• Fixed \"Update available\" text display on all languages — previously showed the technical key",
-                                           "es":  "• Corregida la visualización del texto \"Actualización disponible\" en todos los idiomas — antes mostraba la clave técnica",
-                                           "zh":  "• 修复了所有语言下\"有可用更新\"文本的显示——之前显示技术键名",
-                                           "ja":  "• 全言語で「アップデート利用可能」のテキスト表示を修正 — 以前は技術的なキーが表示されていました",
-                                           "ko":  "• 모든 언어에서 \"업데이트 사용 가능\" 텍스트 표시 수정 — 이전에는 기술 키가 표시됨",
-                                           "pt":  "• Corrigida a exibição do texto \"Atualização disponível\" em todos os idiomas — antes mostrava a chave técnica",
-                                           "uk":  "• Виправлено відображення тексту «Доступне оновлення» на всіх мовах — раніше показувався технічний ключ"
-                                       }
-                     },
-                     {
-                         "versionCode":  75,
-                         "versionName":  "1.9.40",
-                         "releaseDate":  "2026-11-07",
-                         "changelog":  {
-                                           "ru":  "• Убрана версия из кнопки обновления\n• Исправлена анимация кнопки \"Отлично\" в диалоге \"Что нового\" — больше не дёргается и не сужается",
-                                           "en":  "• Removed version from update button\n• Fixed \"OK\" button animation in What\u0027s New dialog — no longer jerky or shrinking",
-                                           "es":  "• Eliminada la versión del botón de actualización\n• Corregida la animación del botón \"Aceptar\" en el diálogo Novedades — ya no se sacude ni se encoge",
-                                           "zh":  "• 从更新按钮中删除了版本\n• 修复了新功能对话框中的\"确定\"按钮动画——不再抖动或收缩",
-                                           "ja":  "• 更新ボタンからバージョンを削除\n• 新機能ダイアログの\"OK\"ボタンのアニメーションを修正 — 引っかかったり縮んだりしなくなりました",
-                                           "ko":  "• 업데이트 버튼에서 버전 제거\n• 새 기능 대화상자의 \"확인\" 버튼 애니메이션 수정 — 더 이상 튀거나 줄어들지 않음",
-                                           "pt":  "• Removida a versão do botão de atualização\n• Corrigida a animação do botão \"OK\" no diálogo Novidades — não treme ou encolhe mais",
-                                           "uk":  "• Прибрано версію з кнопки оновлення\n• Виправлено анімацію кнопки \"Гаразд\" у діалозі \"Що нового\" — більше не смикається і не звужується"
-                                       }
-                     },
-                     {
-                         "versionCode":  74,
-                         "versionName":  "1.9.39",
-                         "releaseDate":  "2026-11-07",
-                         "changelog":  {
-                                           "ru":  "• Кнопка обновления теперь автоматически подстраивается под размер текста без анимации",
-                                           "en":  "• Update button now automatically adjusts to text size without animation",
-                                           "es":  "• El botón de actualización ahora se ajusta automáticamente al tamaño del texto sin animación",
-                                           "zh":  "• 更新按钮现在自动调整到文本大小，无动画",
-                                           "ja":  "• 更新ボタンがアニメーションなしでテキストサイズに自動調整されるようになりました",
-                                           "ko":  "• 업데이트 버튼이 이제 애니메이션 없이 텍스트 크기에 자동으로 조정됩니다",
-                                           "pt":  "• O botão de atualização agora se ajusta automaticamente ao tamanho do texto sem animação",
-                                           "uk":  "• Кнопка оновлення тепер автоматично підлаштовується під розмір тексту без анімації"
-                                       }
-                     },
-                     {
-                         "versionCode":  73,
-                         "versionName":  "1.9.38",
-                         "releaseDate":  "2026-11-07",
-                         "changelog":  {
-                                           "ru":  "• Исправлена анимация кнопки «Что нового» — больше не дёргается\n• Добавлено мигающее сердечко рядом с «Доступно обновление»",
-                                           "en":  "• Fixed What\u0027s New button animation — no longer jerky\n• Added pulsing heart icon next to Update available",
-                                           "es":  "• Corregida la animación del botón Novedades — ya no se sacude\n• Añadido icono de corazón pulsante junto a Actualización disponible",
-                                           "zh":  "• 修复了新功能按钮动画——不再抖动\n• 在有可用更新旁边添加了跳动的心形图标",
-                                           "ja":  "• 新機能ボタンのアニメーションを修正 — 引っかからなくなりました\n• アップデート利用可能の横に脈打つハートアイコンを追加",
-                                           "ko":  "• 새 기능 버튼 애니메이션 수정 — 더 이상 튀지 않음\n• 업데이트 사용 가능 옆에 맥동하는 하트 아이콘 추가",
-                                           "pt":  "• Corrigida a animação do botão Novidades — não treme mais\n• Adicionado ícone de coração pulsante ao lado de Atualização disponível",
-                                           "uk":  "• Виправлено анімацію кнопки «Що нового» — більше не смикається\n• Додано пульсуюче серце поруч з «Доступне оновлення»"
-                                       }
-                     },
-                     {
-                         "versionCode":  72,
-                         "versionName":  "1.9.37",
-                         "releaseDate":  "2026-11-07",
-                         "changelog":  {
-                                           "ru":  "• Уведомление сервиса теперь действительно нельзя скрыть — повышен приоритет канала и уведомления",
-                                           "en":  "• Service notification now truly cannot be hidden — channel and notification priority increased",
-                                           "es":  "• La notificación del servicio ahora realmente no se puede ocultar — prioridad de canal y notificación aumentada",
-                                           "zh":  "• 服务通知现在真的无法隐藏——提高了频道和通知优先级",
-                                           "ja":  "• サービス通知が本当に非表示にできなくなりました — チャンネルと通知の優先度を上げました",
-                                           "ko":  "• 서비스 알림을 이제 정말로 숨길 수 없음 — 채널 및 알림 우선순위 증가",
-                                           "pt":  "• A notificação do serviço agora realmente não pode ser ocultada — prioridade do canal e notificação aumentada",
-                                           "uk":  "• Сповіщення сервісу тепер дійсно не можна приховати — підвищено пріоритет каналу та сповіщення"
-                                       }
-                     },
-                     {
-                         "versionCode":  71,
-                         "versionName":  "1.9.36",
-                         "releaseDate":  "2026-11-07",
-                         "changelog":  {
-                                           "ru":  "• Умная логика обновлений: кнопка \"Позже\" откладывает проверку до перезапуска\n• Кнопка меняется на \"Доступно обновление\" когда обновление найдено\n• Фоновая проверка каждые 5 секунд только для обновления статуса кнопки\n• Уведомление сервиса теперь нельзя скрыть из панели уведомлений",
-                                           "en":  "• Smart update logic: \"Later\" button postpones checking until restart\n• Button changes to \"Update available\" when update is found\n• Background check every 5 seconds only updates button status\n• Service notification can no longer be hidden from notification panel",
-                                           "es":  "• Lógica de actualización inteligente: el botón \"Más tarde\" pospone la verificación hasta el reinicio\n• El botón cambia a \"Actualización disponible\" cuando se encuentra una actualización\n• La verificación en segundo plano cada 5 segundos solo actualiza el estado del botón\n• La notificación del servicio ya no se puede ocultar del panel de notificaciones",
-                                           "zh":  "• 智能更新逻辑：\"稍后\" 按钮将检查推迟到重启\n• 找到更新时按钮变为 \"有可用更新\"\n• 每5秒后台检查仅更新按钮状态\n• 服务通知现在无法从通知面板隐藏",
-                                           "ja":  "• スマート更新ロジック：\"後で\" ボタンで再起動までチェックを延期\n• 更新が見つかるとボタンが \"アップデート利用可能\" に変更\n• 5秒ごとのバックグラウンドチェックはボタンの状態のみを更新\n• サービス通知は通知パネルから非表示にできなくなりました",
-                                           "ko":  "• 스마트 업데이트 로직: \"나중에\" 버튼으로 재시작까지 확인 연기\n• 업데이트를 찾으면 버튼이 \"업데이트 사용 가능\"으로 변경\n• 5초마다 백그라운드 확인은 버튼 상태만 업데이트\n• 서비스 알림을 알림 패널에서 숨길 수 없게 됨",
-                                           "pt":  "• Lógica de atualização inteligente: o botão \"Mais tarde\" adia a verificação até a reinicialização\n• O botão muda para \"Atualização disponível\" quando a atualização é encontrada\n• A verificação em segundo plano a cada 5 segundos apenas atualiza o status do botão\n• A notificação do serviço não pode mais ser ocultada do painel de notificações",
-                                           "uk":  "• Розумна логіка оновлень: кнопка \"Пізніше\" відкладає перевірку до перезапуску\n• Кнопка змінюється на \"Доступне оновлення\" коли оновлення знайдено\n• Фонова перевірка кожні 5 секунд тільки оновлює статус кнопки\n• Сповіщення сервісу тепер не можна приховати з панелі сповіщень"
-                                       }
-                     },
-                     {
-                         "versionCode":  70,
-                         "versionName":  "1.9.35",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Полностью исправлена двойная анимация свайпа — теперь используется отдельная логика для drag и click",
-                                           "en":  "• Completely fixed double swipe animation — now uses separate logic for drag and click",
-                                           "es":  "• Corregida completamente la animación de doble deslizamiento — ahora usa lógica separada para arrastrar y hacer clic",
-                                           "zh":  "• 完全修复了双重滑动动画——现在对拖动和点击使用单独的逻辑",
-                                           "ja":  "• ダブルスワイプアニメーションを完全に修正 — ドラッグとクリックに別々のロジックを使用するようになりました",
-                                           "ko":  "• 이중 스와이프 애니메이션 완전히 수정 — 이제 드래그 및 클릭에 대해 별도의 논리 사용",
-                                           "pt":  "• Corrigida completamente a animação de deslizar duplo — agora usa lógica separada para arrastar e clicar",
-                                           "uk":  "• Повністю виправлено подвійну анімацію свайпу — тепер використовується окрема логіка для drag і click"
-                                       }
-                     },
-                     {
-                         "versionCode":  69,
-                         "versionName":  "1.9.34",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Исправлена автопроверка обновлений при запуске\n• Добавлена фоновая проверка обновлений каждые 5 секунд\n• Проверка не работает если обновления приостановлены",
-                                           "en":  "• Fixed automatic update check on launch\n• Added background update check every 5 seconds\n• Check doesn\u0027t run if updates are paused",
-                                           "es":  "• Corregida la verificación automática de actualizaciones al iniciar\n• Agregada verificación de actualizaciones en segundo plano cada 5 segundos\n• La verificación no se ejecuta si las actualizaciones están pausadas",
-                                           "zh":  "• 修复了启动时的自动更新检查\n• 添加了每5秒后台更新检查\n• 如果更新暂停，则不运行检查",
-                                           "ja":  "• 起動時の自動更新チェックを修正\n• 5秒ごとのバックグラウンド更新チェックを追加\n• 更新が一時停止されている場合、チェックは実行されません",
-                                           "ko":  "• 시작 시 자동 업데이트 확인 수정\n• 5초마다 백그라운드 업데이트 확인 추가\n• 업데이트가 일시 중지되면 확인이 실행되지 않음",
-                                           "pt":  "• Corrigida a verificação automática de atualizações na inicialização\n• Adicionada verificação de atualizações em segundo plano a cada 5 segundos\n• A verificação não é executada se as atualizações estiverem pausadas",
-                                           "uk":  "• Виправлено автоперевірку оновлень при запуску\n• Додано фонову перевірку оновлень кожні 5 секунд\n• Перевірка не працює якщо оновлення призупинені"
-                                       }
-                     },
-                     {
-                         "versionCode":  68,
-                         "versionName":  "1.9.33",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Исправлена анимация свайпа — больше не дёргается назад во время перехода",
-                                           "en":  "• Fixed swipe animation — no longer jerks back during transition",
-                                           "es":  "• Corregida la animación de deslizamiento — ya no se sacude hacia atrás durante la transición",
-                                           "zh":  "• 修复了滑动动画——过渡期间不再向后抖动",
-                                           "ja":  "• スワイプアニメーションを修正 — 遷移中に後ろに引っかからなくなりました",
-                                           "ko":  "• 스와이프 애니메이션 수정 — 전환 중 더 이상 뒤로 튀지 않음",
-                                           "pt":  "• Corrigida a animação de deslizar — não treme mais para trás durante a transição",
-                                           "uk":  "• Виправлено анімацію свайпу — більше не смикається назад під час переходу"
-                                       }
-                     },
-                     {
-                         "versionCode":  67,
-                         "versionName":  "1.9.32",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Полностью исправлен двойной свайп при переходе между вкладками\n• Автоматическое окно обновления теперь показывается даже если обновление было пропущено ранее",
-                                           "en":  "• Completely fixed double swipe when transitioning between tabs\n• Automatic update dialog now shows even if update was previously skipped",
-                                           "es":  "• Corregido completamente el doble deslizamiento al cambiar entre pestañas\n• El diálogo de actualización automático ahora se muestra incluso si la actualización fue omitida anteriormente",
-                                           "zh":  "• 完全修复了标签页切换时的双重滑动\n• 即使之前跳过更新，自动更新对话框现在也会显示",
-                                           "ja":  "• タブ切り替え時のダブルスワイプを完全に修正\n• 以前に更新をスキップした場合でも、自動更新ダイアログが表示されるようになりました",
-                                           "ko":  "• 탭 전환 시 이중 스와이프 완전히 수정\n• 이전에 업데이트를 건너뛴 경우에도 자동 업데이트 대화상자가 표시됩니다",
-                                           "pt":  "• Corrigido completamente o duplo deslizar ao alternar entre abas\n• O diálogo de atualização automático agora é exibido mesmo se a atualização foi ignorada anteriormente",
-                                           "uk":  "• Повністю виправлено подвійний свайп при переході між вкладками\n• Автоматичне вікно оновлення тепер показується навіть якщо оновлення було пропущено раніше"
-                                       }
-                     },
-                     {
-                         "versionCode":  66,
-                         "versionName":  "1.9.31",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Исправлен двойной свайп при переходе между вкладками\n• Убрано ускорение анимации при быстром переключении вкладок\n• Окно «Что нового» больше не телепается при повторном открытии",
-                                           "en":  "• Fixed double swipe when transitioning between tabs\n• Removed animation acceleration when rapidly switching tabs\n• What\u0027s New dialog no longer glitches when reopened",
-                                           "es":  "• Corregido el doble deslizamiento al cambiar entre pestañas\n• Eliminada la aceleración de animación al cambiar rápidamente de pestaña\n• El diálogo Novedades ya no parpadea al reabrirse",
-                                           "zh":  "• 修复了标签页切换时的双重滑动\n• 移除了快速切换标签页时的动画加速\n• 新功能对话框重新打开时不再闪烁",
-                                           "ja":  "• タブ切り替え時のダブルスワイプを修正\n• タブの高速切り替え時のアニメーション加速を削除\n• 新機能ダイアログが再度開いたときに点滅しなくなりました",
-                                           "ko":  "• 탭 전환 시 이중 스와이프 수정\n• 탭 빠른 전환 시 애니메이션 가속 제거\n• 새 기능 대화상자를 다시 열 때 깜박임 없음",
-                                           "pt":  "• Corrigido o duplo deslizar ao alternar entre abas\n• Removida a aceleração da animação ao alternar rapidamente entre abas\n• O diálogo Novidades não pisca mais ao reabrir",
-                                           "uk":  "• Виправлено подвійний свайп при переході між вкладками\n• Прибрано прискорення анімації при швидкому перемиканні вкладок\n• Вікно «Що нового» більше не телепортується при повторному відкритті"
-                                       }
-                     },
-                     {
-                         "versionCode":  65,
-                         "versionName":  "1.9.30",
-                         "releaseDate":  "2026-11-07",
-                         "changelog":  {
-                                           "ru":  "• Исправлен UID — теперь генерируется новый при сбросе настроек\n• Убран фон в поле «Свой срок» при приостановке обновлений\n• Слово «дней» теперь цветом как текст уведомления\n• Окно «Что нового» больше не телепается при повторном открытии\n• Анимация перехода между вкладками при клике\n• Плавное исчезновение текста «прокрутите...»\n• Автоматическое окно обновления при запуске с блокировкой на 3 секунды",
-                                           "en":  "• Fixed UID — now generates a new one when resetting settings\n• Removed background in custom duration field when pausing updates\n• The word “days” now matches notification text color\n• What’s New dialog no longer glitches when reopened\n• Tab transition animation when clicking\n• Smooth fade-out of “scroll...” text\n• Automatic update dialog on launch with 3-second dismiss lock",
-                                           "es":  "• UID corregido — ahora genera uno nuevo al restablecer configuración\n• Eliminado el fondo en el campo de duración personalizada al pausar actualizaciones\n• La palabra «días» ahora coincide con el color del texto de notificación\n• El diálogo Novedades ya no parpadea al reabrirse\n• Animación de transición entre pestañas al hacer clic\n• Desvanecimiento suave del texto «desplazar...»\n• Diálogo de actualización automático al iniciar con bloqueo de 3 segundos",
-                                           "zh":  "• 修复UID——重置设置时现在会生成新的\n• 移除了暂停更新时自定义时长字段的背景\n• 「天」字现在与通知文本颜色匹配\n• 新功能对话框重新打开时不再闪烁\n• 点击时的标签页过渡动画\n• 「滚动...」文本的平滑淡出\n• 启动时自动显示更新对话框，带6秒锁定关闭",
-                                           "ja":  "• UIDを修正——設定リセット時に新しいものを生成\n• 更新一時停止時のカスタム期間フィールドの背景を削除\n• 「日」の文字が通知テキストの色と一致\n• 新機能ダイアログが再度開いたときに点滅しなくなりました\n• クリック時のタブ遷移アニメーション\n• 「スクロール...」テキストのスムーズなフェードアウト\n• 起動時に自動更新ダイアログ、3秒間の閉じるロック付き",
-                                           "ko":  "• UID 수정——설정 초기화 시 새로 생성\n• 업데이트 일시 중지 시 사용자 지정 기간 필드의 배경 제거\n• “일” 단어가 이제 알림 텍스트 색상과 일치\n• 새 기능 대화상자를 다시 열 때 깜박임 없음\n• 클릭 시 탭 전환 애니메이션\n• “스크롬...” 텍스트의 부드러운 페이드아웃\n• 실행 시 자동 업데이트 대화상자, 3초 닫기 잠금 포함",
-                                           "pt":  "• UID corrigido — agora gera um novo ao redefinir configurações\n• Removido o fundo no campo de duração personalizada ao pausar atualizações\n• A palavra «dias» agora corresponde à cor do texto de notificação\n• O diálogo Novidades não pisca mais ao reabrir\n• Animação de transição entre abas ao clicar\n• Desvanecimento suave do texto «rolar...»\n• Diálogo de atualização automático na inicialização com bloqueio de 3 segundos",
-                                           "uk":  "• Виправлено UID — тепер генерується новий при скиданні налаштувань\n• Прибрано фон у полі «Свій строк» при призупиненні оновлень\n• Слово «днів» тепер кольором як текст сповіщення\n• Вікно «Що нового» більше не телепортується при повторному відкритті\n• Анімація переходу між вкладками при кліку\n• Плавне зникнення тексту «прокрутіть...»\n• Автоматичне вікно оновлення при запуску з блокуванням на 3 секунди"
-                                       }
-                     },
-                     {
-                         "versionCode":  64,
-                         "versionName":  "1.9.29",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Убрана внутренняя рамка в поле «Свой срок» при приостановке обновлений\n• Плавная анимация возврата при нажатии «Возобновить»\n• Плавное расширение окна обновления при появлении прогресс-бара\n• Улучшены анимации открытия/закрытия всех диалогов\n• Скачанный APK удаляется автоматически после установки\n• Кнопка «Сбросить настройки» в скрытом меню (нажмите 3 раза на версию)",
-                                           "en":  "• Removed inner border in the custom duration field when pausing updates\n• Smooth animation when pressing Resume\n• Smooth expansion of update window when progress bar appears\n• Improved open/close animations for all dialogs\n• Downloaded APK is automatically deleted after installation\n• Reset settings button in hidden menu (tap version 3 times)",
-                                           "es":  "• Eliminado el borde interior en el campo de duración personalizada al pausar actualizaciones\n• Animación suave al presionar Reanudar\n• Expansión suave de la ventana de actualización cuando aparece la barra de progreso\n• Mejores animaciones de abrir/cerrar para todos los diálogos\n• El APK descargado se elimina automáticamente después de la instalación\n• Botón para restablecer configuración en menú oculto (toca versión 3 veces)",
-                                           "zh":  "• 移除了暂停更新时自定义时长字段的内边框\n• 按下恢复时的平滑动画\n• 进度条出现时更新窗口的平滑扩展\n• 改进了所有对话框的打开/关闭动画\n• 下载的APK在安装后自动删除\n• 隐藏菜单中的重置设置按钮（点击版本3次）",
-                                           "ja":  "• 更新一時停止時のカスタム期間フィールドの内側枠線を削除\n• 再開を押したときのスムーズなアニメーション\n• 進捗バーが表示されるときの更新ウィンドウのスムーズな拡大\n• すべてのダイアログの開閉アニメーションを改善\n• ダウンロードしたAPKはインストール後に自動削除\n• 非表示メニューに設定リセットボタン（バージョンを3回タップ）",
-                                           "ko":  "• 업데이트 일시 중지 시 사용자 지정 기간 필드의 내부 테두리 제거\n• 재개를 누를 때 부드러운 애니메이션\n• 진행률 표시줄이 나타날 때 업데이트 창의 부드러운 확장\n• 모든 대화상자의 열기/닫기 애니메이션 개선\n• 다운로드한 APK는 설치 후 자동으로 삭제\n• 숨겨진 메뉴의 설정 초기화 버튼(버전을 3번 탭)",
-                                           "pt":  "• Removida a borda interna no campo de duração personalizada ao pausar atualizações\n• Animação suave ao pressionar Retomar\n• Expansão suave da janela de atualização quando a barra de progresso aparece\n• Melhores animações de abrir/fechar para todos os diálogos\n• O APK baixado é automaticamente excluído após a instalação\n• Botão para redefinir configurações no menu oculto (toque na versão 3 vezes)",
-                                           "uk":  "• Прибрано внутрішню рамку в полі «Свій строк» при призупиненні оновлень\n• Плавна анімація при натисканні «Відновити»\n• Плавне розширення вікна оновлення при появі прогрес-бару\n• Поліпшено анімації відкриття/закриття всіх діалогів\n• Завантажений APK видаляється автоматично після встановлення\n• Кнопка «Скинути налаштування» у прихованому меню (натисніть на версію 3 рази)"
-                                       }
-                     },
-                     {
-                         "versionCode":  63,
-                         "versionName":  "1.9.28",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Новый звук нажатия — приятный поп-эффект\n• Убрана задержка озвучки приветствия на первом экране — мгновенный старт",
-                                           "en":  "• New click sound — pleasant pop effect\n• Removed greeting voice delay on the first screen — instant start",
-                                           "es":  "• Nuevo sonido de clic — efecto pop agradable\n• Eliminado el retraso de la voz de bienvenida en la primera pantalla — inicio instantáneo",
-                                           "zh":  "• 新的点击声音——愉快的泡泡效果\n• 移除了首个屏幕上问候语音的延迟——立即开始",
-                                           "ja":  "• 新しいクリック音——心地よいポップ効果\n• 最初の画面の挨拶音声の遅延を削除——即座に開始",
-                                           "ko":  "• 새로운 클릭 소리——기분 좋은 팝 효과\n• 첫 화면의 인사말 음성 지연 제거——즉시 시작",
-                                           "pt":  "• Novo som de clique — efeito pop agradável\n• Removido o atraso da voz de saudação na primeira tela — início instantâneo",
-                                           "uk":  "• Новий звук натискання — приємний поп-ефект\n• Прибрано затримку озвучення вітання на першому екрані — миттєвий старт"
-                                       }
-                     },
-                     {
-                         "versionCode":  62,
-                         "versionName":  "1.9.27",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Убрано дублирование прогресса в окне загрузки обновления — теперь только «Загрузка… 100%», без лишних чисел справа\n• Кнопка «Проверить обновление» теперь с текстом слева и стрелкой справа\n• Новый звук нажатия — более чёткий и приятный\n• Ускорена озвучка приветствия на первом экране настройки",
-                                           "en":  "• Removed progress duplication in the update download window — now only “Downloading… 100%”, without extra numbers on the right\n• The “Check for updates” button now has text on the left and an arrow on the right\n• New click sound — crisper and more pleasant\n• Sped up the greeting voice on the first setup screen",
-                                           "es":  "• Eliminada la duplicación del progreso en la ventana de descarga de actualizaciones — ahora solo «Descargando… 100%», sin números extra a la derecha\n• El botón «Buscar actualizaciones» ahora tiene texto a la izquierda y una flecha a la derecha\n• Nuevo sonido de clic — más nítido y agradable\n• Acelerada la voz de bienvenida en la primera pantalla de configuración",
-                                           "zh":  "• 移除了更新下载窗口中的进度重复——现在只有「下载中… 100%」，右侧没有额外数字\n• 「检查更新」按钮现在左侧有文字，右侧有箭头\n• 新的点击声音——更清脆更愉快\n• 加快了首个设置屏幕上的问候语音",
-                                           "ja":  "• 更新ダウンロードウィンドウの進捗重複を削除——现在は「ダウンロード中… 100%」のみ、右側に余分な数値なし\n• 「更新確認」ボタンは左にテキスト、右に矢印が表示されるように\n• 新しいクリック音——よりクリアで快適\n• 最初の設定画面の挨拶音声を高速化",
-                                           "ko":  "• 업데이트 다운로드 창에서 진행률 중복 제거——이제 “다운로드 중… 100%”만, 오른쪽에 추가 숫자 없음\n• “업데이트 확인” 버튼이 이제 왼쪽에 텍스트, 오른쪽에 화살표 표시\n• 새로운 클릭 소리——더 명확하고 기분 좋음\n• 첫 설정 화면의 인사말 음성을 가속화",
-                                           "pt":  "• Removida a duplicação do progresso na janela de download de atualização — agora apenas «Baixando… 100%», sem números extras à direita\n• O botão «Verificar atualizações» agora tem texto à esquerda e uma seta à direita\n• Novo som de clique — mais nítido e agradável\n• Acelerada a voz de saudação na primeira tela de configuração",
-                                           "uk":  "• Прибрано дублювання прогресу в вікні завантаження оновлення — тепер тільки «Завантаження… 100%», без зайвих чисел справа\n• Кнопка «Перевірити оновлення» тепер з текстом зліва і стрілкою справа\n• Новий звук натискання — більш чіткий і приємний\n• Прискорено озвучення вітання на першому екрані налаштування"
-                                       }
-                     },
-                     {
-                         "versionCode":  61,
-                         "versionName":  "1.9.26",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Убрано дублирование прогресса в окне загрузки обновления (справа теперь только число, без «%»)\n• Кнопка «Проверить обновление» теперь с текстом слева и стрелкой справа, как «Приостановить»\n• Новый звук нажатия — более чёткий и приятный\n• Ускорена озвучка приветствия на первом экране настройки — без задержек",
-                                           "en":  "• Removed progress duplication in the update download window (the right side now shows only the number, without «%»)\n• The “Check for updates” button now has text on the left and an arrow on the right, like “Pause updates”\n• New click sound — crisper and more pleasant\n• Sped up the greeting voice on the first setup screen — no more delays",
-                                           "es":  "• Eliminada la duplicación del progreso en la ventana de descarga de actualizaciones (el lado derecho ahora muestra solo el número, sin «%»)\n• El botón «Buscar actualizaciones» ahora tiene texto a la izquierda y una flecha a la derecha, como «Pausar actualizaciones»\n• Nuevo sonido de clic — más nítido y agradable\n• Acelerada la voz de bienvenida en la primera pantalla de configuración — sin retrasos",
-                                           "zh":  "• 移除了更新下载窗口中的进度重复（右侧现在只显示数字，没有「%」）\n• 「检查更新」按钮现在左侧有文字，右侧有箭头，像「暂停更新」\n• 新的点击声音——更清脆更愉快\n• 加快了首个设置屏幕上的问候语音——没有延迟",
-                                           "ja":  "• 更新ダウンロードウィンドウの進捗重複を削除（右側には数値のみ表示、「%」なし）\n• 「更新確認」ボタンは左にテキスト、右に矢印が表示されるように、「更新を一時停止」と同じデザイン\n• 新しいクリック音——よりクリアで快適\n• 最初の設定画面の挨拶音声を高速化——遅延なし",
-                                           "ko":  "• 업데이트 다운로드 창에서 진행률 중복 제거 (오른쪽에는 이제 숫자만 표시, «%» 없음)\n• “업데이트 확인” 버튼이 이제 왼쪽에 텍스트, 오른쪽에 화살표가 표시되며 “업데이트 일시 중지”와 같은 디자인\n• 새로운 클릭 소리——더 명확하고 기분 좋음\n• 첫 설정 화면의 인사말 음성을 가속화——지연 없음",
-                                           "pt":  "• Removida a duplicação do progresso na janela de download de atualização (o lado direito agora mostra apenas o número, sem «%»)\n• O botão «Verificar atualizações» agora tem texto à esquerda e uma seta à direita, como «Pausar atualizações»\n• Novo som de clique — mais nítido e agradável\n• Acelerada a voz de saudação na primeira tela de configuração — sem atrasos",
-                                           "uk":  "• Прибрано дублювання прогресу в вікні завантаження оновлення (справа тепер тільки число, без «%»)\n• Кнопка «Перевірити оновлення» тепер з текстом зліва і стрілкою справа, як «Призупинити»\n• Новий звук натискання — більш чіткий і приємний\n• Прискорено озвучення вітання на першому екрані налаштування — без затримок"
-                                       }
-                     },
-                     {
-                         "versionCode":  60,
-                         "versionName":  "1.9.25",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Исправлены звуки нажатий на вкладки — теперь звук не воспроизводится при нажатии на уже активную вкладку, и настройка применяется мгновенно\n• Кнопка «Проверить обновление» стала чище и современнее — убрана иконка Refresh, текст по центру",
-                                           "en":  "• Fixed tab click sounds — sound no longer plays when tapping the already active tab, and the setting applies instantly\n• The “Check for updates” button is now cleaner and more modern — removed the Refresh icon, centered text",
-                                           "es":  "• Corregidos los sonidos de clics en las pestañas — el sonido ya no se reproduce al tocar la pestaña ya activa, y la configuración se aplica al instante\n• El botón «Buscar actualizaciones» ahora es más limpio y moderno — se eliminó el icono de actualizar, texto centrado",
-                                           "zh":  "• 修复了标签页点击声音——点击已激活的标签页时不再播放声音，设置立即生效\n• “检查更新”按钮现在更简洁现代——移除了刷新图标，文字居中",
-                                           "ja":  "• タブクリック音を修正——すでにアクティブなタブをタップしても音が鳴らず、設定が即座に反映されるように\n• 「更新確認」ボタンがよりシンプルでモダンに——更新アイコンを削除、テキストを中央揃え",
-                                           "ko":  "• 탭 클릭 사운드 수정——이미 활성화된 탭을 탭할 때 소리가 재생되지 않으며 설정이 즉시 적용됩니다\n• “업데이트 확인” 버튼이 더 깨끗하고 현대적으로——새로고침 아이콘 제거, 텍스트 가운데 정렬",
-                                           "pt":  "• Corrigidos os sons de clique nas abas — o som não toca mais ao tocar na aba já ativa, e a configuração se aplica instantaneamente\n• O botão «Verificar atualizações» agora é mais limpo e moderno — removido o ícone de atualizar, texto centralizado",
-                                           "uk":  "• Виправлено звуки натискань на вкладки — тепер звук не відтворюється при натисканні на вже активну вкладку, і налаштування застосовується миттєво\n• Кнопка «Перевірити оновлення» стала чистішою і сучаснішою — прибрано іконку оновлення, текст по центру"
-                                       }
-                     },
-                     {
-                         "versionCode":  59,
-                         "versionName":  "1.9.24",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Исправлено отображение прогресса скачивания обновления — лишний знак процента убран\n• Исправлены звуки нажатий на вкладки — теперь настройка применяется мгновенно, без переключения вкладок",
-                                           "en":  "• Fixed the update download progress display — the extra percent sign is gone\n• Fixed tab click sounds — the setting now applies immediately, without switching tabs",
-                                           "es":  "• Corregida la visualización del progreso de descarga — el signo de porcentaje duplicado ha sido eliminado\n• Corregidos los sonidos de clics en las pestañas — ahora la configuración se aplica al instante, sin cambiar de pestaña",
-                                           "zh":  "• 修复了更新下载进度的显示——多余的百分号已移除\n• 修夏了标签页点击声音——设置现在立即生效，无需切换标签页",
-                                           "ja":  "• 更新のダウンロード進捗表示を修正 — 余分なパーセント記号を削除\n• タブクリック音を修正 — 設定がタブ切り替えなしで即座に反映されるように",
-                                           "ko":  "• 업데이트 다운로드 진행률 표시 수정 — 중복된 퍼센트 기호 제거\n• 탭 클릭 사운드 수정 — 이제 탭을 전환하지 않고도 설정이 즉시 적용됩니다",
-                                           "pt":  "• Corrigida a exibição do progresso de download — o sinal de porcentagem duplicado foi removido\n• Corrigidos os sons de clique nas abas — agora a configuração se aplica imediatamente, sem trocar de aba",
-                                           "uk":  "• Виправлено відображення прогресу завантаження оновлення — зайвий знак відсотка прибрано\n• Виправлено звуки натискань на вкладки — тепер налаштування застосовується миттєво, без перемикання вкладок"
-                                       }
-                     },
-                     {
-                         "versionCode":  58,
-                         "versionName":  "1.9.23",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Список изменений в окне обновления теперь берётся из самого манифеста и работает даже там, где raw.githubusercontent недоступен\n• Исправлены подписи версий, где вместо текста оставался плейсхолдер %s\n• Переводы во всех 8 языках теперь показываются надёжно",
-                                           "en":  "• The changelog in the update window now comes from the update manifest itself and works even where raw.githubusercontent is unavailable\n• Fixed version labels that kept a %s placeholder instead of text\n• Translations now show reliably in all 8 languages",
-                                           "es":  "• El registro de cambios de la ventana de actualización ahora viene del propio manifiesto y funciona incluso donde raw.githubusercontent no está disponible\n• Corregidas las etiquetas de versión que mostraban el marcador %s\n• Las traducciones ahora se muestran de forma fiable en los 8 idiomas",
-                                           "zh":  "• 更新窗口中的更新日志现在直接取自更新清单，即使 raw.githubusercontent 无法访问也能显示\n• 修复了版本标签中残留 %s 占位符的问题\n• 全部 8 种语言的翻译现在都能可靠显示",
-                                           "ja":  "• 更新ウィンドウの更新履歴は更新マニフェストから取得するため、raw.githubusercontent が利用できない場所でも表示されます\n• バージョンラベルに %s が残る問題を修正\n• 8 ゲージの翻訳が確実に表示されるように",
-                                           "ko":  "• 업데이트 창의 변경 내용을 이제 업데이트 매니페스트에서 직접 가져와 raw.githubusercontent이 사용 불가능한 환경에서도 표시됩니다\n• 버전 라벨에 %s 플레이스홀더가 남는 문제 수정\n• 8개 언어 모두의 번역이 이제 안정적으로 표시됩니다",
-                                           "pt":  "• O registro de alterações na janela de atualização agora vem do próprio manifesto e funciona mesmo onde raw.githubusercontent não está disponível\n• Corrigidos os rótulos de versão que mantinham o marcador %s\n• As traduções agora aparecem de forma confiável nos 8 idiomas",
-                                           "uk":  "• Список змін у вікні оновлення тепер береться із самого маніфесту і працює навіть там, де raw.githubusercontent недоступний\n• Виправлено підписи версій, де замість тексту залишався плейсхолдер %s\n• Переклади усіма 8 мовами тепер показуються надійно"
-                                       }
-                     },
-                     {
-                         "versionCode":  57,
-                         "versionName":  "1.9.22",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Поле ввода «Свой срок» стало аккуратнее: выделенный фон, рамка и подпись единицы\n• Плашка выбора теперь появляется сразу на нажатом пункте и плавно переезжает между пунктами\n• Текст в окнах «Доступно обновление» и «Что нового» стал таким же читаемым, как в других окнах",
-                                           "en":  "• The “Custom period” input looks cleaner: tinted background, border and unit label\n• The selection plate now appears right on the tapped option and then slides smoothly between options\n• Text in the update and What’s New windows is now as readable as in the other windows",
-                                           "es":  "• El campo «Período personalizado» se ve más limpio: fondo, borde y etiqueta de unidad\n• La placa de selección ahora aparece justo en la opción pulsada y luego se desliza suavemente\n• El texto de las ventanas de actualización y Novedades ahora es tan legible como en las demás ventanas",
-                                           "zh":  "• “自定义期限”输入框更美观：带色底、边框和单位标签\n• 选中板现会直接出现在点击的选项上，并在选项间平滑移动\n• 更新窗口和“新功能”窗口的文字现与其他窗口一样清晰",
-                                           "ja":  "• 「カスタム期間」入力欄が整った見た目に（背景、枠、単位ラベル）\n• 選択プレートが押した項目ですぐに表示され、項目間をスムーズに移動\n• 更新ウィンドウと「新機能」のテキストが他のウィンドウと同じくらい読みやすく",
-                                           "ko":  "• “사용자 지정 기간” 입력이 더 깔끔해졌습니다(배경, 테두리, 단위 표시)\n• 선택 플레이트가 누른 항목에 바로 나타나고 항목 사이를 부드럽게 이동합니다\n• 업데이트 창과 “새 기능” 창의 텍스트가 다른 창처럼 읽기 쉽게 바뀌었습니다",
-                                           "pt":  "• O campo «Período personalizado» ficou mais bonito: fundo, borda e rótulo de unidade\n• A placa de seleção agora aparece direto na opção tocada e desliza suavemente entre as opções\n• O texto das janelas de atualização e Novidades agora é tão legível quanto nas outras janelas",
-                                           "uk":  "• Поле введення «Свій термін» стало охайнішим: тонований фон, рамка і підпис одиниці\n• Плашка вибору тепер з\u0027являється одразу на натиснутому пункті й плавно переїздить між пунктами\n• Текст у вікнах «Доступне оновлення» та «Що нового» став таким самим читабельним, як в інших вікнах"
-                                       }
-                     },
-                     {
-                         "versionCode":  56,
-                         "versionName":  "1.9.21",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Список изменений теперь всегда на языке приложения — в окне «Доступно обновление» и в «Что нового»\n• Окно «Что нового» теперь такой же ширины, как «Доступно обновление»\n• Раскрытие списка «Что нового» в окне обновления стало плавным, без рывков",
-                                           "en":  "• The changelog is now always shown in the app language — in both the update window and \"What\u0027s New\"\n• The \"What\u0027s New\" dialog now matches the update window width\n• Expanding the changelog in the update window is now smooth, without stutter",
-                                           "es":  "• El registro de cambios ahora siempre aparece en el idioma de la app — en la ventana de actualización y en «Novedades»\n• La ventana «Novedades» ahora tiene el mismo ancho que la de actualización\n• La expansión del registro de cambios en la ventana de actualización ahora es fluida, sin tirones",
-                                           "zh":  "• 更新日志现在始终以应用语言显示 — 更新窗口和“新功能”窗口都是\n• “新功能”窗口宽度现与更新窗口一致\n• 更新窗口中更新日志的展开现已平滑，无卡顿",
-                                           "ja":  "• 更新履歴が常にアプリの言語で表示されるように — 更新ウィンドウと「新機能」の両方で\n• 「新機能」ウィンドウの幅が更新ウィンドウと同じに\n• 更新ウィンドウでの更新履歴の展開がスムーズに",
-                                           "ko":  "• 변경 내용이 이제 항상 앱 언어로 표시됩니다 — 업데이트 창과 “새 기능” 모두\n• “새 기능” 창 폭이 업데이트 창과 같아졌습니다\n• 업데이트 창에서 변경 내용 펼치기가 부드럽게 동작합니다",
-                                           "pt":  "• O registro de alterações agora sempre aparece no idioma do app — na janela de atualização e em «Novidades»\n• A janela «Novidades» agora tem a mesma largura da janela de atualização\n• A expansão do registro de alterações na janela de atualização agora é suave, sem engasgos",
-                                           "uk":  "• Список змін тепер завжди мовою додатку — у вікні «Доступне оновлення» та «Що нового»\n• Вікно «Що нового» тепер такої ж ширини, як «Доступне оновлення»\n• Розгортання списку «Що нового» у вікні оновлення стало плавним, без ривків"
-                                       }
-                     },
-                     {
-                         "versionCode":  55,
-                         "versionName":  "1.9.20",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Плашка выбранного срока двигается медленнее и плавнее\n• Раскрытие «Что нового» в окне обновления стало более плавным, без рывков\n• Окно «Что нового» (кнопка справа от «Проверить обновление») теперь плавно появляется, без телепания",
-                                           "en":  "• The selected period plate moves slower and smoother\n• Expanding \"What\u0027s New\" in the update window is smoother, no jerks\n• The \"What\u0027s New\" window (button next to Check update) now fades in smoothly",
-                                           "es":  "• La placa del período seleccionado se mueve más lento y suave\n• La expansión de «Novedades» en la ventana de actualización es más suave\n• La ventana «Novedades» ahora aparece con una transición suave",
-                                           "zh":  "• 所选期限的滑动板移动更慢更平滑\n• 更新窗口中“新功能”的展开更平滑，无卡顿\n• “新功能”窗口（检查更新旁的按钮）现在平滑出现",
-                                           "ja":  "• 選択期間のプレートの移動をよりゆっくり滑らかに\n• 更新ウィンドウの「新機能」展開が滑らかに\n• 「新機能」ウィンドウ（更新確認ボタンの隣）が滑らかに表示",
-                                           "ko":  "• 선택한 기간 플레이트가 더 느리고 부드럽게 이동\n• 업데이트 창의 \"새 기능\" 확장이 더 부드러워짐\n• \"새 기능\" 창(업데이트 확인 옆 버튼)이 부드럽게 나타남",
-                                           "pt":  "• A placa do período selecionado se move mais devagar e suave\n• A expansão de «Novidades» na janela de atualização ficou mais suave\n• A janela «Novidades» agora aparece com transição suave",
-                                           "uk":  "• Плашка обраного терміну рухається повільніше та плавніше\n• Розкриття «Що нового» у вікні оновлення стало плавнішим, без ривків\n• Вікно «Що нового» (кнопка праворуч від «Перевірити оновлення») тепер плавно з\u0027являється"
-                                       }
-                     },
-                     {
-                         "versionCode":  54,
-                         "versionName":  "1.9.19",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Текст «Вы не будете видеть уведомления…» стал ярче, как подсказка в «Обратной связи»\n• Кнопка «Возобновить» теперь такого же цвета\n• Окно паузы обновлений выглядит аккуратнее",
-                                           "en":  "• The \"You won\u0027t see notifications…\" text is now brighter, like the feedback hint\n• The \"Resume\" button now uses the same color\n• The update pause window looks cleaner",
-                                           "es":  "• El texto «No verás notificaciones…» ahora es más claro, como la pista en Comentarios\n• El botón «Reanudar» usa el mismo color\n• La ventana de pausa se ve más limpia",
-                                           "zh":  "• “您将看不到通知…”文字更亮，与反馈提示一致\n• “恢复”按钮使用相同颜色\n• 更新暂停窗口更整洁",
-                                           "ja":  "• 「通知は表示されません…」のテキストをフィードバックのヒントと同じ明るさに\n• 「再開」ボタンも同じ色に\n• 更新一時停止ウィンドウがより整った見た目に",
-                                           "ko":  "• \"알림이 표시되지 않습니다…\" 텍스트를 피드백 힌트처럼 더 밝게\n• \"재개\" 버튼도 같은 색상 사용\n• 업데이트 일시 중지 창이 더 깔끔해짐",
-                                           "pt":  "• O texto «Você não verá notificações…» ficou mais claro, como a dica em Comentários\n• O botão «Retomar» usa a mesma cor\n• A janela de pausa ficou mais limpa",
-                                           "uk":  "• Текст «Ви не бачитимете сповіщень…» став яскравішим, як підказка у «Зворотному зв\u0027язку»\n• Кнопка «Відновити» тепер такого ж кольору\n• Вікно паузи оновлень виглядає охайніше"
-                                       }
-                     },
-                     {
-                         "versionCode":  53,
-                         "versionName":  "1.9.18",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Убран вариант «2 недели» из окна паузы обновлений\n• Поле «Свой срок» теперь появляется прямо в строке, окно не растягивается\n• Убрано лишнее описание под списком",
-                                           "en":  "• Removed the \"2 weeks\" option from the update pause window\n• The custom period field now appears inline, no extra window space\n• Removed the extra description text under the list",
-                                           "es":  "• Eliminada la opción «2 semanas» de la ventana de pausa de actualización\n• El campo de período personalizado ahora aparece en la misma línea\n• Eliminado el texto descriptivo adicional bajo la lista",
-                                           "zh":  "• 从更新暂停窗口中移除了“2周”选项\n• 自定义期限输入框现在直接显示在该行内，窗口不再变大\n• 移除了列表下方的多余描述文字",
-                                           "ja":  "• 更新一時停止ウィンドウから「2週間」オプションを削除\n• カスタム期間の入力欄が同じ行に表示され、ウィンドウが広がりません\n• リスト下の余分な説明テキストを削除",
-                                           "ko":  "• 업데이트 일시 중지 창에서 \"2주\" 옵션 제거\n• 사용자 지정 기간 입력란이 같은 줄에 표시되어 창이 커지지 않습니다\n• 목록 아래의 불필요한 설명 텍스트 제거",
-                                           "pt":  "• Removida a opção \"2 semanas\" da janela de pausa de atualização\n• O campo de período personalizado agora aparece na mesma linha\n• Removido o texto descritivo extra abaixo da lista",
-                                           "uk":  "• Прибрано варіант «2 тижні» з вікна паузи оновлень\n• Поле «Свій термін» тепер з\u0027являється прямо в рядку, вікно не розтягується\n• Прибрано зайвий опис під списком"
-                                       }
-                     },
-                     {
-                         "versionCode":  52,
-                         "versionName":  "1.9.17",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Улучшено центрирование текста в элементах списка паузы обновлений\n• Добавлено описание выбранного периода серым текстом\n• Текст \"Вы не будете видеть уведомления об обновлениях\" показывается для каждого варианта",
-                                           "en":  "• Improved text centering in update pause list items\n• Added selected period description in muted text\n• \"You won\u0027t see update notifications\" text shown for each option",
-                                           "es":  "• Centrado de texto mejorado en elementos de lista de pausa de actualización\n• Descripción del período seleccionado agregada en texto atenuado\n• Texto \"No verás notificaciones de actualización\" mostrado para cada opción",
-                                           "zh":  "• 改进了更新暂停列表项中的文本居中\n• 添加了灰色文本的选定期间描述\n• 为每个选项显示\"您将看不到更新通知\"文本",
-                                           "ja":  "• 更新一時停止リスト項目のテキスト中央揃えを改善\n• ミュートテキストで選択期間の説明を追加\n• 各オプションに「更新通知は表示されません」テキストを表示",
-                                           "ko":  "• 업데이트 일시 중지 목록 항목의 텍스트 중앙 정렬 개선\n• 음소거된 텍스트로 선택한 기간 설명 추가\n• 각 옵션에 대해 \"업데이트 알림이 표시되지 않습니다\" 텍스트 표시",
-                                           "pt":  "• Centralização de texto melhorada em itens da lista de pausa de atualização\n• Descrição do período selecionado adicionada em texto silenciado\n• Texto \"Você não verá notificações de atualização\" mostrado para cada opção",
-                                           "uk":  "• Покращено центрування тексту в елементах списку паузи оновлень\n• Додано опис обраного періоду сірим текстом\n• Текст \"Ви не бачитимете сповіщень про оновлення\" показується для кожного варіанту"
-                                       }
-                     },
-                     {
-                         "versionCode":  51,
-                         "versionName":  "1.9.16",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Улучшено центрирование текста в элементах списка паузы обновлений\n• Добавлено описание выбранного периода серым текстом\n• Текст \"Вы не будете видеть уведомления об обновлениях\" показывается для каждого варианта",
-                                           "en":  "• Improved text centering in update pause list items\n• Added selected period description in muted text\n• \"You won\u0027t see update notifications\" text shown for each option",
-                                           "es":  "• Centrado de texto mejorado en elementos de lista de pausa de actualización\n• Descripción del período seleccionado agregada en texto atenuado\n• Texto \"No verás notificaciones de actualización\" mostrado para cada opción",
-                                           "zh":  "• 改进了更新暂停列表项中的文本居中\n• 添加了灰色文本的选定期间描述\n• 为每个选项显示\"您将看不到更新通知\"文本",
-                                           "ja":  "• 更新一時停止リスト項目のテキスト中央揃えを改善\n• ミュートテキストで選択期間の説明を追加\n• 各オプションに「更新通知は表示されません」テキストを表示",
-                                           "ko":  "• 업데이트 일시 중지 목록 항목의 텍스트 중앙 정렬 개선\n• 음소거된 텍스트로 선택한 기간 설명 추가\n• 각 옵션에 대해 \"업데이트 알림이 표시되지 않습니다\" 텍스트 표시",
-                                           "pt":  "• Centralização de texto melhorada em itens da lista de pausa de atualização\n• Descrição do período selecionado adicionada em texto silenciado\n• Texto \"Você não verá notificações de atualização\" mostrado para cada opção",
-                                           "uk":  "• Покращено центрування тексту в елементах списку паузи оновлень\n• Додано опис обраного періоду сірим текстом\n• Текст \"Ви не бачитимете сповіщень про оновлення\" показується для кожного варіанту"
-                                       }
-                     },
-                     {
-                         "versionCode":  50,
-                         "versionName":  "1.9.15",
-                         "releaseDate":  "2026-11-06",
-                         "changelog":  {
-                                           "ru":  "• Исправлено позиционирование элементов в окне паузы обновлений\n• Плашка выбора теперь точно совпадает с пунктами меню\n• Улучшена структура вложенности UI элементов",
-                                           "en":  "• Fixed element positioning in update pause window\n• Selection plate now aligns perfectly with menu items\n• Improved UI element nesting structure",
-                                           "es":  "• Posicionamiento de elementos corregido en ventana de pausa de actualización\n• La placa de selección ahora se alinea perfectamente con los elementos del menú\n• Estructura de anidamiento de elementos UI mejorada",
-                                           "zh":  "• 修复了更新暂停窗口中的元素定位\n• 选择板现在与菜单项完美对齐\n• 改进了UI元素嵌套结构",
-                                           "ja":  "• 更新一時停止ウィンドウでの要素配置を修正\n• 選択プレートがメニュー項目と完全に整列するようになりました\n• UI要素のネスト構造を改善",
-                                           "ko":  "• 업데이트 일시 중지 창의 요소 위치 수정\n• 선택 플레이트가 이제 메뉴 항목과 완벽하게 정렬됨\n• UI 요소 중첩 구조 개선",
-                                           "pt":  "• Posicionamento de elementos corrigido na janela de pausa de atualização\n• A placa de seleção agora se alinha perfeitamente com os itens do menu\n• Estrutura de aninhamento de elementos UI melhorada",
-                                           "uk":  "• Виправлено позиціонування елементів у вікні паузи оновлень\n• Плашка вибору тепер точно збігається з пунктами меню\n• Покращено структуру вкладеності UI елементів"
-                                       }
-                     },
-                     {
-                         "versionCode":  49,
-                         "versionName":  "1.9.14",
-                         "releaseDate":  "2026-11-04",
-                         "changelog":  {
-                                           "ru":  "• Исправлено расположение плашки выбора в паузе обновлений\n• Убрано дёрганье при раскрытии \"Что нового\" в уведомлении\n• Исправлено телепание окна \"Что нового\" вниз после появления\n• Все анимации теперь работают плавно и естественно",
-                                           "en":  "• Fixed selection plate position in update pause\n• Removed jerking when expanding What\u0027s New in notification\n• Fixed What\u0027s New window jumping down after appearance\n• All animations now work smoothly and naturally",
-                                           "es":  "• Corregida posición de placa de selección en pausa de actualización\n• Eliminado movimiento brusco al expandir Novedades en notificación\n• Corregido salto de ventana de Novedades hacia abajo después de aparecer\n• Todas las animaciones ahora funcionan suave y naturalmente",
-                                           "zh":  "• 修复了更新暂停中的选择板位置\n• 移除了通知中展开新功能时的抖动\n• 修复了新功能窗口出现后向下跳动\n• 所有动画现在平滑自然地工作",
-                                           "ja":  "• 更新一時停止での選択プレートの位置を修正\n• 通知で新機能を展開する際のガタつきを削除\n• 新機能ウィンドウの表示後の下へのジャンプを修正\n• すべてのアニメーションがスムーズで自然に動作するようになりました",
-                                           "ko":  "• 업데이트 일시 중지에서 선택 플레이트 위치 수정\n• 알림에서 새 기능 확장 시 떨림 제거\n• 새 기능 창이 나타난 후 아래로 점프하는 현상 수정\n• 모든 애니메이션이 이제 부드럽고 자연스럽게 작동합니다",
-                                           "pt":  "• Corrigida posição da placa de seleção na pausa de atualização\n• Removido movimento brusco ao expandir Novidades na notificação\n• Corrigido salto da janela de Novidades para baixo após aparecer\n• Todas as animações agora funcionam suave e naturalmente",
-                                           "uk":  "• Виправлено розташування плашки вибору в паузі оновлень\n• Прибрано смикання при розкритті \"Що нового\" в сповіщенні\n• Виправлено телепання вікна \"Що нового\" вниз після появи\n• Всі анімації тепер працюють плавно та природно"
-                                       }
-                     },
-                     {
-                         "versionCode":  48,
-                         "versionName":  "1.9.13",
-                         "releaseDate":  "2026-11-04",
-                         "changelog":  {
-                                           "ru":  "• Убрано дёрганье окна при изменении размера (паузы обновлений)\n• Плашка выбора теперь плавно \"переплывает\" между пунктами\n• Исправлено дёрганье окна \"Что нового\" при раскрытии\n• Исправлена загрузка переводов changelog для всех языков\n• Все анимации теперь используют spring для естественного движения",
-                                           "en":  "• Removed window jerking on resize (update pause)\n• Selection plate now smoothly \"floats\" between items\n• Fixed What\u0027s New window jerking on expansion\n• Fixed changelog translation loading for all languages\n• All animations now use spring for natural movement",
-                                           "es":  "• Eliminado el movimiento brusco de la ventana al cambiar tamaño (pausa de actualización)\n• La placa de selección ahora \"flota\" suavemente entre elementos\n• Corregido movimiento brusco de ventana de Novedades al expandir\n• Corregida carga de traducción de changelog para todos los idiomas\n• Todas las animaciones ahora usan spring para movimiento natural",
-                                           "zh":  "• 移除了调整大小时的窗口抖动（更新暂停）\n• 选择板现在在项目之间平滑\"浮动\"\n• 修复了展开时新功能窗口的抖动\n• 修复了所有语言的更新日志翻译加载\n• 所有动画现在使用弹簧以实现自然运动",
-                                           "ja":  "• リサイズ時のウィンドウのガタつきを削除（更新一時停止）\n• 選択プレートがアイテム間をスムーズに\"浮遊\"するようになりました\n• 新機能ウィンドウの展開時のガタつきを修正\n• すべての言語の変更履歴翻訳の読み込みを修正\n• すべてのアニメーションが自然な動きのためにスプリングを使用するようになりました",
-                                           "ko":  "• 크기 조정 시 창 떨림 제거（업데이트 일시 중지）\n• 선택 플레이트가 이제 항목 간에 부드럽게 \"떠다님\"\n• 확장 시 새 기능 창 떨림 수정\n• 모든 언어에 대한 변경 로그 번역 로딩 수정\n• 모든 애니메이션이 이제 자연스러운 움직임을 위해 스프링 사용",
-                                           "pt":  "• Removido o movimento brusco da janela ao redimensionar (pausa de atualização)\n• A placa de seleção agora \"flutua\" suavemente entre itens\n• Corrigido movimento brusco da janela de Novidades ao expandir\n• Corrigido carregamento de tradução de changelog para todos os idiomas\n• Todas as animações agora usam spring para movimento natural",
-                                           "uk":  "• Прибрано смикання вікна при зміні розміру (паузи оновлень)\n• Плашка вибору тепер плавно \"переплаває\" між пунктами\n• Виправлено смикання вікна \"Що нового\" при розкритті\n• Виправлено завантаження перекладів changelog для всіх мов\n• Всі анімації тепер використовують spring для природного руху"
-                                       }
-                     },
-                     {
-                         "versionCode":  47,
-                         "versionName":  "1.9.12",
-                         "releaseDate":  "2026-11-04",
-                         "changelog":  {
-                                           "ru":  "• Исправлена локализация уведомлений при смене языка\n• Плавная анимация выбора периодов в окне паузы обновлений\n• Плавное расширение поля \"Свой срок\" с анимацией\n• Исправлен баг с сбросом выбора при закрытии окна\n• Динамическая загрузка переводов \"Что нового\" при смене языка\n• Убрано телепортирование окна при раскрытии changelog",
-                                           "en":  "• Fixed notification localization on language change\n• Smooth pause period selection animation\n• Smooth custom period field expansion with animation\n• Fixed selection reset bug on window close\n• Dynamic What\u0027s New translation loading on language change\n• Removed window teleportation on changelog expansion",
-                                           "es":  "• Localización de notificaciones corregida al cambiar idioma\n• Animación suave de selección de período de pausa\n• Expansión suave del campo de período personalizado con animación\n• Bug de restablecimiento de selección corregido al cerrar ventana\n• Carga dinámica de traducciones de Novedades al cambiar idioma\n• Eliminado teletransporte de ventana en expansión de changelog",
-                                           "zh":  "• 修复了更改语言时的通知本地化\n• 平滑的暂停期间选择动画\n• 平滑的自定义期间字段展开动画\n• 修复了关闭窗口时的选择重置错误\n• 更改语言时动态加载新功能翻译\n• 删除了更新日志展开时的窗口传送",
-                                           "ja":  "• 言語変更時の通知ローカライゼーションを修正\n• スムーズな一時停止期間選択アニメーション\n• アニメーション付きスムーズなカスタム期間フィールド展開\n• ウィンドウを閉じたときの選択リセットバグを修正\n• 言語変更時の新機能翻訳の動的読み込み\n• 変更履歴展開時のウィンドウテレポートを削除",
-                                           "ko":  "• 언어 변경 시 알림 현지화 수정\n• 부드러운 일시 중지 기간 선택 애니메이션\n• 애니메이션이 있는 부드러운 사용자 지정 기간 필드 확장\n• 창 닫기 시 선택 재설정 버그 수정\n• 언어 변경 시 새 기능 번역 동적 로딩\n• 변경 로그 확장 시 창 순간이동 제거",
-                                           "pt":  "• Localização de notificações corrigida ao mudar idioma\n• Animação suave de seleção de período de pausa\n• Expansão suave do campo de período personalizado com animação\n• Bug de redefinição de seleção corrigido ao fechar janela\n• Carregamento dinâmico de traduções de Novidades ao mudar idioma\n• Removido teletransporte de janela na expansão do changelog",
-                                           "uk":  "• Виправлено локалізацію сповіщень при зміні мови\n• Плавна анімація вибору періодів у вікні паузи оновлень\n• Плавне розширення поля \"Свій термін\" з анімацією\n• Виправлено баг зі скиданням вибору при закритті вікна\n• Динамічне завантаження перекладів \"Що нового\" при зміні мови\n• Прибрано телепортування вікна при розкритті changelog"
-                                       }
-                     },
-                     {
-                         "versionCode":  46,
-                         "versionName":  "1.9.11",
-                         "releaseDate":  "2026-11-04",
-                         "changelog":  {
-                                           "ru":  "• Исправлена анимация раскрытия списка изменений\n• Плавная трансформация окна приостановки обновлений\n• Анимация выбора периодов паузы\n• Плавное расширение поля \"Свой срок\"\n• Исправлена локализация уведомлений\n• Динамическая загрузка переводов при смене языка",
-                                           "en":  "• Fixed changelog expansion animation\n• Smooth update pause window transformation\n• Pause period selection animation\n• Smooth custom period field expansion\n• Fixed notification localization\n• Dynamic translation loading on language change",
-                                           "es":  "• Animación de expansión del changelog corregida\n• Transformación suave de ventana de pausa de actualización\n• Animación de selección de período de pausa\n• Expansión suave del campo de período personalizado\n• Localización de notificaciones corregida\n• Carga dinámica de traducciones al cambiar idioma",
-                                           "zh":  "• 修复了更新日志展开动画\n• 平滑的更新暂停窗口转换\n• 暂停期间选择动画\n• 平滑的自定义期间字段展开\n• 修复了通知本地化\n• 更改语言时动态加载翻译",
-                                           "ja":  "• 変更履歴展開アニメーションを修正\n• スムーズな更新一時停止ウィンドウ変換\n• 一時停止期間選択アニメーション\n• スムーズなカスタム期間フィールド展開\n• 通知のローカライゼーションを修正\n• 言語変更時の動的翻訳読み込み",
-                                           "ko":  "• 변경 로그 확장 애니메이션 수정\n• 부드러운 업데이트 일시 중지 창 전환\n• 일시 중지 기간 선택 애니메이션\n• 부드러운 사용자 지정 기간 필드 확장\n• 알림 현지화 수정\n• 언어 변경 시 동적 번역 로딩",
-                                           "pt":  "• Animação de expansão do changelog corrigida\n• Transformação suave da janela de pausa de atualização\n• Animação de seleção de período de pausa\n• Expansão suave do campo de período personalizado\n• Localização de notificações corrigida\n• Carregamento dinâmico de traduções ao mudar idioma",
-                                           "uk":  "• Виправлено анімацію розкриття списку змін\n• Плавна трансформація вікна призупинення оновлень\n• Анімація вибору періодів паузи\n• Плавне розширення поля \"Свій термін\"\n• Виправлено локалізацію сповіщень\n• Динамічне завантаження перекладів при зміні мови"
-                                       }
-                     },
-                     {
-                         "versionCode":  45,
-                         "versionName":  "1.9.10",
-                         "releaseDate":  "2026-11-04",
-                         "changelog":  {
-                                           "ru":  "• Исправлена анимация раскрытия «Что нового»\n• Плавное раскрытие списка изменений без рывков\n• Оптимизация времени анимации для естественного движения",
-                                           "en":  "• Fixed What\u0027s New expansion animation\n• Smooth changelog list expansion without jerks\n• Optimized animation timing for natural movement",
-                                           "es":  "• Animación de expansión de Novedades corregida\n• Expansión suave de lista de cambios sin tirones\n• Tiempo de animación optimizado para movimiento natural",
-                                           "zh":  "• 修复了\"新功能\"展开动画\n• 平滑的更新日志列表展开，无卡顿\n• 优化动画时间以实现自然运动",
-                                           "ja":  "• 新機能の展開アニメーションを修正\n• スムーズな変更履歴リストの展開（ぎこちなさなし）\n• 自然な動きのためのアニメーションタイミングの最適化",
-                                           "ko":  "• 새 기능 확장 애니메이션 수정\n• 끊김 없는 부드러운 변경 로그 목록 확장\n• 자연스러운 움직임을 위한 애니메이션 타이밍 최적화",
-                                           "pt":  "• Animação de expansão de Novidades corrigida\n• Expansão suave da lista de mudanças sem travamentos\n• Tempo de animação otimizado para movimento natural",
-                                           "uk":  "• Виправлено анімацію розкриття «Що нового»\n• Плавне розкриття списку змін без ривків\n• Оптимізація часу анімації для природного руху"
-                                       }
-                     },
-                     {
-                         "versionCode":  41,
-                         "versionName":  "1.9.6",
-                         "releaseDate":  "2026-11-04",
-                         "changelog":  {
-                                           "ru":  "• Все зелёные цвета заменены на розовые (accent)\n• Ping в истории сессий: розовый градиент\n• Этап проверки версии: убрана кнопка «Назад»\n• Плавная анимация проверки версии\n• Диалог паузы обновлений переделан",
-                                           "en":  "• All green colors replaced with pink (accent)\n• Ping history: pink gradient\n• Version check step: removed Back button\n• Smooth version check animation\n• Update pause dialog redesigned",
-                                           "es":  "• Todos los colores verdes reemplazados por rosa (accent)\n• Historial de ping: degradado rosa\n• Paso de verificación de versión: botón Atrás eliminado\n• Animación suave de verificación de versión\n• Diálogo de pausa de actualización rediseñado",
-                                           "zh":  "• 所有绿色替换为粉色（accent）\n• Ping历史：粉色渐变\n• 版本检查步骤：删除返回按钮\n• 流畅的版本检查动画\n• 更新暂停对话框重新设计",
-                                           "ja":  "• すべての緑色をピンク（accent）に置き換え\n• Ping履歴：ピンクのグラデーション\n• バージョン確認ステップ：戻るボタンを削除\n• スムーズなバージョン確認アニメーション\n• 更新一時停止ダイアログの再設計",
-                                           "ko":  "• 모든 녹색을 분홍색(accent)으로 교체\n• Ping 기록: 분홍색 그라데이션\n• 버전 확인 단계: 뒤로 버튼 제거\n• 부드러운 버전 확인 애니메이션\n• 업데이트 일시 중지 대화상자 재설계",
-                                           "pt":  "• Todas as cores verdes substituídas por rosa (accent)\n• Histórico de ping: gradiente rosa\n• Etapa de verificação de versão: botão Voltar removido\n• Animação suave de verificação de versão\n• Diálogo de pausa de atualização redesenhado",
-                                           "uk":  "• Всі зелені кольори замінено на рожеві (accent)\n• Історія ping: рожевий градієнт\n• Етап перевірки версії: видалено кнопку «Назад»\n• Плавна анімація перевірки версії\n• Діалог паузи оновлень перероблено"
-                                       }
-                     },
-                     {
-                         "versionCode":  40,
-                         "versionName":  "1.9.5",
-                         "releaseDate":  "2026-11-04",
-                         "changelog":  {
-                                           "ru":  "• Кнопка «Приостановить обновления» перенесена в «О приложении»\n• Кнопка «Проверить обновление» переделана: компактная, не обрезается\n• Кнопка ℹ️ «Что нового» работает\n• Исправлен жест назад в истории сессий\n• Исправлена анимация «Что нового»",
-                                           "en":  "• Pause updates button moved to About\n• Check update button redesigned: compact, no clipping\n• ℹ️ What\u0027s new button works\n• Fixed back gesture in session history\n• Fixed What\u0027s new animation",
-                                           "es":  "• Botón Pausar actualizaciones movido a Acerca de\n• Botón Verificar actualización rediseñado: compacto, sin recortes\n• Botón ℹ️ Novedades funciona\n• Gesto de retroceso corregido en historial de sesiones\n• Animación de Novedades corregida",
-                                           "zh":  "• 暂停更新按钮移至关于\n• 检查更新按钮重新设计：紧凑，无裁剪\n• ℹ️ 新功能按钮有效\n• 修复会话历史中的返回手势\n• 修复新功能动画",
-                                           "ja":  "• 更新一時停止ボタンをアバウトに移動\n• 更新確認ボタンの再設計：コンパクト、クリッピングなし\n• ℹ️ 新機能ボタンが機能\n• セッション履歴の戻るジェスチャーを修正\n• 新機能アニメーションを修正",
-                                           "ko":  "• 업데이트 일시 중지 버튼이 정보로 이동\n• 업데이트 확인 버튼 재설계: 컴팩트, 클리핑 없음\n• ℹ️ 새 기능 버튼 작동\n• 세션 기록의 뒤로 제스처 수정\n• 새 기능 애니메이션 수정",
-                                           "pt":  "• Botão Pausar atualizações movido para Sobre\n• Botão Verificar atualização redesenhado: compacto, sem recorte\n• Botão ℹ️ Novidades funciona\n• Gesto de voltar corrigido no histórico de sessões\n• Animação de Novidades corrigida",
-                                           "uk":  "• Кнопку «Призупинити оновлення» перенесено до «Про додаток»\n• Кнопку «Перевірити оновлення» перероблено: компактна, не обрізається\n• Кнопка ℹ️ «Що нового» працює\n• Виправлено жест назад в історії сесій\n• Виправлено анімацію «Що нового»"
-                                       }
-                     },
-                     {
-                         "versionCode":  39,
-                         "versionName":  "1.9.4",
-                         "releaseDate":  "2026-11-04",
-                         "changelog":  {
-                                           "ru":  "• Стрелочка-индикатор в «Что нового»\n• Диалог приостановки обновлений\n• Тихое уведомление о новой версии\n• История: не сохраняются сессии \u003c 2 сек\n• Анимация заставки замедлена в 2 раза\n• Постоянный UID на основе ANDROID_ID",
-                                           "en":  "• Scroll indicator in What\u0027s new\n• Update pause dialog\n• Silent notification about new version\n• History: sessions \u003c 2 sec not saved\n• Splash animation slowed 2x\n• Permanent UID based on ANDROID_ID",
-                                           "es":  "• Indicador de desplazamiento en Novedades\n• Diálogo de pausa de actualización\n• Notificación silenciosa sobre nueva versión\n• Historial: sesiones \u003c 2 seg no guardadas\n• Animación de inicio ralentizada 2x\n• UID permanente basado en ANDROID_ID",
-                                           "zh":  "• 新功能中的滚动指示器\n• 更新暂停对话框\n• 关于新版本的静默通知\n• 历史：\u003c 2秒的会话不保存\n• 启动动画减慢2倍\n• 基于ANDROID_ID的永久UID",
-                                           "ja":  "• 新機能のスクロールインジケーター\n• 更新一時停止ダイアログ\n• 新しいバージョンについてのサイレント通知\n• 履歴：2秒未満のセッションは保存されません\n• スプラッシュアニメーションを2倍遅く\n• ANDROID_IDに基づく永続UID",
-                                           "ko":  "• 새 기능의 스크롤 표시기\n• 업데이트 일시 중지 대화상자\n• 새 버전에 대한 조용한 알림\n• 기록: 2초 미만 세션 저장 안 됨\n• 스플래시 애니메이션 2배 느려짐\n• ANDROID_ID 기반 영구 UID",
-                                           "pt":  "• Indicador de rolagem em Novidades\n• Diálogo de pausa de atualização\n• Notificação silenciosa sobre nova versão\n• Histórico: sessões \u003c 2 seg não salvas\n• Animação de inicialização desacelerada 2x\n• UID permanente baseado em ANDROID_ID",
-                                           "uk":  "• Стрілочка-індикатор у «Що нового»\n• Діалог призупинення оновлень\n• Тихе сповіщення про нову версію\n• Історія: не зберігаються сесії \u003c 2 сек\n• Анімацію заставки уповільнено у 2 рази\n• Постійний UID на основі ANDROID_ID"
-                                       }
-                     },
-                     {
-                         "releaseDate":  "2026-11-10",
-                         "changelog":  {
-                                           "ru":  "Исправление багов и визуальных элементов: очистка истории, сроки приостановки обновлений, положение интерфейса при фразах, анимация полосы соединения, цвет кнопки Послушать.",
-                                           "en":  "Bug fixes and visual elements: history clearing, pause updates deadlines, UI position with start phrases, connection bar animation, Listen button color."
-                                       },
-                         "versionCode":  83,
-                         "versionName":  "1.9.48 release",
-                         "stable":  true
-                     }
-                 ]
+{
+  "versions": [
+    {
+      "versionCode": 80,
+      "versionName": "1.9.45",
+      "releaseDate": "2026-11-08",
+      "changelog": {
+        "ru": "• Анимации окон/свайпов теперь мгновенно выключаются при отключении «Визуальные эффекты»\n• Блюр при открытых окнах (история/About) теперь работает всегда, независимо от настройки визуальных эффектов\n• Смена темы стала живей: 650 мс с FastOutSlowInEasing и overshoot-ощущением\n• Кнопка смены темы: press-анимация (scale down до 0.95× + сдвиг градиента) при нажатии",
+        "en": "• Window/swipe animations now instantly disable when \"Visual effects\" is turned off\n• Blur on open overlays (history/About) now works always, independent of visual effects setting\n• Theme switching is livelier: 650 ms with FastOutSlowInEasing and overshoot feel\n• Theme button: press animation (scale down to 0.95× + gradient shift) on tap",
+        "es": "• Las animaciones de ventanas/deslizamientos ahora se desactivan al instante al desactivar \"Efectos visuales\"\n• El desenfoque en ventanas abiertas (historial/About) ahora funciona siempre, independientemente de los efectos visuales\n• El cambio de tema es más fluido: 650 ms con FastOutSlowInEasing y sensación de overshoot\n• Botón de tema: animación al pulsar (escala a 0,95× + cambio de gradiente)",
+        "zh": "• 关闭\"视觉效果\"时，窗口/滑动动画现在会瞬间禁用\n• 打开覆盖层(历史记录/关于)时的模糊效果现在始终有效，与视觉效果设置无关\n• 主题切换更生动：650 ms 配合 FastOutSlowInEasing 和过冲感\n• 主题按钮：按下时有动画（缩放至 0.95× + 渐变位移）",
+        "ja": "• 「視覚効果」をオフにするとウィンドウ/スワイプアニメーションが即座に無効になります\n• 開いているオーバーレイ(履歴/About)のぼかしが常に有効になり、視覚効果設定に依存しません\n• テーマ切り替えがより生き生きと: 650 ms、FastOutSlowInEasing、オーバーシュート感あり\n• テーマボタン: タップ時にプレスアニメーション(0.95倍へのスケールダウン + グラデーションシフト)",
+        "ko": "• \"시각 효과\"를 끄면 창/스와이프 애니메이션이 즉시 비활성화됩니다\n• 열린 오버레이(기록/정보)의 블러가 항상 작동하며 시각 효과 설정과 무관합니다\n• 테마 전환이 더 생동감 있게: 650 ms, FastOutSlowInEasing, 오버슈트 느낌\n• 테마 버튼: 누를 때 프레스 애니메이션(0.95배로 축소 + 그라데이션 이동)",
+        "pt": "• Animações de janela/deslize agora desativam instantaneamente ao desligar \"Efeitos visuais\"\n• Desfoque em overlays abertos (histórico/Sobre) agora funciona sempre, independente dos efeitos visuais\n• Troca de tema mais viva: 650 ms com FastOutSlowInEasing e sensação de overshoot\n• Botão de tema: animação ao pressionar (escala para 0,95× + deslocamento de gradiente)",
+        "uk": "• Анімації вікон/свайпів тепер миттєво вимикаються при вимкненні \"Візуальні ефекти\"\n• Блур при відкритих вікнах (історія/About) тепер працює завжди, незалежно від налаштування візуальних ефектів\n• Зміна теми став живішою: 650 мс з FastOutSlowInEasing та відчуттям overshoot\n• Кнопка зміни теми: press-анімація (scale down до 0,95× + зміщення градієнта) при натисканні"
+      }
+    },
+    {
+      "versionCode": 79,
+      "versionName": "1.9.44",
+      "releaseDate": "2026-11-07",
+      "changelog": {
+        "ru": "• «Сбросить настройки» теперь полностью очищает приложение: язык, тема, все настройки, IP, параметры звука, история сессий, кэш обновлений\n• После сброса приложение сразу переходит на экран первоначальной настройки, как после установки\n• Сброс не сбрасывается фоновыми записями и не показывает окно «Что нового»",
+        "en": "• \"Reset settings\" now fully wipes the app: language, theme, all settings, IP, audio parameters, session history, update cache\n• After reset the app immediately returns to the initial setup screen, just like after installation\n• Reset is not overwritten by background writes and does not show the What's New dialog",
+        "es": "• \"Restablecer ajustes\" ahora borra completamente la app: idioma, tema, todos los ajustes, IP, parámetros de audio, historial de sesiones y caché de actualizaciones\n• Tras el restablecimiento la app vuelve inmediatamente a la pantalla de configuración inicial, como tras la instalación\n• El restablecimiento no se pierde por escrituras en segundo plano y no muestra el diálogo de novedades",
+        "zh": "• “重置设置”现在会彻底清空应用：语言、主题、所有设置、IP、音频参数、会话历史和更新缓存\n• 重置后应用会立即返回初始设置界面，就像刚安装一样\n• 重置不会被后台写入覆盖，也不会弹出“更新内容”对话框",
+        "ja": "• 「設定をリセット」で言語・テーマ・すべての設定・IP・音声パラメータ・セッション履歴・更新キャッシュを完全に消去します\n• リセット後はインストール直後と同様に初期設定画面へすぐ戻ります\n• リセットはバックグラウンドの書き込みで上書きされず、「新機能」ダイアログも表示されません",
+        "ko": "• “설정 초기화”가 이제 언어, 테마, 모든 설정, IP, 오디오 매개변수, 세션 기록, 업데이트 캐시를 완전히 지웁니다\n• 초기화 후에는 설치 직후처럼 초기 설정 화면으로 즉시 돌아갑니다\n• 초기화는 백그라운드 저장으로 덮어써지지 않으며 “새로운 기능” 대화상자가 표시되지 않습니다",
+        "pt": "• \"Redefinir configurações\" agora apaga completamente o app: idioma, tema, todas as configurações, IP, parâmetros de áudio, histórico de sessões e cache de atualizações\n• Após a redefinição o app volta imediatamente à tela de configuração inicial, como após a instalação\n• A redefinição não é sobrescrita por gravações em segundo plano e não mostra o diálogo de novidades",
+        "uk": "• «Скинути налаштування» тепер повністю очищає застосунок: мову, тему, усі налаштування, IP, параметри звуку, історію сесій, кеш оновлень\n• Після скидання застосунок одразу повертається на екран початкового налаштування, як після встановлення\n• Скидання не перезаписується фоновими записами і не показує вікно «Що нового»"
+      }
+    },
+    {
+      "versionCode": 78,
+      "versionName": "1.9.43",
+      "releaseDate": "2026-11-07",
+      "changelog": {
+        "ru": "• Уведомление сервиса теперь появляется только при запуске передачи и исчезает при остановке — при открытии приложения без стриминга его нет\n• Каждые 5 секунд проверяется наличие уведомления: если его скрыли, оно возвращается — то же самое, без дублей и спама",
+        "en": "• The service notification now appears only when streaming starts and disappears when stopped — no notification when opening the app without streaming\n• Every 5 seconds the notification is checked: if dismissed, it is restored — the same one, with no duplicates or spam",
+        "es": "• La notificación del servicio ahora aparece solo al iniciar la transmisión y desaparece al detenerla — no hay notificación al abrir la app sin streaming\n• Cada 5 segundos se comprueba la notificación: si se descarta, se restaura — la misma, sin duplicados ni spam",
+        "zh": "• 服务通知现在仅在开始传输时出现，停止时消失——未开启传输时打开应用不会显示通知\n• 每5秒检查一次通知：如果被关闭，会自动恢复——始终是同一条，无重复、无刷屏",
+        "ja": "• サービスの通知はストリーミング開始時のみ表示され、停止時に消えます — ストリーミングなしでアプリを開いても通知は出ません\n• 5秒ごとに通知の有無を確認し、閉じられていたら復元します — 同じ通知で、重複やスパムはありません",
+        "ko": "• 서비스 알림이 이제 스트리밍 시작 시에만 나타나고 중지 시 사라집니다 — 스트리밍 없이 앱을 열면 알림이 없습니다\n• 5초마다 알림 존재를 확인하고, 닫혀 있으면 복원합니다 — 동일한 알림 하나만, 중복이나 스팸 없음",
+        "pt": "• A notificação do serviço agora aparece apenas ao iniciar a transmissão e desaparece ao parar — sem notificação ao abrir o app sem streaming\n• A cada 5 segundos a notificação é verificada: se for dispensada, é restaurada — a mesma, sem duplicados nem spam",
+        "uk": "• Сповіщення сервісу тепер з'являється лише під час запуску передачі та зникає після зупинки — при відкритті застосунку без стрімінгу його немає\n• Кожні 5 секунд перевіряється наявність сповіщення: якщо його приховали, воно повертається — те саме, без дублів і спаму"
+      }
+    },
+    {
+      "versionCode": 77,
+      "versionName": "1.9.42",
+      "releaseDate": "2026-11-07",
+      "changelog": {
+        "ru": "• Диалог «Что нового» теперь сразу открывается финального размера — кнопка «Отлично» больше не прыгает и окно не сужается\n• Уведомление сервиса автоматически возвращается в шторку, если его скрыть",
+        "en": "• The What's New dialog now opens at its final size right away — the OK button no longer jumps and the window no longer shrinks\n• The service notification is automatically restored to the shade if dismissed",
+        "es": "• El diálogo Novedades ahora se abre directamente con su tamaño final — el botón Aceptar ya no salta y la ventana no se encoge\n• La notificación del servicio se restaura automáticamente en la cortina si se descarta",
+        "zh": "• “新功能”对话框现在直接以最终尺寸打开——确定按钮不再跳动，窗口不再收缩\n• 服务通知被关闭后会自动恢复到通知栏",
+        "ja": "• 「新機能」ダイアログが最初から最終サイズで開くようになりました — OKボタンが跳ねたり、ウィンドウが縮んだりしません\n• サービスの通知を閉じても通知シェードに自動的に復元されます",
+        "ko": "• \"새 기능\" 대화상자가 이제 처음부터 최종 크기로 열립니다 — 확인 버튼이 튀거나 창이 줄어들지 않습니다\n• 서비스 알림을 닫아도 알림 창에 자동으로 복원됩니다",
+        "pt": "• O diálogo Novidades agora abre direto no tamanho final — o botão OK não pula mais e a janela não encolhe\n• A notificação do serviço é restaurada automaticamente na gaveta se for dispensada",
+        "uk": "• Діалог «Що нового» тепер одразу відкривається фінального розміру — кнопка «Гаразд» більше не стрибає і вікно не звужується\n• Сповіщення сервісу автоматично повертається в шторку, якщо його приховати"
+      }
+    },
+    {
+      "versionCode": 76,
+      "versionName": "1.9.41",
+      "releaseDate": "2026-11-07",
+      "changelog": {
+        "ru": "• Исправлено отображение текста «Доступно обновление» на всех языках — раньше показывался технический ключ",
+        "en": "• Fixed \"Update available\" text display on all languages — previously showed the technical key",
+        "es": "• Corregida la visualización del texto \"Actualización disponible\" en todos los idiomas — antes mostraba la clave técnica",
+        "zh": "• 修复了所有语言下\"有可用更新\"文本的显示——之前显示技术键名",
+        "ja": "• 全言語で「アップデート利用可能」のテキスト表示を修正 — 以前は技術的なキーが表示されていました",
+        "ko": "• 모든 언어에서 \"업데이트 사용 가능\" 텍스트 표시 수정 — 이전에는 기술 키가 표시됨",
+        "pt": "• Corrigida a exibição do texto \"Atualização disponível\" em todos os idiomas — antes mostrava a chave técnica",
+        "uk": "• Виправлено відображення тексту «Доступне оновлення» на всіх мовах — раніше показувався технічний ключ"
+      }
+    },
+    {
+      "versionCode": 75,
+      "versionName": "1.9.40",
+      "releaseDate": "2026-11-07",
+      "changelog": {
+        "ru": "• Убрана версия из кнопки обновления\n• Исправлена анимация кнопки \"Отлично\" в диалоге \"Что нового\" — больше не дёргается и не сужается",
+        "en": "• Removed version from update button\n• Fixed \"OK\" button animation in What's New dialog — no longer jerky or shrinking",
+        "es": "• Eliminada la versión del botón de actualización\n• Corregida la animación del botón \"Aceptar\" en el diálogo Novedades — ya no se sacude ni se encoge",
+        "zh": "• 从更新按钮中删除了版本\n• 修复了新功能对话框中的\"确定\"按钮动画——不再抖动或收缩",
+        "ja": "• 更新ボタンからバージョンを削除\n• 新機能ダイアログの\"OK\"ボタンのアニメーションを修正 — 引っかかったり縮んだりしなくなりました",
+        "ko": "• 업데이트 버튼에서 버전 제거\n• 새 기능 대화상자의 \"확인\" 버튼 애니메이션 수정 — 더 이상 튀거나 줄어들지 않음",
+        "pt": "• Removida a versão do botão de atualização\n• Corrigida a animação do botão \"OK\" no diálogo Novidades — não treme ou encolhe mais",
+        "uk": "• Прибрано версію з кнопки оновлення\n• Виправлено анімацію кнопки \"Гаразд\" у діалозі \"Що нового\" — більше не смикається і не звужується"
+      }
+    },
+    {
+      "versionCode": 74,
+      "versionName": "1.9.39",
+      "releaseDate": "2026-11-07",
+      "changelog": {
+        "ru": "• Кнопка обновления теперь автоматически подстраивается под размер текста без анимации",
+        "en": "• Update button now automatically adjusts to text size without animation",
+        "es": "• El botón de actualización ahora se ajusta automáticamente al tamaño del texto sin animación",
+        "zh": "• 更新按钮现在自动调整到文本大小，无动画",
+        "ja": "• 更新ボタンがアニメーションなしでテキストサイズに自動調整されるようになりました",
+        "ko": "• 업데이트 버튼이 이제 애니메이션 없이 텍스트 크기에 자동으로 조정됩니다",
+        "pt": "• O botão de atualização agora se ajusta automaticamente ao tamanho do texto sem animação",
+        "uk": "• Кнопка оновлення тепер автоматично підлаштовується під розмір тексту без анімації"
+      }
+    },
+    {
+      "versionCode": 73,
+      "versionName": "1.9.38",
+      "releaseDate": "2026-11-07",
+      "changelog": {
+        "ru": "• Исправлена анимация кнопки «Что нового» — больше не дёргается\n• Добавлено мигающее сердечко рядом с «Доступно обновление»",
+        "en": "• Fixed What's New button animation — no longer jerky\n• Added pulsing heart icon next to Update available",
+        "es": "• Corregida la animación del botón Novedades — ya no se sacude\n• Añadido icono de corazón pulsante junto a Actualización disponible",
+        "zh": "• 修复了新功能按钮动画——不再抖动\n• 在有可用更新旁边添加了跳动的心形图标",
+        "ja": "• 新機能ボタンのアニメーションを修正 — 引っかからなくなりました\n• アップデート利用可能の横に脈打つハートアイコンを追加",
+        "ko": "• 새 기능 버튼 애니메이션 수정 — 더 이상 튀지 않음\n• 업데이트 사용 가능 옆에 맥동하는 하트 아이콘 추가",
+        "pt": "• Corrigida a animação do botão Novidades — não treme mais\n• Adicionado ícone de coração pulsante ao lado de Atualização disponível",
+        "uk": "• Виправлено анімацію кнопки «Що нового» — більше не смикається\n• Додано пульсуюче серце поруч з «Доступне оновлення»"
+      }
+    },
+    {
+      "versionCode": 72,
+      "versionName": "1.9.37",
+      "releaseDate": "2026-11-07",
+      "changelog": {
+        "ru": "• Уведомление сервиса теперь действительно нельзя скрыть — повышен приоритет канала и уведомления",
+        "en": "• Service notification now truly cannot be hidden — channel and notification priority increased",
+        "es": "• La notificación del servicio ahora realmente no se puede ocultar — prioridad de canal y notificación aumentada",
+        "zh": "• 服务通知现在真的无法隐藏——提高了频道和通知优先级",
+        "ja": "• サービス通知が本当に非表示にできなくなりました — チャンネルと通知の優先度を上げました",
+        "ko": "• 서비스 알림을 이제 정말로 숨길 수 없음 — 채널 및 알림 우선순위 증가",
+        "pt": "• A notificação do serviço agora realmente não pode ser ocultada — prioridade do canal e notificação aumentada",
+        "uk": "• Сповіщення сервісу тепер дійсно не можна приховати — підвищено пріоритет каналу та сповіщення"
+      }
+    },
+    {
+      "versionCode": 71,
+      "versionName": "1.9.36",
+      "releaseDate": "2026-11-07",
+      "changelog": {
+        "ru": "• Умная логика обновлений: кнопка \"Позже\" откладывает проверку до перезапуска\n• Кнопка меняется на \"Доступно обновление\" когда обновление найдено\n• Фоновая проверка каждые 5 секунд только для обновления статуса кнопки\n• Уведомление сервиса теперь нельзя скрыть из панели уведомлений",
+        "en": "• Smart update logic: \"Later\" button postpones checking until restart\n• Button changes to \"Update available\" when update is found\n• Background check every 5 seconds only updates button status\n• Service notification can no longer be hidden from notification panel",
+        "es": "• Lógica de actualización inteligente: el botón \"Más tarde\" pospone la verificación hasta el reinicio\n• El botón cambia a \"Actualización disponible\" cuando se encuentra una actualización\n• La verificación en segundo plano cada 5 segundos solo actualiza el estado del botón\n• La notificación del servicio ya no se puede ocultar del panel de notificaciones",
+        "zh": "• 智能更新逻辑：\"稍后\" 按钮将检查推迟到重启\n• 找到更新时按钮变为 \"有可用更新\"\n• 每5秒后台检查仅更新按钮状态\n• 服务通知现在无法从通知面板隐藏",
+        "ja": "• スマート更新ロジック：\"後で\" ボタンで再起動までチェックを延期\n• 更新が見つかるとボタンが \"アップデート利用可能\" に変更\n• 5秒ごとのバックグラウンドチェックはボタンの状態のみを更新\n• サービス通知は通知パネルから非表示にできなくなりました",
+        "ko": "• 스마트 업데이트 로직: \"나중에\" 버튼으로 재시작까지 확인 연기\n• 업데이트를 찾으면 버튼이 \"업데이트 사용 가능\"으로 변경\n• 5초마다 백그라운드 확인은 버튼 상태만 업데이트\n• 서비스 알림을 알림 패널에서 숨길 수 없게 됨",
+        "pt": "• Lógica de atualização inteligente: o botão \"Mais tarde\" adia a verificação até a reinicialização\n• O botão muda para \"Atualização disponível\" quando a atualização é encontrada\n• A verificação em segundo plano a cada 5 segundos apenas atualiza o status do botão\n• A notificação do serviço não pode mais ser ocultada do painel de notificações",
+        "uk": "• Розумна логіка оновлень: кнопка \"Пізніше\" відкладає перевірку до перезапуску\n• Кнопка змінюється на \"Доступне оновлення\" коли оновлення знайдено\n• Фонова перевірка кожні 5 секунд тільки оновлює статус кнопки\n• Сповіщення сервісу тепер не можна приховати з панелі сповіщень"
+      }
+    },
+    {
+      "versionCode": 70,
+      "versionName": "1.9.35",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Полностью исправлена двойная анимация свайпа — теперь используется отдельная логика для drag и click",
+        "en": "• Completely fixed double swipe animation — now uses separate logic for drag and click",
+        "es": "• Corregida completamente la animación de doble deslizamiento — ahora usa lógica separada para arrastrar y hacer clic",
+        "zh": "• 完全修复了双重滑动动画——现在对拖动和点击使用单独的逻辑",
+        "ja": "• ダブルスワイプアニメーションを完全に修正 — ドラッグとクリックに別々のロジックを使用するようになりました",
+        "ko": "• 이중 스와이프 애니메이션 완전히 수정 — 이제 드래그 및 클릭에 대해 별도의 논리 사용",
+        "pt": "• Corrigida completamente a animação de deslizar duplo — agora usa lógica separada para arrastar e clicar",
+        "uk": "• Повністю виправлено подвійну анімацію свайпу — тепер використовується окрема логіка для drag і click"
+      }
+    },
+    {
+      "versionCode": 69,
+      "versionName": "1.9.34",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Исправлена автопроверка обновлений при запуске\n• Добавлена фоновая проверка обновлений каждые 5 секунд\n• Проверка не работает если обновления приостановлены",
+        "en": "• Fixed automatic update check on launch\n• Added background update check every 5 seconds\n• Check doesn't run if updates are paused",
+        "es": "• Corregida la verificación automática de actualizaciones al iniciar\n• Agregada verificación de actualizaciones en segundo plano cada 5 segundos\n• La verificación no se ejecuta si las actualizaciones están pausadas",
+        "zh": "• 修复了启动时的自动更新检查\n• 添加了每5秒后台更新检查\n• 如果更新暂停，则不运行检查",
+        "ja": "• 起動時の自動更新チェックを修正\n• 5秒ごとのバックグラウンド更新チェックを追加\n• 更新が一時停止されている場合、チェックは実行されません",
+        "ko": "• 시작 시 자동 업데이트 확인 수정\n• 5초마다 백그라운드 업데이트 확인 추가\n• 업데이트가 일시 중지되면 확인이 실행되지 않음",
+        "pt": "• Corrigida a verificação automática de atualizações na inicialização\n• Adicionada verificação de atualizações em segundo plano a cada 5 segundos\n• A verificação não é executada se as atualizações estiverem pausadas",
+        "uk": "• Виправлено автоперевірку оновлень при запуску\n• Додано фонову перевірку оновлень кожні 5 секунд\n• Перевірка не працює якщо оновлення призупинені"
+      }
+    },
+    {
+      "versionCode": 68,
+      "versionName": "1.9.33",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Исправлена анимация свайпа — больше не дёргается назад во время перехода",
+        "en": "• Fixed swipe animation — no longer jerks back during transition",
+        "es": "• Corregida la animación de deslizamiento — ya no se sacude hacia atrás durante la transición",
+        "zh": "• 修复了滑动动画——过渡期间不再向后抖动",
+        "ja": "• スワイプアニメーションを修正 — 遷移中に後ろに引っかからなくなりました",
+        "ko": "• 스와이프 애니메이션 수정 — 전환 중 더 이상 뒤로 튀지 않음",
+        "pt": "• Corrigida a animação de deslizar — não treme mais para trás durante a transição",
+        "uk": "• Виправлено анімацію свайпу — більше не смикається назад під час переходу"
+      }
+    },
+    {
+      "versionCode": 67,
+      "versionName": "1.9.32",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Полностью исправлен двойной свайп при переходе между вкладками\n• Автоматическое окно обновления теперь показывается даже если обновление было пропущено ранее",
+        "en": "• Completely fixed double swipe when transitioning between tabs\n• Automatic update dialog now shows even if update was previously skipped",
+        "es": "• Corregido completamente el doble deslizamiento al cambiar entre pestañas\n• El diálogo de actualización automático ahora se muestra incluso si la actualización fue omitida anteriormente",
+        "zh": "• 完全修复了标签页切换时的双重滑动\n• 即使之前跳过更新，自动更新对话框现在也会显示",
+        "ja": "• タブ切り替え時のダブルスワイプを完全に修正\n• 以前に更新をスキップした場合でも、自動更新ダイアログが表示されるようになりました",
+        "ko": "• 탭 전환 시 이중 스와이프 완전히 수정\n• 이전에 업데이트를 건너뛴 경우에도 자동 업데이트 대화상자가 표시됩니다",
+        "pt": "• Corrigido completamente o duplo deslizar ao alternar entre abas\n• O diálogo de atualização automático agora é exibido mesmo se a atualização foi ignorada anteriormente",
+        "uk": "• Повністю виправлено подвійний свайп при переході між вкладками\n• Автоматичне вікно оновлення тепер показується навіть якщо оновлення було пропущено раніше"
+      }
+    },
+    {
+      "versionCode": 66,
+      "versionName": "1.9.31",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Исправлен двойной свайп при переходе между вкладками\n• Убрано ускорение анимации при быстром переключении вкладок\n• Окно «Что нового» больше не телепается при повторном открытии",
+        "en": "• Fixed double swipe when transitioning between tabs\n• Removed animation acceleration when rapidly switching tabs\n• What's New dialog no longer glitches when reopened",
+        "es": "• Corregido el doble deslizamiento al cambiar entre pestañas\n• Eliminada la aceleración de animación al cambiar rápidamente de pestaña\n• El diálogo Novedades ya no parpadea al reabrirse",
+        "zh": "• 修复了标签页切换时的双重滑动\n• 移除了快速切换标签页时的动画加速\n• 新功能对话框重新打开时不再闪烁",
+        "ja": "• タブ切り替え時のダブルスワイプを修正\n• タブの高速切り替え時のアニメーション加速を削除\n• 新機能ダイアログが再度開いたときに点滅しなくなりました",
+        "ko": "• 탭 전환 시 이중 스와이프 수정\n• 탭 빠른 전환 시 애니메이션 가속 제거\n• 새 기능 대화상자를 다시 열 때 깜박임 없음",
+        "pt": "• Corrigido o duplo deslizar ao alternar entre abas\n• Removida a aceleração da animação ao alternar rapidamente entre abas\n• O diálogo Novidades não pisca mais ao reabrir",
+        "uk": "• Виправлено подвійний свайп при переході між вкладками\n• Прибрано прискорення анімації при швидкому перемиканні вкладок\n• Вікно «Що нового» більше не телепортується при повторному відкритті"
+      }
+    },
+    {
+      "versionCode": 65,
+      "versionName": "1.9.30",
+      "releaseDate": "2026-11-07",
+      "changelog": {
+        "ru": "• Исправлен UID — теперь генерируется новый при сбросе настроек\n• Убран фон в поле «Свой срок» при приостановке обновлений\n• Слово «дней» теперь цветом как текст уведомления\n• Окно «Что нового» больше не телепается при повторном открытии\n• Анимация перехода между вкладками при клике\n• Плавное исчезновение текста «прокрутите...»\n• Автоматическое окно обновления при запуске с блокировкой на 3 секунды",
+        "en": "• Fixed UID — now generates a new one when resetting settings\n• Removed background in custom duration field when pausing updates\n• The word “days” now matches notification text color\n• What’s New dialog no longer glitches when reopened\n• Tab transition animation when clicking\n• Smooth fade-out of “scroll...” text\n• Automatic update dialog on launch with 3-second dismiss lock",
+        "es": "• UID corregido — ahora genera uno nuevo al restablecer configuración\n• Eliminado el fondo en el campo de duración personalizada al pausar actualizaciones\n• La palabra «días» ahora coincide con el color del texto de notificación\n• El diálogo Novedades ya no parpadea al reabrirse\n• Animación de transición entre pestañas al hacer clic\n• Desvanecimiento suave del texto «desplazar...»\n• Diálogo de actualización automático al iniciar con bloqueo de 3 segundos",
+        "zh": "• 修复UID——重置设置时现在会生成新的\n• 移除了暂停更新时自定义时长字段的背景\n• 「天」字现在与通知文本颜色匹配\n• 新功能对话框重新打开时不再闪烁\n• 点击时的标签页过渡动画\n• 「滚动...」文本的平滑淡出\n• 启动时自动显示更新对话框，带6秒锁定关闭",
+        "ja": "• UIDを修正——設定リセット時に新しいものを生成\n• 更新一時停止時のカスタム期間フィールドの背景を削除\n• 「日」の文字が通知テキストの色と一致\n• 新機能ダイアログが再度開いたときに点滅しなくなりました\n• クリック時のタブ遷移アニメーション\n• 「スクロール...」テキストのスムーズなフェードアウト\n• 起動時に自動更新ダイアログ、3秒間の閉じるロック付き",
+        "ko": "• UID 수정——설정 초기화 시 새로 생성\n• 업데이트 일시 중지 시 사용자 지정 기간 필드의 배경 제거\n• “일” 단어가 이제 알림 텍스트 색상과 일치\n• 새 기능 대화상자를 다시 열 때 깜박임 없음\n• 클릭 시 탭 전환 애니메이션\n• “스크롬...” 텍스트의 부드러운 페이드아웃\n• 실행 시 자동 업데이트 대화상자, 3초 닫기 잠금 포함",
+        "pt": "• UID corrigido — agora gera um novo ao redefinir configurações\n• Removido o fundo no campo de duração personalizada ao pausar atualizações\n• A palavra «dias» agora corresponde à cor do texto de notificação\n• O diálogo Novidades não pisca mais ao reabrir\n• Animação de transição entre abas ao clicar\n• Desvanecimento suave do texto «rolar...»\n• Diálogo de atualização automático na inicialização com bloqueio de 3 segundos",
+        "uk": "• Виправлено UID — тепер генерується новий при скиданні налаштувань\n• Прибрано фон у полі «Свій строк» при призупиненні оновлень\n• Слово «днів» тепер кольором як текст сповіщення\n• Вікно «Що нового» більше не телепортується при повторному відкритті\n• Анімація переходу між вкладками при кліку\n• Плавне зникнення тексту «прокрутіть...»\n• Автоматичне вікно оновлення при запуску з блокуванням на 3 секунди"
+      }
+    },
+    {
+      "versionCode": 64,
+      "versionName": "1.9.29",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Убрана внутренняя рамка в поле «Свой срок» при приостановке обновлений\n• Плавная анимация возврата при нажатии «Возобновить»\n• Плавное расширение окна обновления при появлении прогресс-бара\n• Улучшены анимации открытия/закрытия всех диалогов\n• Скачанный APK удаляется автоматически после установки\n• Кнопка «Сбросить настройки» в скрытом меню (нажмите 3 раза на версию)",
+        "en": "• Removed inner border in the custom duration field when pausing updates\n• Smooth animation when pressing Resume\n• Smooth expansion of update window when progress bar appears\n• Improved open/close animations for all dialogs\n• Downloaded APK is automatically deleted after installation\n• Reset settings button in hidden menu (tap version 3 times)",
+        "es": "• Eliminado el borde interior en el campo de duración personalizada al pausar actualizaciones\n• Animación suave al presionar Reanudar\n• Expansión suave de la ventana de actualización cuando aparece la barra de progreso\n• Mejores animaciones de abrir/cerrar para todos los diálogos\n• El APK descargado se elimina automáticamente después de la instalación\n• Botón para restablecer configuración en menú oculto (toca versión 3 veces)",
+        "zh": "• 移除了暂停更新时自定义时长字段的内边框\n• 按下恢复时的平滑动画\n• 进度条出现时更新窗口的平滑扩展\n• 改进了所有对话框的打开/关闭动画\n• 下载的APK在安装后自动删除\n• 隐藏菜单中的重置设置按钮（点击版本3次）",
+        "ja": "• 更新一時停止時のカスタム期間フィールドの内側枠線を削除\n• 再開を押したときのスムーズなアニメーション\n• 進捗バーが表示されるときの更新ウィンドウのスムーズな拡大\n• すべてのダイアログの開閉アニメーションを改善\n• ダウンロードしたAPKはインストール後に自動削除\n• 非表示メニューに設定リセットボタン（バージョンを3回タップ）",
+        "ko": "• 업데이트 일시 중지 시 사용자 지정 기간 필드의 내부 테두리 제거\n• 재개를 누를 때 부드러운 애니메이션\n• 진행률 표시줄이 나타날 때 업데이트 창의 부드러운 확장\n• 모든 대화상자의 열기/닫기 애니메이션 개선\n• 다운로드한 APK는 설치 후 자동으로 삭제\n• 숨겨진 메뉴의 설정 초기화 버튼(버전을 3번 탭)",
+        "pt": "• Removida a borda interna no campo de duração personalizada ao pausar atualizações\n• Animação suave ao pressionar Retomar\n• Expansão suave da janela de atualização quando a barra de progresso aparece\n• Melhores animações de abrir/fechar para todos os diálogos\n• O APK baixado é automaticamente excluído após a instalação\n• Botão para redefinir configurações no menu oculto (toque na versão 3 vezes)",
+        "uk": "• Прибрано внутрішню рамку в полі «Свій строк» при призупиненні оновлень\n• Плавна анімація при натисканні «Відновити»\n• Плавне розширення вікна оновлення при появі прогрес-бару\n• Поліпшено анімації відкриття/закриття всіх діалогів\n• Завантажений APK видаляється автоматично після встановлення\n• Кнопка «Скинути налаштування» у прихованому меню (натисніть на версію 3 рази)"
+      }
+    },
+    {
+      "versionCode": 63,
+      "versionName": "1.9.28",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Новый звук нажатия — приятный поп-эффект\n• Убрана задержка озвучки приветствия на первом экране — мгновенный старт",
+        "en": "• New click sound — pleasant pop effect\n• Removed greeting voice delay on the first screen — instant start",
+        "es": "• Nuevo sonido de clic — efecto pop agradable\n• Eliminado el retraso de la voz de bienvenida en la primera pantalla — inicio instantáneo",
+        "zh": "• 新的点击声音——愉快的泡泡效果\n• 移除了首个屏幕上问候语音的延迟——立即开始",
+        "ja": "• 新しいクリック音——心地よいポップ効果\n• 最初の画面の挨拶音声の遅延を削除——即座に開始",
+        "ko": "• 새로운 클릭 소리——기분 좋은 팝 효과\n• 첫 화면의 인사말 음성 지연 제거——즉시 시작",
+        "pt": "• Novo som de clique — efeito pop agradável\n• Removido o atraso da voz de saudação na primeira tela — início instantâneo",
+        "uk": "• Новий звук натискання — приємний поп-ефект\n• Прибрано затримку озвучення вітання на першому екрані — миттєвий старт"
+      }
+    },
+    {
+      "versionCode": 62,
+      "versionName": "1.9.27",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Убрано дублирование прогресса в окне загрузки обновления — теперь только «Загрузка… 100%», без лишних чисел справа\n• Кнопка «Проверить обновление» теперь с текстом слева и стрелкой справа\n• Новый звук нажатия — более чёткий и приятный\n• Ускорена озвучка приветствия на первом экране настройки",
+        "en": "• Removed progress duplication in the update download window — now only “Downloading… 100%”, without extra numbers on the right\n• The “Check for updates” button now has text on the left and an arrow on the right\n• New click sound — crisper and more pleasant\n• Sped up the greeting voice on the first setup screen",
+        "es": "• Eliminada la duplicación del progreso en la ventana de descarga de actualizaciones — ahora solo «Descargando… 100%», sin números extra a la derecha\n• El botón «Buscar actualizaciones» ahora tiene texto a la izquierda y una flecha a la derecha\n• Nuevo sonido de clic — más nítido y agradable\n• Acelerada la voz de bienvenida en la primera pantalla de configuración",
+        "zh": "• 移除了更新下载窗口中的进度重复——现在只有「下载中… 100%」，右侧没有额外数字\n• 「检查更新」按钮现在左侧有文字，右侧有箭头\n• 新的点击声音——更清脆更愉快\n• 加快了首个设置屏幕上的问候语音",
+        "ja": "• 更新ダウンロードウィンドウの進捗重複を削除——现在は「ダウンロード中… 100%」のみ、右側に余分な数値なし\n• 「更新確認」ボタンは左にテキスト、右に矢印が表示されるように\n• 新しいクリック音——よりクリアで快適\n• 最初の設定画面の挨拶音声を高速化",
+        "ko": "• 업데이트 다운로드 창에서 진행률 중복 제거——이제 “다운로드 중… 100%”만, 오른쪽에 추가 숫자 없음\n• “업데이트 확인” 버튼이 이제 왼쪽에 텍스트, 오른쪽에 화살표 표시\n• 새로운 클릭 소리——더 명확하고 기분 좋음\n• 첫 설정 화면의 인사말 음성을 가속화",
+        "pt": "• Removida a duplicação do progresso na janela de download de atualização — agora apenas «Baixando… 100%», sem números extras à direita\n• O botão «Verificar atualizações» agora tem texto à esquerda e uma seta à direita\n• Novo som de clique — mais nítido e agradável\n• Acelerada a voz de saudação na primeira tela de configuração",
+        "uk": "• Прибрано дублювання прогресу в вікні завантаження оновлення — тепер тільки «Завантаження… 100%», без зайвих чисел справа\n• Кнопка «Перевірити оновлення» тепер з текстом зліва і стрілкою справа\n• Новий звук натискання — більш чіткий і приємний\n• Прискорено озвучення вітання на першому екрані налаштування"
+      }
+    },
+    {
+      "versionCode": 61,
+      "versionName": "1.9.26",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Убрано дублирование прогресса в окне загрузки обновления (справа теперь только число, без «%»)\n• Кнопка «Проверить обновление» теперь с текстом слева и стрелкой справа, как «Приостановить»\n• Новый звук нажатия — более чёткий и приятный\n• Ускорена озвучка приветствия на первом экране настройки — без задержек",
+        "en": "• Removed progress duplication in the update download window (the right side now shows only the number, without «%»)\n• The “Check for updates” button now has text on the left and an arrow on the right, like “Pause updates”\n• New click sound — crisper and more pleasant\n• Sped up the greeting voice on the first setup screen — no more delays",
+        "es": "• Eliminada la duplicación del progreso en la ventana de descarga de actualizaciones (el lado derecho ahora muestra solo el número, sin «%»)\n• El botón «Buscar actualizaciones» ahora tiene texto a la izquierda y una flecha a la derecha, como «Pausar actualizaciones»\n• Nuevo sonido de clic — más nítido y agradable\n• Acelerada la voz de bienvenida en la primera pantalla de configuración — sin retrasos",
+        "zh": "• 移除了更新下载窗口中的进度重复（右侧现在只显示数字，没有「%」）\n• 「检查更新」按钮现在左侧有文字，右侧有箭头，像「暂停更新」\n• 新的点击声音——更清脆更愉快\n• 加快了首个设置屏幕上的问候语音——没有延迟",
+        "ja": "• 更新ダウンロードウィンドウの進捗重複を削除（右側には数値のみ表示、「%」なし）\n• 「更新確認」ボタンは左にテキスト、右に矢印が表示されるように、「更新を一時停止」と同じデザイン\n• 新しいクリック音——よりクリアで快適\n• 最初の設定画面の挨拶音声を高速化——遅延なし",
+        "ko": "• 업데이트 다운로드 창에서 진행률 중복 제거 (오른쪽에는 이제 숫자만 표시, «%» 없음)\n• “업데이트 확인” 버튼이 이제 왼쪽에 텍스트, 오른쪽에 화살표가 표시되며 “업데이트 일시 중지”와 같은 디자인\n• 새로운 클릭 소리——더 명확하고 기분 좋음\n• 첫 설정 화면의 인사말 음성을 가속화——지연 없음",
+        "pt": "• Removida a duplicação do progresso na janela de download de atualização (o lado direito agora mostra apenas o número, sem «%»)\n• O botão «Verificar atualizações» agora tem texto à esquerda e uma seta à direita, como «Pausar atualizações»\n• Novo som de clique — mais nítido e agradável\n• Acelerada a voz de saudação na primeira tela de configuração — sem atrasos",
+        "uk": "• Прибрано дублювання прогресу в вікні завантаження оновлення (справа тепер тільки число, без «%»)\n• Кнопка «Перевірити оновлення» тепер з текстом зліва і стрілкою справа, як «Призупинити»\n• Новий звук натискання — більш чіткий і приємний\n• Прискорено озвучення вітання на першому екрані налаштування — без затримок"
+      }
+    },
+    {
+      "versionCode": 60,
+      "versionName": "1.9.25",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Исправлены звуки нажатий на вкладки — теперь звук не воспроизводится при нажатии на уже активную вкладку, и настройка применяется мгновенно\n• Кнопка «Проверить обновление» стала чище и современнее — убрана иконка Refresh, текст по центру",
+        "en": "• Fixed tab click sounds — sound no longer plays when tapping the already active tab, and the setting applies instantly\n• The “Check for updates” button is now cleaner and more modern — removed the Refresh icon, centered text",
+        "es": "• Corregidos los sonidos de clics en las pestañas — el sonido ya no se reproduce al tocar la pestaña ya activa, y la configuración se aplica al instante\n• El botón «Buscar actualizaciones» ahora es más limpio y moderno — se eliminó el icono de actualizar, texto centrado",
+        "zh": "• 修复了标签页点击声音——点击已激活的标签页时不再播放声音，设置立即生效\n• “检查更新”按钮现在更简洁现代——移除了刷新图标，文字居中",
+        "ja": "• タブクリック音を修正——すでにアクティブなタブをタップしても音が鳴らず、設定が即座に反映されるように\n• 「更新確認」ボタンがよりシンプルでモダンに——更新アイコンを削除、テキストを中央揃え",
+        "ko": "• 탭 클릭 사운드 수정——이미 활성화된 탭을 탭할 때 소리가 재생되지 않으며 설정이 즉시 적용됩니다\n• “업데이트 확인” 버튼이 더 깨끗하고 현대적으로——새로고침 아이콘 제거, 텍스트 가운데 정렬",
+        "pt": "• Corrigidos os sons de clique nas abas — o som não toca mais ao tocar na aba já ativa, e a configuração se aplica instantaneamente\n• O botão «Verificar atualizações» agora é mais limpo e moderno — removido o ícone de atualizar, texto centralizado",
+        "uk": "• Виправлено звуки натискань на вкладки — тепер звук не відтворюється при натисканні на вже активну вкладку, і налаштування застосовується миттєво\n• Кнопка «Перевірити оновлення» стала чистішою і сучаснішою — прибрано іконку оновлення, текст по центру"
+      }
+    },
+    {
+      "versionCode": 59,
+      "versionName": "1.9.24",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Исправлено отображение прогресса скачивания обновления — лишний знак процента убран\n• Исправлены звуки нажатий на вкладки — теперь настройка применяется мгновенно, без переключения вкладок",
+        "en": "• Fixed the update download progress display — the extra percent sign is gone\n• Fixed tab click sounds — the setting now applies immediately, without switching tabs",
+        "es": "• Corregida la visualización del progreso de descarga — el signo de porcentaje duplicado ha sido eliminado\n• Corregidos los sonidos de clics en las pestañas — ahora la configuración se aplica al instante, sin cambiar de pestaña",
+        "zh": "• 修复了更新下载进度的显示——多余的百分号已移除\n• 修夏了标签页点击声音——设置现在立即生效，无需切换标签页",
+        "ja": "• 更新のダウンロード進捗表示を修正 — 余分なパーセント記号を削除\n• タブクリック音を修正 — 設定がタブ切り替えなしで即座に反映されるように",
+        "ko": "• 업데이트 다운로드 진행률 표시 수정 — 중복된 퍼센트 기호 제거\n• 탭 클릭 사운드 수정 — 이제 탭을 전환하지 않고도 설정이 즉시 적용됩니다",
+        "pt": "• Corrigida a exibição do progresso de download — o sinal de porcentagem duplicado foi removido\n• Corrigidos os sons de clique nas abas — agora a configuração se aplica imediatamente, sem trocar de aba",
+        "uk": "• Виправлено відображення прогресу завантаження оновлення — зайвий знак відсотка прибрано\n• Виправлено звуки натискань на вкладки — тепер налаштування застосовується миттєво, без перемикання вкладок"
+      }
+    },
+    {
+      "versionCode": 58,
+      "versionName": "1.9.23",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Список изменений в окне обновления теперь берётся из самого манифеста и работает даже там, где raw.githubusercontent недоступен\n• Исправлены подписи версий, где вместо текста оставался плейсхолдер %s\n• Переводы во всех 8 языках теперь показываются надёжно",
+        "en": "• The changelog in the update window now comes from the update manifest itself and works even where raw.githubusercontent is unavailable\n• Fixed version labels that kept a %s placeholder instead of text\n• Translations now show reliably in all 8 languages",
+        "es": "• El registro de cambios de la ventana de actualización ahora viene del propio manifiesto y funciona incluso donde raw.githubusercontent no está disponible\n• Corregidas las etiquetas de versión que mostraban el marcador %s\n• Las traducciones ahora se muestran de forma fiable en los 8 idiomas",
+        "zh": "• 更新窗口中的更新日志现在直接取自更新清单，即使 raw.githubusercontent 无法访问也能显示\n• 修复了版本标签中残留 %s 占位符的问题\n• 全部 8 种语言的翻译现在都能可靠显示",
+        "ja": "• 更新ウィンドウの更新履歴は更新マニフェストから取得するため、raw.githubusercontent が利用できない場所でも表示されます\n• バージョンラベルに %s が残る問題を修正\n• 8 ゲージの翻訳が確実に表示されるように",
+        "ko": "• 업데이트 창의 변경 내용을 이제 업데이트 매니페스트에서 직접 가져와 raw.githubusercontent이 사용 불가능한 환경에서도 표시됩니다\n• 버전 라벨에 %s 플레이스홀더가 남는 문제 수정\n• 8개 언어 모두의 번역이 이제 안정적으로 표시됩니다",
+        "pt": "• O registro de alterações na janela de atualização agora vem do próprio manifesto e funciona mesmo onde raw.githubusercontent não está disponível\n• Corrigidos os rótulos de versão que mantinham o marcador %s\n• As traduções agora aparecem de forma confiável nos 8 idiomas",
+        "uk": "• Список змін у вікні оновлення тепер береться із самого маніфесту і працює навіть там, де raw.githubusercontent недоступний\n• Виправлено підписи версій, де замість тексту залишався плейсхолдер %s\n• Переклади усіма 8 мовами тепер показуються надійно"
+      }
+    },
+    {
+      "versionCode": 57,
+      "versionName": "1.9.22",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Поле ввода «Свой срок» стало аккуратнее: выделенный фон, рамка и подпись единицы\n• Плашка выбора теперь появляется сразу на нажатом пункте и плавно переезжает между пунктами\n• Текст в окнах «Доступно обновление» и «Что нового» стал таким же читаемым, как в других окнах",
+        "en": "• The “Custom period” input looks cleaner: tinted background, border and unit label\n• The selection plate now appears right on the tapped option and then slides smoothly between options\n• Text in the update and What’s New windows is now as readable as in the other windows",
+        "es": "• El campo «Período personalizado» se ve más limpio: fondo, borde y etiqueta de unidad\n• La placa de selección ahora aparece justo en la opción pulsada y luego se desliza suavemente\n• El texto de las ventanas de actualización y Novedades ahora es tan legible como en las demás ventanas",
+        "zh": "• “自定义期限”输入框更美观：带色底、边框和单位标签\n• 选中板现会直接出现在点击的选项上，并在选项间平滑移动\n• 更新窗口和“新功能”窗口的文字现与其他窗口一样清晰",
+        "ja": "• 「カスタム期間」入力欄が整った見た目に（背景、枠、単位ラベル）\n• 選択プレートが押した項目ですぐに表示され、項目間をスムーズに移動\n• 更新ウィンドウと「新機能」のテキストが他のウィンドウと同じくらい読みやすく",
+        "ko": "• “사용자 지정 기간” 입력이 더 깔끔해졌습니다(배경, 테두리, 단위 표시)\n• 선택 플레이트가 누른 항목에 바로 나타나고 항목 사이를 부드럽게 이동합니다\n• 업데이트 창과 “새 기능” 창의 텍스트가 다른 창처럼 읽기 쉽게 바뀌었습니다",
+        "pt": "• O campo «Período personalizado» ficou mais bonito: fundo, borda e rótulo de unidade\n• A placa de seleção agora aparece direto na opção tocada e desliza suavemente entre as opções\n• O texto das janelas de atualização e Novidades agora é tão legível quanto nas outras janelas",
+        "uk": "• Поле введення «Свій термін» стало охайнішим: тонований фон, рамка і підпис одиниці\n• Плашка вибору тепер з'являється одразу на натиснутому пункті й плавно переїздить між пунктами\n• Текст у вікнах «Доступне оновлення» та «Що нового» став таким самим читабельним, як в інших вікнах"
+      }
+    },
+    {
+      "versionCode": 56,
+      "versionName": "1.9.21",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Список изменений теперь всегда на языке приложения — в окне «Доступно обновление» и в «Что нового»\n• Окно «Что нового» теперь такой же ширины, как «Доступно обновление»\n• Раскрытие списка «Что нового» в окне обновления стало плавным, без рывков",
+        "en": "• The changelog is now always shown in the app language — in both the update window and \"What's New\"\n• The \"What's New\" dialog now matches the update window width\n• Expanding the changelog in the update window is now smooth, without stutter",
+        "es": "• El registro de cambios ahora siempre aparece en el idioma de la app — en la ventana de actualización y en «Novedades»\n• La ventana «Novedades» ahora tiene el mismo ancho que la de actualización\n• La expansión del registro de cambios en la ventana de actualización ahora es fluida, sin tirones",
+        "zh": "• 更新日志现在始终以应用语言显示 — 更新窗口和“新功能”窗口都是\n• “新功能”窗口宽度现与更新窗口一致\n• 更新窗口中更新日志的展开现已平滑，无卡顿",
+        "ja": "• 更新履歴が常にアプリの言語で表示されるように — 更新ウィンドウと「新機能」の両方で\n• 「新機能」ウィンドウの幅が更新ウィンドウと同じに\n• 更新ウィンドウでの更新履歴の展開がスムーズに",
+        "ko": "• 변경 내용이 이제 항상 앱 언어로 표시됩니다 — 업데이트 창과 “새 기능” 모두\n• “새 기능” 창 폭이 업데이트 창과 같아졌습니다\n• 업데이트 창에서 변경 내용 펼치기가 부드럽게 동작합니다",
+        "pt": "• O registro de alterações agora sempre aparece no idioma do app — na janela de atualização e em «Novidades»\n• A janela «Novidades» agora tem a mesma largura da janela de atualização\n• A expansão do registro de alterações na janela de atualização agora é suave, sem engasgos",
+        "uk": "• Список змін тепер завжди мовою додатку — у вікні «Доступне оновлення» та «Що нового»\n• Вікно «Що нового» тепер такої ж ширини, як «Доступне оновлення»\n• Розгортання списку «Що нового» у вікні оновлення стало плавним, без ривків"
+      }
+    },
+    {
+      "versionCode": 55,
+      "versionName": "1.9.20",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Плашка выбранного срока двигается медленнее и плавнее\n• Раскрытие «Что нового» в окне обновления стало более плавным, без рывков\n• Окно «Что нового» (кнопка справа от «Проверить обновление») теперь плавно появляется, без телепания",
+        "en": "• The selected period plate moves slower and smoother\n• Expanding \"What's New\" in the update window is smoother, no jerks\n• The \"What's New\" window (button next to Check update) now fades in smoothly",
+        "es": "• La placa del período seleccionado se mueve más lento y suave\n• La expansión de «Novedades» en la ventana de actualización es más suave\n• La ventana «Novedades» ahora aparece con una transición suave",
+        "zh": "• 所选期限的滑动板移动更慢更平滑\n• 更新窗口中“新功能”的展开更平滑，无卡顿\n• “新功能”窗口（检查更新旁的按钮）现在平滑出现",
+        "ja": "• 選択期間のプレートの移動をよりゆっくり滑らかに\n• 更新ウィンドウの「新機能」展開が滑らかに\n• 「新機能」ウィンドウ（更新確認ボタンの隣）が滑らかに表示",
+        "ko": "• 선택한 기간 플레이트가 더 느리고 부드럽게 이동\n• 업데이트 창의 \"새 기능\" 확장이 더 부드러워짐\n• \"새 기능\" 창(업데이트 확인 옆 버튼)이 부드럽게 나타남",
+        "pt": "• A placa do período selecionado se move mais devagar e suave\n• A expansão de «Novidades» na janela de atualização ficou mais suave\n• A janela «Novidades» agora aparece com transição suave",
+        "uk": "• Плашка обраного терміну рухається повільніше та плавніше\n• Розкриття «Що нового» у вікні оновлення стало плавнішим, без ривків\n• Вікно «Що нового» (кнопка праворуч від «Перевірити оновлення») тепер плавно з'являється"
+      }
+    },
+    {
+      "versionCode": 54,
+      "versionName": "1.9.19",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Текст «Вы не будете видеть уведомления…» стал ярче, как подсказка в «Обратной связи»\n• Кнопка «Возобновить» теперь такого же цвета\n• Окно паузы обновлений выглядит аккуратнее",
+        "en": "• The \"You won't see notifications…\" text is now brighter, like the feedback hint\n• The \"Resume\" button now uses the same color\n• The update pause window looks cleaner",
+        "es": "• El texto «No verás notificaciones…» ahora es más claro, como la pista en Comentarios\n• El botón «Reanudar» usa el mismo color\n• La ventana de pausa se ve más limpia",
+        "zh": "• “您将看不到通知…”文字更亮，与反馈提示一致\n• “恢复”按钮使用相同颜色\n• 更新暂停窗口更整洁",
+        "ja": "• 「通知は表示されません…」のテキストをフィードバックのヒントと同じ明るさに\n• 「再開」ボタンも同じ色に\n• 更新一時停止ウィンドウがより整った見た目に",
+        "ko": "• \"알림이 표시되지 않습니다…\" 텍스트를 피드백 힌트처럼 더 밝게\n• \"재개\" 버튼도 같은 색상 사용\n• 업데이트 일시 중지 창이 더 깔끔해짐",
+        "pt": "• O texto «Você não verá notificações…» ficou mais claro, como a dica em Comentários\n• O botão «Retomar» usa a mesma cor\n• A janela de pausa ficou mais limpa",
+        "uk": "• Текст «Ви не бачитимете сповіщень…» став яскравішим, як підказка у «Зворотному зв'язку»\n• Кнопка «Відновити» тепер такого ж кольору\n• Вікно паузи оновлень виглядає охайніше"
+      }
+    },
+    {
+      "versionCode": 53,
+      "versionName": "1.9.18",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Убран вариант «2 недели» из окна паузы обновлений\n• Поле «Свой срок» теперь появляется прямо в строке, окно не растягивается\n• Убрано лишнее описание под списком",
+        "en": "• Removed the \"2 weeks\" option from the update pause window\n• The custom period field now appears inline, no extra window space\n• Removed the extra description text under the list",
+        "es": "• Eliminada la opción «2 semanas» de la ventana de pausa de actualización\n• El campo de período personalizado ahora aparece en la misma línea\n• Eliminado el texto descriptivo adicional bajo la lista",
+        "zh": "• 从更新暂停窗口中移除了“2周”选项\n• 自定义期限输入框现在直接显示在该行内，窗口不再变大\n• 移除了列表下方的多余描述文字",
+        "ja": "• 更新一時停止ウィンドウから「2週間」オプションを削除\n• カスタム期間の入力欄が同じ行に表示され、ウィンドウが広がりません\n• リスト下の余分な説明テキストを削除",
+        "ko": "• 업데이트 일시 중지 창에서 \"2주\" 옵션 제거\n• 사용자 지정 기간 입력란이 같은 줄에 표시되어 창이 커지지 않습니다\n• 목록 아래의 불필요한 설명 텍스트 제거",
+        "pt": "• Removida a opção \"2 semanas\" da janela de pausa de atualização\n• O campo de período personalizado agora aparece na mesma linha\n• Removido o texto descritivo extra abaixo da lista",
+        "uk": "• Прибрано варіант «2 тижні» з вікна паузи оновлень\n• Поле «Свій термін» тепер з'являється прямо в рядку, вікно не розтягується\n• Прибрано зайвий опис під списком"
+      }
+    },
+    {
+      "versionCode": 52,
+      "versionName": "1.9.17",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Улучшено центрирование текста в элементах списка паузы обновлений\n• Добавлено описание выбранного периода серым текстом\n• Текст \"Вы не будете видеть уведомления об обновлениях\" показывается для каждого варианта",
+        "en": "• Improved text centering in update pause list items\n• Added selected period description in muted text\n• \"You won't see update notifications\" text shown for each option",
+        "es": "• Centrado de texto mejorado en elementos de lista de pausa de actualización\n• Descripción del período seleccionado agregada en texto atenuado\n• Texto \"No verás notificaciones de actualización\" mostrado para cada opción",
+        "zh": "• 改进了更新暂停列表项中的文本居中\n• 添加了灰色文本的选定期间描述\n• 为每个选项显示\"您将看不到更新通知\"文本",
+        "ja": "• 更新一時停止リスト項目のテキスト中央揃えを改善\n• ミュートテキストで選択期間の説明を追加\n• 各オプションに「更新通知は表示されません」テキストを表示",
+        "ko": "• 업데이트 일시 중지 목록 항목의 텍스트 중앙 정렬 개선\n• 음소거된 텍스트로 선택한 기간 설명 추가\n• 각 옵션에 대해 \"업데이트 알림이 표시되지 않습니다\" 텍스트 표시",
+        "pt": "• Centralização de texto melhorada em itens da lista de pausa de atualização\n• Descrição do período selecionado adicionada em texto silenciado\n• Texto \"Você não verá notificações de atualização\" mostrado para cada opção",
+        "uk": "• Покращено центрування тексту в елементах списку паузи оновлень\n• Додано опис обраного періоду сірим текстом\n• Текст \"Ви не бачитимете сповіщень про оновлення\" показується для кожного варіанту"
+      }
+    },
+    {
+      "versionCode": 51,
+      "versionName": "1.9.16",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Улучшено центрирование текста в элементах списка паузы обновлений\n• Добавлено описание выбранного периода серым текстом\n• Текст \"Вы не будете видеть уведомления об обновлениях\" показывается для каждого варианта",
+        "en": "• Improved text centering in update pause list items\n• Added selected period description in muted text\n• \"You won't see update notifications\" text shown for each option",
+        "es": "• Centrado de texto mejorado en elementos de lista de pausa de actualización\n• Descripción del período seleccionado agregada en texto atenuado\n• Texto \"No verás notificaciones de actualización\" mostrado para cada opción",
+        "zh": "• 改进了更新暂停列表项中的文本居中\n• 添加了灰色文本的选定期间描述\n• 为每个选项显示\"您将看不到更新通知\"文本",
+        "ja": "• 更新一時停止リスト項目のテキスト中央揃えを改善\n• ミュートテキストで選択期間の説明を追加\n• 各オプションに「更新通知は表示されません」テキストを表示",
+        "ko": "• 업데이트 일시 중지 목록 항목의 텍스트 중앙 정렬 개선\n• 음소거된 텍스트로 선택한 기간 설명 추가\n• 각 옵션에 대해 \"업데이트 알림이 표시되지 않습니다\" 텍스트 표시",
+        "pt": "• Centralização de texto melhorada em itens da lista de pausa de atualização\n• Descrição do período selecionado adicionada em texto silenciado\n• Texto \"Você não verá notificações de atualização\" mostrado para cada opção",
+        "uk": "• Покращено центрування тексту в елементах списку паузи оновлень\n• Додано опис обраного періоду сірим текстом\n• Текст \"Ви не бачитимете сповіщень про оновлення\" показується для кожного варіанту"
+      }
+    },
+    {
+      "versionCode": 50,
+      "versionName": "1.9.15",
+      "releaseDate": "2026-11-06",
+      "changelog": {
+        "ru": "• Исправлено позиционирование элементов в окне паузы обновлений\n• Плашка выбора теперь точно совпадает с пунктами меню\n• Улучшена структура вложенности UI элементов",
+        "en": "• Fixed element positioning in update pause window\n• Selection plate now aligns perfectly with menu items\n• Improved UI element nesting structure",
+        "es": "• Posicionamiento de elementos corregido en ventana de pausa de actualización\n• La placa de selección ahora se alinea perfectamente con los elementos del menú\n• Estructura de anidamiento de elementos UI mejorada",
+        "zh": "• 修复了更新暂停窗口中的元素定位\n• 选择板现在与菜单项完美对齐\n• 改进了UI元素嵌套结构",
+        "ja": "• 更新一時停止ウィンドウでの要素配置を修正\n• 選択プレートがメニュー項目と完全に整列するようになりました\n• UI要素のネスト構造を改善",
+        "ko": "• 업데이트 일시 중지 창의 요소 위치 수정\n• 선택 플레이트가 이제 메뉴 항목과 완벽하게 정렬됨\n• UI 요소 중첩 구조 개선",
+        "pt": "• Posicionamento de elementos corrigido na janela de pausa de atualização\n• A placa de seleção agora se alinha perfeitamente com os itens do menu\n• Estrutura de aninhamento de elementos UI melhorada",
+        "uk": "• Виправлено позиціонування елементів у вікні паузи оновлень\n• Плашка вибору тепер точно збігається з пунктами меню\n• Покращено структуру вкладеності UI елементів"
+      }
+    },
+    {
+      "versionCode": 49,
+      "versionName": "1.9.14",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Исправлено расположение плашки выбора в паузе обновлений\n• Убрано дёрганье при раскрытии \"Что нового\" в уведомлении\n• Исправлено телепание окна \"Что нового\" вниз после появления\n• Все анимации теперь работают плавно и естественно",
+        "en": "• Fixed selection plate position in update pause\n• Removed jerking when expanding What's New in notification\n• Fixed What's New window jumping down after appearance\n• All animations now work smoothly and naturally",
+        "es": "• Corregida posición de placa de selección en pausa de actualización\n• Eliminado movimiento brusco al expandir Novedades en notificación\n• Corregido salto de ventana de Novedades hacia abajo después de aparecer\n• Todas las animaciones ahora funcionan suave y naturalmente",
+        "zh": "• 修复了更新暂停中的选择板位置\n• 移除了通知中展开新功能时的抖动\n• 修复了新功能窗口出现后向下跳动\n• 所有动画现在平滑自然地工作",
+        "ja": "• 更新一時停止での選択プレートの位置を修正\n• 通知で新機能を展開する際のガタつきを削除\n• 新機能ウィンドウの表示後の下へのジャンプを修正\n• すべてのアニメーションがスムーズで自然に動作するようになりました",
+        "ko": "• 업데이트 일시 중지에서 선택 플레이트 위치 수정\n• 알림에서 새 기능 확장 시 떨림 제거\n• 새 기능 창이 나타난 후 아래로 점프하는 현상 수정\n• 모든 애니메이션이 이제 부드럽고 자연스럽게 작동합니다",
+        "pt": "• Corrigida posição da placa de seleção na pausa de atualização\n• Removido movimento brusco ao expandir Novidades na notificação\n• Corrigido salto da janela de Novidades para baixo após aparecer\n• Todas as animações agora funcionam suave e naturalmente",
+        "uk": "• Виправлено розташування плашки вибору в паузі оновлень\n• Прибрано смикання при розкритті \"Що нового\" в сповіщенні\n• Виправлено телепання вікна \"Що нового\" вниз після появи\n• Всі анімації тепер працюють плавно та природно"
+      }
+    },
+    {
+      "versionCode": 48,
+      "versionName": "1.9.13",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Убрано дёрганье окна при изменении размера (паузы обновлений)\n• Плашка выбора теперь плавно \"переплывает\" между пунктами\n• Исправлено дёрганье окна \"Что нового\" при раскрытии\n• Исправлена загрузка переводов changelog для всех языков\n• Все анимации теперь используют spring для естественного движения",
+        "en": "• Removed window jerking on resize (update pause)\n• Selection plate now smoothly \"floats\" between items\n• Fixed What's New window jerking on expansion\n• Fixed changelog translation loading for all languages\n• All animations now use spring for natural movement",
+        "es": "• Eliminado el movimiento brusco de la ventana al cambiar tamaño (pausa de actualización)\n• La placa de selección ahora \"flota\" suavemente entre elementos\n• Corregido movimiento brusco de ventana de Novedades al expandir\n• Corregida carga de traducción de changelog para todos los idiomas\n• Todas las animaciones ahora usan spring para movimiento natural",
+        "zh": "• 移除了调整大小时的窗口抖动（更新暂停）\n• 选择板现在在项目之间平滑\"浮动\"\n• 修复了展开时新功能窗口的抖动\n• 修复了所有语言的更新日志翻译加载\n• 所有动画现在使用弹簧以实现自然运动",
+        "ja": "• リサイズ時のウィンドウのガタつきを削除（更新一時停止）\n• 選択プレートがアイテム間をスムーズに\"浮遊\"するようになりました\n• 新機能ウィンドウの展開時のガタつきを修正\n• すべての言語の変更履歴翻訳の読み込みを修正\n• すべてのアニメーションが自然な動きのためにスプリングを使用するようになりました",
+        "ko": "• 크기 조정 시 창 떨림 제거（업데이트 일시 중지）\n• 선택 플레이트가 이제 항목 간에 부드럽게 \"떠다님\"\n• 확장 시 새 기능 창 떨림 수정\n• 모든 언어에 대한 변경 로그 번역 로딩 수정\n• 모든 애니메이션이 이제 자연스러운 움직임을 위해 스프링 사용",
+        "pt": "• Removido o movimento brusco da janela ao redimensionar (pausa de atualização)\n• A placa de seleção agora \"flutua\" suavemente entre itens\n• Corrigido movimento brusco da janela de Novidades ao expandir\n• Corrigido carregamento de tradução de changelog para todos os idiomas\n• Todas as animações agora usam spring para movimento natural",
+        "uk": "• Прибрано смикання вікна при зміні розміру (паузи оновлень)\n• Плашка вибору тепер плавно \"переплаває\" між пунктами\n• Виправлено смикання вікна \"Що нового\" при розкритті\n• Виправлено завантаження перекладів changelog для всіх мов\n• Всі анімації тепер використовують spring для природного руху"
+      }
+    },
+    {
+      "versionCode": 47,
+      "versionName": "1.9.12",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Исправлена локализация уведомлений при смене языка\n• Плавная анимация выбора периодов в окне паузы обновлений\n• Плавное расширение поля \"Свой срок\" с анимацией\n• Исправлен баг с сбросом выбора при закрытии окна\n• Динамическая загрузка переводов \"Что нового\" при смене языка\n• Убрано телепортирование окна при раскрытии changelog",
+        "en": "• Fixed notification localization on language change\n• Smooth pause period selection animation\n• Smooth custom period field expansion with animation\n• Fixed selection reset bug on window close\n• Dynamic What's New translation loading on language change\n• Removed window teleportation on changelog expansion",
+        "es": "• Localización de notificaciones corregida al cambiar idioma\n• Animación suave de selección de período de pausa\n• Expansión suave del campo de período personalizado con animación\n• Bug de restablecimiento de selección corregido al cerrar ventana\n• Carga dinámica de traducciones de Novedades al cambiar idioma\n• Eliminado teletransporte de ventana en expansión de changelog",
+        "zh": "• 修复了更改语言时的通知本地化\n• 平滑的暂停期间选择动画\n• 平滑的自定义期间字段展开动画\n• 修复了关闭窗口时的选择重置错误\n• 更改语言时动态加载新功能翻译\n• 删除了更新日志展开时的窗口传送",
+        "ja": "• 言語変更時の通知ローカライゼーションを修正\n• スムーズな一時停止期間選択アニメーション\n• アニメーション付きスムーズなカスタム期間フィールド展開\n• ウィンドウを閉じたときの選択リセットバグを修正\n• 言語変更時の新機能翻訳の動的読み込み\n• 変更履歴展開時のウィンドウテレポートを削除",
+        "ko": "• 언어 변경 시 알림 현지화 수정\n• 부드러운 일시 중지 기간 선택 애니메이션\n• 애니메이션이 있는 부드러운 사용자 지정 기간 필드 확장\n• 창 닫기 시 선택 재설정 버그 수정\n• 언어 변경 시 새 기능 번역 동적 로딩\n• 변경 로그 확장 시 창 순간이동 제거",
+        "pt": "• Localização de notificações corrigida ao mudar idioma\n• Animação suave de seleção de período de pausa\n• Expansão suave do campo de período personalizado com animação\n• Bug de redefinição de seleção corrigido ao fechar janela\n• Carregamento dinâmico de traduções de Novidades ao mudar idioma\n• Removido teletransporte de janela na expansão do changelog",
+        "uk": "• Виправлено локалізацію сповіщень при зміні мови\n• Плавна анімація вибору періодів у вікні паузи оновлень\n• Плавне розширення поля \"Свій термін\" з анімацією\n• Виправлено баг зі скиданням вибору при закритті вікна\n• Динамічне завантаження перекладів \"Що нового\" при зміні мови\n• Прибрано телепортування вікна при розкритті changelog"
+      }
+    },
+    {
+      "versionCode": 46,
+      "versionName": "1.9.11",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Исправлена анимация раскрытия списка изменений\n• Плавная трансформация окна приостановки обновлений\n• Анимация выбора периодов паузы\n• Плавное расширение поля \"Свой срок\"\n• Исправлена локализация уведомлений\n• Динамическая загрузка переводов при смене языка",
+        "en": "• Fixed changelog expansion animation\n• Smooth update pause window transformation\n• Pause period selection animation\n• Smooth custom period field expansion\n• Fixed notification localization\n• Dynamic translation loading on language change",
+        "es": "• Animación de expansión del changelog corregida\n• Transformación suave de ventana de pausa de actualización\n• Animación de selección de período de pausa\n• Expansión suave del campo de período personalizado\n• Localización de notificaciones corregida\n• Carga dinámica de traducciones al cambiar idioma",
+        "zh": "• 修复了更新日志展开动画\n• 平滑的更新暂停窗口转换\n• 暂停期间选择动画\n• 平滑的自定义期间字段展开\n• 修复了通知本地化\n• 更改语言时动态加载翻译",
+        "ja": "• 変更履歴展開アニメーションを修正\n• スムーズな更新一時停止ウィンドウ変換\n• 一時停止期間選択アニメーション\n• スムーズなカスタム期間フィールド展開\n• 通知のローカライゼーションを修正\n• 言語変更時の動的翻訳読み込み",
+        "ko": "• 변경 로그 확장 애니메이션 수정\n• 부드러운 업데이트 일시 중지 창 전환\n• 일시 중지 기간 선택 애니메이션\n• 부드러운 사용자 지정 기간 필드 확장\n• 알림 현지화 수정\n• 언어 변경 시 동적 번역 로딩",
+        "pt": "• Animação de expansão do changelog corrigida\n• Transformação suave da janela de pausa de atualização\n• Animação de seleção de período de pausa\n• Expansão suave do campo de período personalizado\n• Localização de notificações corrigida\n• Carregamento dinâmico de traduções ao mudar idioma",
+        "uk": "• Виправлено анімацію розкриття списку змін\n• Плавна трансформація вікна призупинення оновлень\n• Анімація вибору періодів паузи\n• Плавне розширення поля \"Свій термін\"\n• Виправлено локалізацію сповіщень\n• Динамічне завантаження перекладів при зміні мови"
+      }
+    },
+    {
+      "versionCode": 45,
+      "versionName": "1.9.10",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Исправлена анимация раскрытия «Что нового»\n• Плавное раскрытие списка изменений без рывков\n• Оптимизация времени анимации для естественного движения",
+        "en": "• Fixed What's New expansion animation\n• Smooth changelog list expansion without jerks\n• Optimized animation timing for natural movement",
+        "es": "• Animación de expansión de Novedades corregida\n• Expansión suave de lista de cambios sin tirones\n• Tiempo de animación optimizado para movimiento natural",
+        "zh": "• 修复了\"新功能\"展开动画\n• 平滑的更新日志列表展开，无卡顿\n• 优化动画时间以实现自然运动",
+        "ja": "• 新機能の展開アニメーションを修正\n• スムーズな変更履歴リストの展開（ぎこちなさなし）\n• 自然な動きのためのアニメーションタイミングの最適化",
+        "ko": "• 새 기능 확장 애니메이션 수정\n• 끊김 없는 부드러운 변경 로그 목록 확장\n• 자연스러운 움직임을 위한 애니메이션 타이밍 최적화",
+        "pt": "• Animação de expansão de Novidades corrigida\n• Expansão suave da lista de mudanças sem travamentos\n• Tempo de animação otimizado para movimento natural",
+        "uk": "• Виправлено анімацію розкриття «Що нового»\n• Плавне розкриття списку змін без ривків\n• Оптимізація часу анімації для природного руху"
+      }
+    },
+    {
+      "versionCode": 41,
+      "versionName": "1.9.6",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Все зелёные цвета заменены на розовые (accent)\n• Ping в истории сессий: розовый градиент\n• Этап проверки версии: убрана кнопка «Назад»\n• Плавная анимация проверки версии\n• Диалог паузы обновлений переделан",
+        "en": "• All green colors replaced with pink (accent)\n• Ping history: pink gradient\n• Version check step: removed Back button\n• Smooth version check animation\n• Update pause dialog redesigned",
+        "es": "• Todos los colores verdes reemplazados por rosa (accent)\n• Historial de ping: degradado rosa\n• Paso de verificación de versión: botón Atrás eliminado\n• Animación suave de verificación de versión\n• Diálogo de pausa de actualización rediseñado",
+        "zh": "• 所有绿色替换为粉色（accent）\n• Ping历史：粉色渐变\n• 版本检查步骤：删除返回按钮\n• 流畅的版本检查动画\n• 更新暂停对话框重新设计",
+        "ja": "• すべての緑色をピンク（accent）に置き換え\n• Ping履歴：ピンクのグラデーション\n• バージョン確認ステップ：戻るボタンを削除\n• スムーズなバージョン確認アニメーション\n• 更新一時停止ダイアログの再設計",
+        "ko": "• 모든 녹색을 분홍색(accent)으로 교체\n• Ping 기록: 분홍색 그라데이션\n• 버전 확인 단계: 뒤로 버튼 제거\n• 부드러운 버전 확인 애니메이션\n• 업데이트 일시 중지 대화상자 재설계",
+        "pt": "• Todas as cores verdes substituídas por rosa (accent)\n• Histórico de ping: gradiente rosa\n• Etapa de verificação de versão: botão Voltar removido\n• Animação suave de verificação de versão\n• Diálogo de pausa de atualização redesenhado",
+        "uk": "• Всі зелені кольори замінено на рожеві (accent)\n• Історія ping: рожевий градієнт\n• Етап перевірки версії: видалено кнопку «Назад»\n• Плавна анімація перевірки версії\n• Діалог паузи оновлень перероблено"
+      }
+    },
+    {
+      "versionCode": 40,
+      "versionName": "1.9.5",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Кнопка «Приостановить обновления» перенесена в «О приложении»\n• Кнопка «Проверить обновление» переделана: компактная, не обрезается\n• Кнопка ℹ️ «Что нового» работает\n• Исправлен жест назад в истории сессий\n• Исправлена анимация «Что нового»",
+        "en": "• Pause updates button moved to About\n• Check update button redesigned: compact, no clipping\n• ℹ️ What's new button works\n• Fixed back gesture in session history\n• Fixed What's new animation",
+        "es": "• Botón Pausar actualizaciones movido a Acerca de\n• Botón Verificar actualización rediseñado: compacto, sin recortes\n• Botón ℹ️ Novedades funciona\n• Gesto de retroceso corregido en historial de sesiones\n• Animación de Novedades corregida",
+        "zh": "• 暂停更新按钮移至关于\n• 检查更新按钮重新设计：紧凑，无裁剪\n• ℹ️ 新功能按钮有效\n• 修复会话历史中的返回手势\n• 修复新功能动画",
+        "ja": "• 更新一時停止ボタンをアバウトに移動\n• 更新確認ボタンの再設計：コンパクト、クリッピングなし\n• ℹ️ 新機能ボタンが機能\n• セッション履歴の戻るジェスチャーを修正\n• 新機能アニメーションを修正",
+        "ko": "• 업데이트 일시 중지 버튼이 정보로 이동\n• 업데이트 확인 버튼 재설계: 컴팩트, 클리핑 없음\n• ℹ️ 새 기능 버튼 작동\n• 세션 기록의 뒤로 제스처 수정\n• 새 기능 애니메이션 수정",
+        "pt": "• Botão Pausar atualizações movido para Sobre\n• Botão Verificar atualização redesenhado: compacto, sem recorte\n• Botão ℹ️ Novidades funciona\n• Gesto de voltar corrigido no histórico de sessões\n• Animação de Novidades corrigida",
+        "uk": "• Кнопку «Призупинити оновлення» перенесено до «Про додаток»\n• Кнопку «Перевірити оновлення» перероблено: компактна, не обрізається\n• Кнопка ℹ️ «Що нового» працює\n• Виправлено жест назад в історії сесій\n• Виправлено анімацію «Що нового»"
+      }
+    },
+    {
+      "versionCode": 39,
+      "versionName": "1.9.4",
+      "releaseDate": "2026-11-04",
+      "changelog": {
+        "ru": "• Стрелочка-индикатор в «Что нового»\n• Диалог приостановки обновлений\n• Тихое уведомление о новой версии\n• История: не сохраняются сессии < 2 сек\n• Анимация заставки замедлена в 2 раза\n• Постоянный UID на основе ANDROID_ID",
+        "en": "• Scroll indicator in What's new\n• Update pause dialog\n• Silent notification about new version\n• History: sessions < 2 sec not saved\n• Splash animation slowed 2x\n• Permanent UID based on ANDROID_ID",
+        "es": "• Indicador de desplazamiento en Novedades\n• Diálogo de pausa de actualización\n• Notificación silenciosa sobre nueva versión\n• Historial: sesiones < 2 seg no guardadas\n• Animación de inicio ralentizada 2x\n• UID permanente basado en ANDROID_ID",
+        "zh": "• 新功能中的滚动指示器\n• 更新暂停对话框\n• 关于新版本的静默通知\n• 历史：< 2秒的会话不保存\n• 启动动画减慢2倍\n• 基于ANDROID_ID的永久UID",
+        "ja": "• 新機能のスクロールインジケーター\n• 更新一時停止ダイアログ\n• 新しいバージョンについてのサイレント通知\n• 履歴：2秒未満のセッションは保存されません\n• スプラッシュアニメーションを2倍遅く\n• ANDROID_IDに基づく永続UID",
+        "ko": "• 새 기능의 스크롤 표시기\n• 업데이트 일시 중지 대화상자\n• 새 버전에 대한 조용한 알림\n• 기록: 2초 미만 세션 저장 안 됨\n• 스플래시 애니메이션 2배 느려짐\n• ANDROID_ID 기반 영구 UID",
+        "pt": "• Indicador de rolagem em Novidades\n• Diálogo de pausa de atualização\n• Notificação silenciosa sobre nova versão\n• Histórico: sessões < 2 seg não salvas\n• Animação de inicialização desacelerada 2x\n• UID permanente baseado em ANDROID_ID",
+        "uk": "• Стрілочка-індикатор у «Що нового»\n• Діалог призупинення оновлень\n• Тихе сповіщення про нову версію\n• Історія: не зберігаються сесії < 2 сек\n• Анімацію заставки уповільнено у 2 рази\n• Постійний UID на основі ANDROID_ID"
+      }
+    },
+    {
+      "versionCode": 83,
+      "versionName": "1.9.48",
+      "releaseDate": "2026-11-10",
+      "changelog": {
+        "ru": "• Исправлена очистка истории: кнопка корзины работает независимо от визуальных эффектов. Первое нажатие — подтверждение (красная кнопка), второе — очистка.\n• Убрана анимация плашки срока приостановки обновлений — мгновенный переход между вариантами.\n• Зафиксировано положение интерфейса при отображении стартовых фраз — не сдвигается вверх при переносе текста.\n• Отключена анимация точек полосы соединения при выключенных визуальных эффектах.\n• Цвет текста кнопки «Послушать» на вкладке «Фильтры» приведён к цвету активной кнопки «Возобновить».",
+        "en": "• Fixed history clearing: trash button works regardless of visual effects. First tap — confirmation (red button), second — clear.\n• Removed pause-updates deadline plate animation — instant transition between options.\n• Fixed UI position when start phrases are displayed — no upward shift on text wrap.\n• Disabled connection bar dots animation when visual effects are off.\n• Listen button text color on Filters tab matches active Resume button color.",
+        "es": "• Se corrigió el borrado del historial: el botón de papelera funciona independientemente de los efectos visuales. Primer toque — confirmación (botón rojo), segundo — borrar.\n• Se eliminó la animación de la placa de plazo de pausa de actualizaciones — transición instantánea entre opciones.\n• Se corrigió la posición de la interfaz al mostrar frases iniciales — no se desplaza hacia arriba al envolver texto.\n• Se desactivó la animación de puntos de la barra de conexión cuando los efectos visuales están desactivados.\n• El color del texto del botón «Escuchar» en la pestaña Filtros coincide con el color del botón «Reanudar» activo.",
+        "zh": "• 修复了历史记录清除：垃圾桶按钮无论视觉效果设置如何均可正常工作。第一次点击 — 确认（红色按钮），第二次 — 清除。\n• 移除了更新暂停期限板动画 — 选项之间瞬间切换。\n• 修复了启动短语显示时的界面位置 — 文本换行时不会向上移动。\n• 视觉效果关闭时禁用了连接栏点动画。\n• 过滤器标签页“聆听”按钮的文本颜色与活跃“恢复”按钮颜色一致。",
+        "ja": "• 履歴クリアを修正：ゴミ箱ボタンは視覚効果の設定に関係なく動作します。最初のタップ — 確認（赤いボタン）、2回目 — クリア。\n• 更新一時停止期限プレートのアニメーションを削除 — オプション間を即座に切り替え。\n• 開始フレーズ表示時のUI位置を修正 — テキスト折り返し時に上にずれません。\n• 視覚効果がオフの場合、接続バーの点のアニメーションを無効化。\n• フィルタータブの「聴く」ボタンのテキスト色が、アクティブな「再開」ボタンの色と一致。",
+        "ko": "• 기록 삭제 수정: 휴지통 버튼이 시각 효과 설정과 관계없이 작동합니다. 첫 번째 탭 — 확인 (빨간 버튼), 두 번째 — 삭제.\n• 업데이트 일시중지 만료판 애니메이션 제거 — 옵션 간 즉시 전환.\n• 시작 구문 표시 시 UI 위치 수정 — 텍스트 줄바꿈 시 위로 이동하지 않음.\n• 시각 효과가 꺼져 있을 때 연결 바 점 애니메이션 비활성화.\n• 필터 탭의 \"듣기\" 버튼 텍스트 색상이 활성 \"재개\" 버튼 색상과 일치.",
+        "pt": "• Correção na limpeza do histórico: o botão de lixeira funciona independentemente dos efeitos visuais. Primeiro toque — confirmação (botão vermelho), segundo — limpar.\n• Removida a animação da placa de prazo de pausa de atualizações — transição instantânea entre opções.\n• Corrigida a posição da interface ao exibir frases iniciais — não desloca para cima ao quebrar texto.\n• Animação de pontos da barra de conexão desativada quando os efeitos visuais estão desligados.\n• A cor do texto do botão «Ouvir» na guia Filtros corresponde à cor do botão «Retomar» ativo.",
+        "uk": "• Виправлено очищення історії: кнопка кошика працює незалежно від візуальних ефектів. Перше натискання — підтвердження (червона кнопка), друге — очистити.\n• Прибрано анімацію планки терміну припсини оновлення — миттєвий перехід між варіантами.\n• Виправлено положення інтерфейсу при відображенні стартових фраз — не зсувається вгору при перенозі тексту.\n• Вимкнено анімацію точок планки з'єднання при вимкнених візуальних ефектах.\n• Колір тексту кнопки «Послухати» на вкладці «Фільтри» відповідає колір активної кнопки «Відновити»."
+      },
+      "stable": true
+    }
+  ]
 }
