@@ -5089,10 +5089,10 @@ fun ConnectionBar(isStreaming: Boolean, pcConnected: Boolean, colors: NelevColor
         verticalAlignment = Alignment.CenterVertically
     ) {
         DeviceIcon("phone", isStreaming, active, base, if (isStreaming) phonePulse else 1f)
-        Box(Modifier.weight(1f).padding(horizontal = 5.dp)) { ConnectorLine((prog * 2f).coerceIn(0f, 1f), active, base) }
+        Box(Modifier.weight(1f).padding(horizontal = 5.dp)) { ConnectorLine((prog * 2f).coerceIn(0f, 1f), active, base, effectsEnabled) }
         val hc by animateColorAsState(if (prog >= 0.5f) active else base, tween(600), label = "hc")
         Canvas(Modifier.size(22.dp).alpha(if (isStreaming && !pcConnected) heartPulse else 1f)) { drawHeart(hc) }
-        Box(Modifier.weight(1f).padding(horizontal = 5.dp)) { ConnectorLine(((prog - .5f) * 2f).coerceIn(0f, 1f), active, base) }
+        Box(Modifier.weight(1f).padding(horizontal = 5.dp)) { ConnectorLine(((prog - .5f) * 2f).coerceIn(0f, 1f), active, base, effectsEnabled) }
         val pcA by animateFloatAsState(if (pcConnected) 1f else 0.72f, tween(500), label = "pca")
         DeviceIcon("pc", pcConnected, active, base, pcA)
     }
@@ -5128,7 +5128,7 @@ fun androidx.compose.ui.graphics.drawscope.DrawScope.drawHeart(color: Color) {
 }
 
 @Composable
-fun ConnectorLine(progress: Float, activeColor: Color, baseColor: Color) {
+fun ConnectorLine(progress: Float, activeColor: Color, baseColor: Color, effectsEnabled: Boolean = true) {
     val dotCount = 5
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -5137,9 +5137,15 @@ fun ConnectorLine(progress: Float, activeColor: Color, baseColor: Color) {
     ) {
         repeat(dotCount) { i ->
             val lit = progress >= (i + 1f) / (dotCount + 1f)
-            val dc  by animateColorAsState(if (lit) activeColor else baseColor, tween(200, i * 40), label = "d$i") // OPTIMIZATION: 300ms → 200ms, delay 60 → 40
-            val ds: Dp by animateDpAsState(if (lit) 5.dp else 3.5.dp, tween(200, i * 40), label = "ds$i")
-            Box(Modifier.size(ds).clip(RoundedCornerShape(50)).background(dc))
+            val dc = if (lit) activeColor else baseColor
+            val ds: Dp = if (lit) 5.dp else 3.5.dp
+            Box(
+                Modifier
+                    .size(ds)
+                    .clip(RoundedCornerShape(50))
+                    .background(dc)
+                    .then(if (effectsEnabled) Modifier.animateContentSize() else Modifier)
+            )
         }
     }
 }
@@ -6114,8 +6120,8 @@ fun ConnectScreen(
 
             AnimatedVisibility(
                 state.currentPhrase.value != null && (appSettings.value.phrasesEnabled || EasterEggGuide.guidedTourTarget.value == GuidedTourTarget.PHRASE_BOX),
-                enter = fadeIn(tween(if (effectsEnabled) 300 else 0)) + expandVertically(tween(if (effectsEnabled) 300 else 0, easing = FastOutSlowInEasing)), // OPTIMIZATION: 500ms → 300ms
-                exit  = fadeOut(tween(if (effectsEnabled) 250 else 0)) + shrinkVertically(tween(if (effectsEnabled) 250 else 0)) // OPTIMIZATION: 400ms → 250ms
+                enter = fadeIn(tween(if (effectsEnabled) 300 else 0)),
+                exit  = fadeOut(tween(if (effectsEnabled) 250 else 0))
             ) {
                 state.currentPhrase.value?.let { phrase ->
                     PhraseCard(
@@ -6371,7 +6377,7 @@ fun FiltersScreen(
                                 isPlaying = true
                             } catch (e: Exception) { Toast.makeText(ctx, "Ошибка: ${e.message}", Toast.LENGTH_SHORT).show() }
                         }
-                    }, modifier = Modifier.scale(playScale), shape = RoundedCornerShape(18.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = muted), border = androidx.compose.foundation.BorderStroke(1.dp, border), enabled = recordFile != null && !isRecording) {
+                    }, modifier = Modifier.scale(playScale), shape = RoundedCornerShape(18.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = accent), border = androidx.compose.foundation.BorderStroke(1.dp, border), enabled = recordFile != null && !isRecording) {
                         Text(if (isPlaying) Strings.get("record_stop", lang) else Strings.get("record_play", lang), fontSize = 13.sp)
                     }
                 }
@@ -7028,17 +7034,11 @@ fun SessionHistoryScreen(
         scope.launch {
             SessionStore.clear(ctx)
             val copy = sessions.toList()
-            if (!effectsEnabled) {
-                sessions.clear()
-                hidingIds.value = emptySet()
-                showClearConfirm = false
-                return@launch
-            }
             for (s in copy) {
                 hidingIds.value = hidingIds.value + s.startMs
-                delay(60L)
+                delay(if (effectsEnabled) 60L else 0L)
             }
-            delay(280L)
+            delay(if (effectsEnabled) 280L else 0L)
             sessions.clear()
             hidingIds.value = emptySet()
             showClearConfirm = false
@@ -8757,17 +8757,8 @@ fun AboutAppOverlay(
                                                 Box {
                                                     // Фоновая плашка которая переплывает
                                                     val targetOffset = if (selectedPauseOption != null) (selectedPauseOption!! * 52).dp else 0.dp
-                                                    val animatedOffset by animateDpAsState(
-                                                        targetValue = targetOffset,
-                                                        animationSpec = if (pausePlateSnap) snap() else spring(
-                                                            dampingRatio = Spring.DampingRatioNoBouncy,
-                                                            stiffness = Spring.StiffnessLow
-                                                        ),
-                                                        label = "pause_selection_offset"
-                                                    )
-                                                    // Первый выбор показываем сразу на месте (без выезда сверху),
-                                                    // дальнейшие — плавно переезжают.
-                                                    val selectedOffset = if (pausePlateSnap) targetOffset else animatedOffset
+                                                    // Плашка перемещается мгновенно без анимации
+                                                    val selectedOffset = targetOffset
                                                     
                                                     if (selectedPauseOption != null) {
                                                         Box(
