@@ -3772,6 +3772,10 @@ fun NelevMainScreen(
     
     // Состояние кнопки обновления: true если обновление доступно
     var updateAvailable by remember { mutableStateOf(false) }
+    // debug меню: фейковое "доступно обновление" для проверки кнопок без реального сервера
+    var fakeUpdateAvailable by remember { mutableStateOf(false) }
+    // Эффективное состояние: реальное обновление ИЛИ фейковое (для отладки)
+    val effectiveUpdateAvailable = updateAvailable || fakeUpdateAvailable
     var cachedUpdateInfo by remember { mutableStateOf<UpdateInfo?>(null) }
 
     LaunchedEffect(Unit) {
@@ -4246,7 +4250,7 @@ fun NelevMainScreen(
                             .offset { IntOffset(dragOffset.value.toInt(), 0) }
                             .graphicsLayer { alpha = 1f - (abs(dragOffset.value) / screenWidth).coerceIn(0f, 1f) * 0.3f }) {
                             TabContent(selectedTab.value, appState, appSettings, colors, lang, isDark, sliderDragging,
-                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback, onShowPauseDialog = { showPauseDialog = true }, updateAvailable = updateAvailable, updateVersion = cachedUpdateInfo?.versionName)
+                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback, onShowPauseDialog = { showPauseDialog = true }, updateAvailable = effectiveUpdateAvailable, updateVersion = cachedUpdateInfo?.versionName)
                         }
                     } else {
                         // При клике используем AnimatedContent для плавного перехода
@@ -4272,7 +4276,7 @@ fun NelevMainScreen(
                             label = "tab_content"
                         ) { tab ->
                             TabContent(tab, appState, appSettings, colors, lang, isDark, sliderDragging,
-                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback, onShowPauseDialog = { showPauseDialog = true }, updateAvailable = updateAvailable, updateVersion = cachedUpdateInfo?.versionName)
+                                effectsEnabled, isTransitioning, { isTransitioning = it }, startService, stopService, showHistory, selectedTab, showAbout, onCheckUpdates = checkUpdates, onScanQr = qrScanCallback, onShowPauseDialog = { showPauseDialog = true }, updateAvailable = effectiveUpdateAvailable, updateVersion = cachedUpdateInfo?.versionName)
                         }
                     }
                 }
@@ -4339,7 +4343,8 @@ fun NelevMainScreen(
                 ctx = ctx,
                 save = { SettingsStore.save(ctx, it); appSettings.value = it },
                 showStatsToggle = showStatsToggle,
-                showStats = showStats
+                showStats = showStats,
+                onFakeUpdateToggle = { fakeUpdateAvailable = it }
             )
 
             updateInfo?.let { info ->
@@ -7646,123 +7651,120 @@ val phase = rememberPhaseTick(effectsEnabled, 1f / 3f, 1f)
             }
         }
 
-        // Кнопка "Проверить обновление" + иконка "Что нового"
+        // Кнопка проверки обновления (капсула)
         var showWhatsNewLocal by remember { mutableStateOf(false) }
         val updateTitle = if (updateAvailable) Strings.get("update_available", lang) else Strings.get("check_update", lang)
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Box(
-                Modifier
-                    .weight(1f)
-                    .wrapContentHeight()
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(if (updateAvailable) accent.copy(alpha = 0.12f) else card)
-                    .border(1.dp, if (updateAvailable) accent else border, RoundedCornerShape(14.dp))
-                    .clickable {
-                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
-                        onCheckUpdates()
-                    }
-                    .padding(horizontal = 12.dp, vertical = 12.dp)
-            ) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
+        val buttonText = if (updateAvailable) {
+            if (updateVersion != null) "Обновить до v$updateVersion" else Strings.get("update_available", lang)
+        } else {
+            Strings.get("check_update", lang)
+        }
 
-                        Column {
-                            Text(
-                                updateTitle,
-                                color = text,
-                                fontSize = 14.sp,
-                                fontWeight = if (updateAvailable) FontWeight.SemiBold else FontWeight.Normal
+        Button(
+            onClick = {
+                if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
+                onCheckUpdates()
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (updateAvailable) accent else Color.Transparent,
+                contentColor = if (updateAvailable) Color.White else text,
+                disabledContainerColor = Color.Transparent,
+                disabledContentColor = muted
+            ),
+            shape = RoundedCornerShape(20.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = if (updateAvailable) IconsEx.SystemUpdate else IconsEx.SystemUpdate,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                    tint = if (updateAvailable) Color.White else text
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = buttonText,
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 14.sp
+                    ),
+                    color = if (updateAvailable) Color.White else text
+                )
+                if (updateAvailable && updateVersion != null) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = Strings.get("new_badge", lang),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 10.sp
+                        ),
+                        color = if (updateAvailable) Color.White else accent,
+                        modifier = Modifier
+                            .padding(vertical = 2.dp)
+                            .padding(horizontal = 6.dp)
+                            .background(
+                                if (updateAvailable) Color.White.copy(alpha = 0.2f) else accent.copy(alpha = 0.15f)
                             )
-                            if (updateAvailable && updateVersion != null) {
-                                Text(
-                                    "v$updateVersion",
-                                    color = if (updateAvailable) accent else muted,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
-                        }
-                        if (updateAvailable) {
-                            Text(
-                                Strings.get("new_badge", lang),
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = accent,
-                                modifier = Modifier
-                                    .padding(top = 2.dp)
-                                    .background(accent.copy(alpha = 0.15f))
-                                    .padding(horizontal = 6.dp, vertical = 2.dp)
-                                    .clip(RoundedCornerShape(6.dp))
-                            )
-                        }
-                        if (updateAvailable) {
-                            // Сердце пульсирует только при включённых визуальных эффектах,
-                            // иначе статично (alpha = 1f).
-                            if (effectsEnabled) {
-                                val infiniteTransition = rememberInfiniteTransition(label = "heart_pulse")
-                                val heartAlpha by infiniteTransition.animateFloat(
-                                    initialValue = 0.3f,
-                                    targetValue = 1f,
-                                    animationSpec = infiniteRepeatable(
-                                        animation = tween(1000, easing = FastOutSlowInEasing),
-                                        repeatMode = RepeatMode.Reverse
-                                    ),
-                                    label = "heart_alpha"
-                                )
-                                Icon(
-                                    Icons.Filled.Favorite,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(16.dp).alpha(heartAlpha),
-                                    tint = accent
-                                )
-                            } else {
-                                Icon(
-                                    Icons.Filled.Favorite,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(16.dp),
-                                    tint = accent
-                                )
-                            }
-                        }
-                    }
-                    Icon(
-                        Icons.Filled.KeyboardArrowRight,
-                        null,
-                        Modifier.size(20.dp),
-                        tint = muted
+                            .clip(RoundedCornerShape(6.dp))
                     )
                 }
             }
-            
-            Box(
-                Modifier
-                    .size(54.dp)
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(card)
-                    .border(1.dp, border, RoundedCornerShape(14.dp))
-                    .clickable {
-                        if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
-                        showWhatsNewLocal = true
-                    },
-                contentAlignment = Alignment.Center
+        }
+
+        if (updateAvailable && effectsEnabled) {
+            // Сердечко пульсирует только при включенных визуальных эффектах
+            val infiniteTransition = rememberInfiniteTransition(label = "heart_pulse")
+            val heartAlpha by infiniteTransition.animateFloat(
+                initialValue = 0.3f,
+                targetValue = 1f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(1000, easing = FastOutSlowInEasing),
+                    repeatMode = RepeatMode.Reverse
+                ),
+                label = "heart_alpha"
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    Icons.Filled.Info, null,
-                    Modifier.size(20.dp), tint = muted
+                    Icons.Filled.Favorite,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp).alpha(heartAlpha),
+                    tint = accent
                 )
             }
         }
-            
+
+        // Кнопка "Что нового" (иконка)
+        Box(
+            Modifier
+                .size(54.dp)
+                .clip(RoundedCornerShape(14.dp))
+                .background(card)
+                .border(1.dp, border, RoundedCornerShape(14.dp))
+                .clickable {
+                    if (appSettings.value.soundClickEnabled) ClickPlayer.play(ctx)
+                    showWhatsNewLocal = true
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                IconsEx.SystemUpdate,
+                null,
+                Modifier.size(20.dp),
+                tint = muted
+            )
+        }
+
         if (showWhatsNewLocal) {
             val currentCode = try {
                 ctx.packageManager.getPackageInfo(ctx.packageName, 0).let {
@@ -8073,7 +8075,8 @@ fun AboutAppOverlay(
     ctx: Context,
     save: (AppSettings) -> Unit,
     showStatsToggle: MutableState<Boolean>,
-    showStats: MutableState<Boolean>
+    showStats: MutableState<Boolean>,
+    onFakeUpdateToggle: (Boolean) -> Unit = {}
 ) {
     val bg = colors["bg"]!!
     val text = colors["text"]!!
@@ -8091,6 +8094,8 @@ fun AboutAppOverlay(
     var selectedPauseOption by remember { mutableStateOf<Int?>(null) }
     var pausePlateSnap by remember { mutableStateOf(true) }
     var customDays by remember { mutableStateOf("") }
+    // debug меню: фейковое "доступно обновление" для тестирования кнопок проверить/доступно обновление
+    var fakeDebugUpdate by remember { mutableStateOf(false) }
 
     BackHandler {
         if (showPauseUpdates) {
@@ -8102,6 +8107,27 @@ fun AboutAppOverlay(
         } else {
             onDismiss()
         }
+    }
+
+    // debug меню: переключатель фейкового обновления для тестирования кнопок проверить/доступно обновление
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Фейк: обновление доступно",
+            color = text,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Switch(
+            checked = fakeDebugUpdate,
+            onCheckedChange = { checked ->
+                fakeDebugUpdate = checked
+                onFakeUpdateToggle(checked)
+            }
+        )
     }
 
     AnimatedVisibility(
